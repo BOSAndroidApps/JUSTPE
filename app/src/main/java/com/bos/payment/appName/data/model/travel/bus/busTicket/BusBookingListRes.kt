@@ -12,6 +12,7 @@ data class BusBookingListRes(@SerializedName("returnCode")
                              @SerializedName("isSuccess")
                              val isSuccess: Boolean = false)
 
+
 data class DataItem(@SerializedName("booking_RefNo")
                     val bookingRefNo: String = "",
                     @SerializedName("transport_PNR")

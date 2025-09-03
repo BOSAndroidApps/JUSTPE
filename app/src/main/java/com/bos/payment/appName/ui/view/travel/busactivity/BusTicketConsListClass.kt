@@ -2,12 +2,14 @@ package com.bos.payment.appName.ui.view.travel.busactivity
 import com.bos.payment.appName.data.model.travel.bus.busRequery.BusRequeryRes
 import com.bos.payment.appName.data.model.travel.bus.busRequery.PaXDetails
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusBookingListRes
+import com.bos.payment.appName.data.model.travel.bus.busTicket.CancelTicketDataItem
 import com.bos.payment.appName.data.model.travel.bus.busTicket.DataItem
 
 class BusTicketConsListClass {
 
     companion object{
         val UpcomingTicketList : MutableList<DataItem> = mutableListOf()
+        val CancelTicketList : MutableList<CancelTicketDataItem> = mutableListOf()
         var startDate : String= ""
         var endDate : String  = ""
         var RequeryResponse: BusRequeryRes? = null

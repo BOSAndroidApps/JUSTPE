@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bos.payment.appName.R
+import com.bos.payment.appName.data.model.travel.bus.busTicket.CancelTicketDataItem
 import com.bos.payment.appName.data.model.travel.bus.busTicket.DataItem
 import com.bos.payment.appName.databinding.CancelticketitemlayoutBinding
 import com.bos.payment.appName.ui.view.travel.busfragment.CancelledRefundBus
@@ -26,9 +27,8 @@ import java.util.Locale
 
 class BusTicketCancelledAdapter(
     private var context: Context,
-    private var passangerList: MutableList<DataItem>,
-    var fragment:CancelledRefundBus
-) :
+    private var passangerList: MutableList<CancelTicketDataItem>,
+    var fragment:CancelledRefundBus) :
     RecyclerView.Adapter<BusTicketCancelledAdapter.ViewHolder>() {
 
     var headers: Array<String> = arrayOf("Select","Name", "Gender", "Seat No", "Ticket No")
@@ -71,7 +71,7 @@ class BusTicketCancelledAdapter(
     @SuppressLint("SuspiciousIndentation")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.pnr_No.text=(passangerList.get(position).transportPNR)
+        //holder.pnr_No.text=(passangerList.get(position).transportPNR)
         holder.booking_refNo.text=(passangerList.get(position).bookingRefNo)
 
         if(position == expandedPosition){
@@ -87,7 +87,7 @@ class BusTicketCancelledAdapter(
             holder.passangerquantity.text=(passangerList.get(position).passangerquantity)
             holder.duration.text= calculateDuration(passangerList.get(position).boardingTime,passangerList.get(position).droppingTime)
 
-                holder.passangerListTable.removeAllViews()
+            holder.passangerListTable.removeAllViews()
                 // Add header row
                 val headerRow = TableRow(context)
 
@@ -142,7 +142,6 @@ class BusTicketCancelledAdapter(
         }
 
 
-
         holder.detailslayout.setOnClickListener {
             if(checkarrow){
                 checkarrow =false
@@ -162,7 +161,7 @@ class BusTicketCancelledAdapter(
 
         holder.view_ticket.setOnClickListener {
             if(fragment!=null) {
-                fragment.hitApiForPassangerDetails(position,passangerList.get(position).bookingRefNo)
+                fragment.hitApiForPassangerDetails(position,passangerList.get(position).bookingRefNo.toString())
             }
         }
 
@@ -171,7 +170,7 @@ class BusTicketCancelledAdapter(
     }
 
 
-    public fun updateList(passangerList: MutableList<DataItem>, position: Int){
+    public fun updateList(passangerList: MutableList<CancelTicketDataItem>, position: Int){
         this.passangerList= passangerList
         expandedPosition =  position
         notifyDataSetChanged()

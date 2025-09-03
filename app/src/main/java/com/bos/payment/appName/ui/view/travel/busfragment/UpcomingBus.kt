@@ -120,13 +120,14 @@ class UpcomingBus : Fragment() {
                                        var passangerQunatity = getdata.noofPax
 
                                        tableData.clear()
-                                       for(passenger in passangerList){
-                                           if(passenger.gender.equals("0")){
-                                               tableData.add(mutableListOf(passenger.paXName,"Male",passenger.seatNumber,passenger.ticketNumber))
-                                           }else{
-                                               tableData.add(mutableListOf(passenger.paXName,"Female",passenger.seatNumber,passenger.ticketNumber))
+
+                                       passangerList
+                                           .filter { it.status.equals("Confirmed", true) || it.status.equals("Payment Pending", true) }
+                                           .forEach { passenger ->
+                                               val genderText = if (passenger.gender == "0" || passenger.gender == "0.00") "Male" else "Female"
+                                               tableData.add(mutableListOf(passenger.paXName, genderText, passenger.seatNumber, passenger.ticketNumber))
                                            }
-                                       }
+
 
                                        UpcomingTicketList.set(position,DataItem(UpcomingTicketList[position].bookingRefNo,UpcomingTicketList[position].transportPNR,UpcomingTicketList[position].imeINumber,UpcomingTicketList[position].statusdesc,UpcomingTicketList[position].requestId,UpcomingTicketList[position].iPAddress,UpcomingTicketList[position].statusCode,
                                            passangerList,droppingTime,boardingTime,fromCity,toCity,busOperatorName,travelType,travelDate,passangerQunatity,tableData,true))
@@ -160,6 +161,7 @@ class UpcomingBus : Fragment() {
         }
 
     }
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -279,6 +281,7 @@ class UpcomingBus : Fragment() {
         }
 
     }
+
 
     fun hitApiForUploadCancelResponseOnServer(cancelresponsereq:BusTicketCancelResponseReq,bookingrefNo:String){
       Log.d("CancelResponseReq", Gson().toJson(cancelresponsereq))
@@ -400,6 +403,7 @@ class UpcomingBus : Fragment() {
                             users.body()?.let { response ->
                                 Log.d("RequeryResponse", Gson().toJson(response))
                                 (activity as? MyBookingBusActivity)?.hitApiForBookingList(BusTicketConsListClass.startDate, BusTicketConsListClass.endDate)
+                                (activity as? MyBookingBusActivity)?.hitApiForBusTicketCancelList(BusTicketConsListClass.startDate, BusTicketConsListClass.endDate)
                             }
                         }
                     }

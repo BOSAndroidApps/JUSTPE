@@ -117,6 +117,7 @@ import com.bos.payment.appName.data.model.travel.bus.busTicket.AddTicketResponse
 import com.bos.payment.appName.data.model.travel.bus.busTicket.AddTicketResponseRes
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusBookingListReq
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusBookingListRes
+import com.bos.payment.appName.data.model.travel.bus.busTicket.BusCancelTicketListRespo
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusPassangerDetailsRes
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusPassengerDetailsReq
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusPaxRequeryResponseReq
@@ -399,12 +400,17 @@ interface ApiInterface {
     suspend fun getBusTempBookingRequest(@Body req: BusTampBookTicketResponseRequest): Response<BusTampBookingResp>? // Annu
 
 
+
     @POST("api/BusApi/requerylist")
     suspend fun getPassangerDetails(@Body req: BusPassengerDetailsReq): Response<BusPassangerDetailsRes>?
 
 
     @POST("api/BusApi/BusReueryResponse")
     suspend fun getPaxRequeryResponseReq(@Body req: BusPaxRequeryResponseReq): Response<BusBookingListRes>? //Annu this api using at ticket book and cancel both time for update data in db
+
+
+    @POST("api/BusApi/BusCancelList")
+    suspend fun getBusCancelList(@Body req: BusBookingListReq): Response<BusCancelTicketListRespo>?
 
 
     @POST("api/Airport/Airportlist")

@@ -871,7 +871,7 @@ class BusSeating : AppCompatActivity() {
 
             Log.d("bookingRefNo", response.bookingRefNo.toString())
             toast(response.responseHeader?.errorCode.toString())
-            getAllBusAddMoney(response.bookingRefNo.toString())
+           // getAllBusAddMoney(response.bookingRefNo.toString())
 
         }
         else {

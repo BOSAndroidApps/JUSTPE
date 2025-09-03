@@ -553,7 +553,33 @@ class TravelViewModel (private val travelRepository: TravelRepository) : ViewMod
         }
     }
 
-    //
+
+    fun getBusCancelTicketRequest(req: BusBookingListReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                travelRepository.getBusCancelTicketDetails(req)
+            }
+            emit(ApiResponse.success(response))
+        } catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        } catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        } catch (e: Exception) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "Something went wrong: ${e.localizedMessage}"
+                )
+            )
+        }
+    }
+
 
     fun getPassangerDetailsRequest(req: BusPaxRequeryResponseReq) = liveData(Dispatchers.IO) {
         emit(ApiResponse.loading(data = null))
@@ -667,7 +693,6 @@ class TravelViewModel (private val travelRepository: TravelRepository) : ViewMod
     }
 
 
-
     fun getFlightTempBookingRequest(req: FlightTempBookingReq) = liveData(Dispatchers.IO) {
         emit(ApiResponse.loading(data = null))
         try {
@@ -696,7 +721,6 @@ class TravelViewModel (private val travelRepository: TravelRepository) : ViewMod
             )
         }
     }
-
 
 
     fun getFlightAddPaymentRequest(req: FlightAddPaymentReq) = liveData(Dispatchers.IO) {
@@ -817,12 +841,6 @@ class TravelViewModel (private val travelRepository: TravelRepository) : ViewMod
             )
         }
     }
-
-
-
-
-
-
 
 
 }

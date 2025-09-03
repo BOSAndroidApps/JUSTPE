@@ -20,6 +20,7 @@ import com.bos.payment.appName.data.model.travel.bus.busRequery.BusRequeryRes
 import com.bos.payment.appName.data.model.travel.bus.busRequery.TicketDetailsForGenerateTicket
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusBookingListReq
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusBookingListRes
+import com.bos.payment.appName.data.model.travel.bus.busTicket.CancelTicketDataItem
 import com.bos.payment.appName.data.model.travel.bus.busTicket.DataItem
 import com.bos.payment.appName.data.repository.TravelRepository
 import com.bos.payment.appName.data.viewModelFactory.TravelViewModelFactory
@@ -58,6 +59,7 @@ class MyBookingBusActivity : AppCompatActivity() {
     var startDate: String? = ""
     var endDate: String? = ""
     var BookingList: MutableList<DataItem> = mutableListOf()
+    var BusCancelList: MutableList<CancelTicketDataItem> = mutableListOf()
     lateinit var viewPager: ViewPager2
     lateinit var tabLayout: TabLayout
 
@@ -116,6 +118,7 @@ class MyBookingBusActivity : AppCompatActivity() {
                     Log.d("Start Date", "" + startDate)
                     if (!startDate!!.isNullOrEmpty() && !endDate!!.isNullOrEmpty()) {
                         hitApiForBookingList(startDate!!, endDate!!)
+
                     }
 
                     // Display in user-friendly format (optional)
@@ -174,6 +177,7 @@ class MyBookingBusActivity : AppCompatActivity() {
 
                     if (!startDate!!.isNullOrEmpty() && !endDate!!.isNullOrEmpty()) {
                         hitApiForBookingList(startDate!!, endDate!!)
+
                     }
 
                     // Display in user-friendly format (optional)
@@ -259,9 +263,73 @@ class MyBookingBusActivity : AppCompatActivity() {
                                 binding.notfounddatalayout.visibility = View.GONE
                                 var dataItem = response.data
 
+                                if(dataItem!!.size>0){
+                                    dataItem?.let { it1 ->
+                                        BookingList.addAll(it1)
+                                        BusTicketConsListClass.UpcomingTicketList.addAll(BookingList)
+                                    }
+
+                                    val adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+                                    viewPager.isUserInputEnabled = true
+                                    viewPager.adapter = adapter
+
+                                    TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                                        val tabView = LayoutInflater.from(tabLayout.context).inflate(R.layout.tab_title, null)
+                                        val text = tabView.findViewById<TextView>(R.id.tabText)
+                                        text.text = statusArray[position]
+                                        tab.customView = tabView
+                                    }.attach()
+
+                                    hitApiForBusTicketCancelList(startDate!!, endDate!!)
+                                }
+                                else{
+                                    hitApiForBusTicketCancelList(startDate!!, endDate!!)
+                                }
+                            }
+                        }
+                    }
+
+                    ApiStatus.ERROR -> {
+                        pd.dismiss()
+                        binding.tablelayout.visibility = View.GONE
+                        binding.notfounddatalayout.visibility = View.VISIBLE
+                        hitApiForBusTicketCancelList(startDate!!, endDate!!)
+                    }
+
+                    ApiStatus.LOADING -> {
+                        pd.show()
+                    }
+                }
+            }
+        }
+
+    }
+
+    fun hitApiForBusTicketCancelList(startDate: String, endDate: String){
+        val busRequery = BusBookingListReq(
+            loginID = mStash!!.getStringValue(Constants.RegistrationId, ""),
+            startDate = startDate,
+            endDate = endDate
+        )
+        AppLog.d("BookingListReq", Gson().toJson(busRequery))
+        viewModel.getBusCancelTicketRequest(busRequery).observe(this) { resource ->
+            resource?.let {
+                when (it.apiStatus) {
+                    ApiStatus.SUCCESS -> {
+                       // pd.dismiss()
+                        it.data?.let { users ->
+                            users.body()?.let { response ->
+                                Log.d("Response", response.toString())
+                                AppLog.d("BookingListReqResponse", response.toString())
+                                BusCancelList.clear()
+                                BusTicketConsListClass.CancelTicketList.clear()
+                                binding.tablelayout.visibility = View.VISIBLE
+                                binding.notfounddatalayout.visibility = View.GONE
+                                var dataItem = response.data
+
                                 dataItem?.let { it1 ->
-                                    BookingList.addAll(it1)
-                                    BusTicketConsListClass.UpcomingTicketList.addAll(BookingList)
+                                    BusCancelList.addAll(it1)
+                                    BusTicketConsListClass.CancelTicketList.addAll(BusCancelList)
                                 }
 
                                 val adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
@@ -280,18 +348,19 @@ class MyBookingBusActivity : AppCompatActivity() {
                     }
 
                     ApiStatus.ERROR -> {
-                        pd.dismiss()
+                      //  pd.dismiss()
                         binding.tablelayout.visibility = View.GONE
                         binding.notfounddatalayout.visibility = View.VISIBLE
                     }
 
                     ApiStatus.LOADING -> {
-                        pd.show()
+                       // pd.show()
                     }
                 }
             }
         }
 
     }
+
 
 }

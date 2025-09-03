@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusPassengerDetailsReq
+import com.bos.payment.appName.data.model.travel.bus.busTicket.CancelTicketDataItem
 import com.bos.payment.appName.data.model.travel.bus.busTicket.DataItem
 import com.bos.payment.appName.data.model.travel.bus.busTicket.PaXDetailsItem
 import com.bos.payment.appName.data.repository.TravelRepository
@@ -30,7 +31,7 @@ import com.google.gson.Gson
 
 class CancelledRefundBus : Fragment() {
    lateinit var binding: FragmentCancelledRefundBusBinding
-    var UpcomingTicketList : MutableList<DataItem> = mutableListOf()
+    var CancelTicketList : MutableList<CancelTicketDataItem> = mutableListOf()
     lateinit var upcomingadapter: BusTicketCancelledAdapter
     var tableData : MutableList<MutableList<String?>> = arrayListOf()
     var checkSelectedPassangerList : MutableList<Int> = mutableListOf()
@@ -49,9 +50,9 @@ class CancelledRefundBus : Fragment() {
         mStash = MStash.getInstance(requireContext())
         pd = PD(context)
 
-        if(BusTicketConsListClass.UpcomingTicketList!=null){
-            UpcomingTicketList.clear()
-            UpcomingTicketList= BusTicketConsListClass.UpcomingTicketList
+        if(BusTicketConsListClass.CancelTicketList!=null){
+            CancelTicketList.clear()
+            CancelTicketList= BusTicketConsListClass.CancelTicketList
 
         }
 
@@ -61,10 +62,10 @@ class CancelledRefundBus : Fragment() {
 
 
     private fun  setRecyclerview(){
-        if(UpcomingTicketList.size>0){
+        if(CancelTicketList.size>0){
             binding.notfounddatalayout.visibility=View.GONE
             binding.showingCancelList.visibility=View.VISIBLE
-            upcomingadapter= BusTicketCancelledAdapter(requireContext(),UpcomingTicketList,this)
+            upcomingadapter= BusTicketCancelledAdapter(requireContext(),CancelTicketList,this)
             binding.showingCancelList.apply { layoutManager= LinearLayoutManager(context)
                 adapter=upcomingadapter
             }
@@ -82,7 +83,7 @@ class CancelledRefundBus : Fragment() {
         var requestForPassengerDetails = BusPassengerDetailsReq(
             bookingRefNo = bookingrefNo
         )
-        Log.d("BusRequery", Gson().toJson(requestForPassengerDetails))
+        Log.d("BusPassangerReq", Gson().toJson(requestForPassengerDetails))
 
         viewModel.getPassangerDetailsRequest(requestForPassengerDetails).observe(this) { resource ->
             resource?.let {
@@ -107,21 +108,40 @@ class CancelledRefundBus : Fragment() {
 
                                     tableData.clear()
                                     var index = 1
-                                    for(passenger in passangerList){
-
-                                        if(passenger.gender.equals("0")){
-                                            tableData.add(mutableListOf(index.toString(),passenger.paXName,"Male",passenger.seatNumber,passenger.ticketNumber))
-                                        }else{
-                                            tableData.add(mutableListOf(index.toString(),passenger.paXName,"Female",passenger.seatNumber,passenger.ticketNumber))
+                                    for (passenger in passangerList) {
+                                        if (passenger.status.equals("Canceled", ignoreCase = true) || passenger.status.equals("Payment Pending", ignoreCase = true) ) {
+                                            if (passenger.gender == "0" || passenger.gender == "0.00") {
+                                                tableData.add(
+                                                    mutableListOf(
+                                                        index.toString(),
+                                                        passenger.paXName,
+                                                        "Male",
+                                                        passenger.seatNumber,
+                                                        passenger.ticketNumber
+                                                    )
+                                                )
+                                            } else {
+                                                tableData.add(
+                                                    mutableListOf(
+                                                        index.toString(),
+                                                        passenger.paXName,
+                                                        "Female",
+                                                        passenger.seatNumber,
+                                                        passenger.ticketNumber
+                                                    )
+                                                )
+                                            }
+                                            index++
                                         }
-                                        index++
                                     }
 
-                                    UpcomingTicketList.set(position,DataItem(UpcomingTicketList[position].bookingRefNo,UpcomingTicketList[position].transportPNR,UpcomingTicketList[position].imeINumber,UpcomingTicketList[position].statusdesc,UpcomingTicketList[position].requestId,UpcomingTicketList[position].iPAddress,UpcomingTicketList[position].statusCode,
-                                        passangerList,droppingTime,boardingTime,fromCity,toCity,busOperatorName,travelType,travelDate,passangerQunatity,tableData,true))
+
+                                    CancelTicketList.set(position,CancelTicketDataItem(CancelTicketList[position].bookingRefNo,CancelTicketList[position].loginId,CancelTicketList[position].apiData,CancelTicketList[position].registrationID,CancelTicketList[position].statusdesc,CancelTicketList[position].statusCode,
+                                        passangerList, droppingTime,boardingTime,fromCity,toCity,busOperatorName,travelType,travelDate,passangerQunatity,tableData,true))
+
 
                                     if(upcomingadapter!=null){
-                                        upcomingadapter.updateList(UpcomingTicketList,position)
+                                       upcomingadapter.updateList(CancelTicketList,position)
                                     }
 
 

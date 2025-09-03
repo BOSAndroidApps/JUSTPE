@@ -46,6 +46,7 @@ class TravelRepository(private val travelInterface: TravelInterface,private val 
     suspend fun getBusTicketCancellationChargeRequest(req:BusTicketCancellationChargeReq)= travelInterface.getBucCancellationCharges(req)
     suspend fun getBusTicketCancelRequest(req:BusTicketCancelReq)= travelInterface.getBusTicketCancel(req)
     suspend fun getPassangerDetails(req: BusPassengerDetailsReq)= apiInterface.getPassangerDetails(req)
+    suspend fun getBusCancelTicketDetails(req: BusBookingListReq)= apiInterface.getBusCancelList(req)
     suspend fun getPaxRequeryResponseRequest(req: BusPaxRequeryResponseReq)= apiInterface.getPaxRequeryResponseReq(req)
 
 

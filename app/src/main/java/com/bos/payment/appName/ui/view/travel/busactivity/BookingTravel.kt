@@ -81,8 +81,6 @@ class BookingTravel : AppCompatActivity() {
         getAllTravelBusList()
         setDropDown()
         btnListener()
-        val requestId = generateRandomNumber()
-        mStash?.setStringValue(Constants.requestId, requestId)
         mStash?.setStringValue(Constants.MerchantId, "AOP-554") // for testing purpose
     }
 
@@ -145,7 +143,10 @@ class BookingTravel : AppCompatActivity() {
 
     }
 
+
     private fun getAllTravelBusList() {
+        val requestId = generateRandomNumber()
+        mStash?.setStringValue(Constants.requestId, requestId)
         val busCityListReq = BusCityListReq(
             iPAddress = mStash!!.getStringValue(Constants.deviceIPAddress, ""),
             requestId =  mStash?.getStringValue(Constants.requestId, ""),
@@ -177,6 +178,7 @@ class BookingTravel : AppCompatActivity() {
         }
     }
 
+
     private fun getAllTravelBusListRes(response: BusCityListRes?) {
         if (response?.responseHeader?.errorCode == "0000"){
             Constants.busListName?.clear()
@@ -196,6 +198,7 @@ class BookingTravel : AppCompatActivity() {
             Toast.makeText(this, response?.responseHeader?.errorDesc.toString(), Toast.LENGTH_SHORT).show()
         }
     }
+
 
     @SuppressLint("ResourceAsColor")
     private fun btnListener() {
