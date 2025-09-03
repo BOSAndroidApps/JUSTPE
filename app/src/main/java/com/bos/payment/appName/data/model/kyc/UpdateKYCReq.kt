@@ -1,0 +1,50 @@
+package com.bos.payment.appName.data.model.kyc
+import com.google.gson.annotations.SerializedName
+
+
+data class UpdateKYCReq (
+
+  @SerializedName("RegistrationID"         ) var RegistrationID        : String? = null,
+  @SerializedName("AEPS_Onboard_Status"    ) var AEPSOnboardStatus     : String? = null,
+  @SerializedName("Encrypted_Pass"         ) var EncryptedPass         : String? = null,
+  @SerializedName("HoldAmt"                ) var HoldAmt               : String? = null,
+  @SerializedName("District"               ) var District              : String? = null,
+  @SerializedName("EmpCode"                ) var EmpCode               : String? = null,
+  @SerializedName("TransactionPin"         ) var TransactionPin        : String? = null,
+  @SerializedName("RefrenceID"             ) var RefrenceID            : String? = null,
+  @SerializedName("RefrenceType"           ) var RefrenceType          : String? = null,
+  @SerializedName("AgentPassword"          ) var AgentPassword         : String? = null,
+  @SerializedName("UploadPanCard"          ) var UploadPanCard         : String? = null,
+  @SerializedName("UploadAddharCard_Front" ) var UploadAddharCardFront : String? = null,
+  @SerializedName("UploadAddharCard_Back"  ) var UploadAddharCardBack  : String? = null,
+  @SerializedName("UploadOtherProof"       ) var UploadOtherProof      : String? = null,
+  @SerializedName("UploadPhoto"            ) var UploadPhoto           : String? = null,
+  @SerializedName("UpdatedBy"              ) var UpdatedBy             : String? = null,
+  @SerializedName("RegistrationDate"       ) var RegistrationDate      : String? = null,
+  @SerializedName("AgentType"              ) var AgentType             : String? = null,
+  @SerializedName("AgencyName"             ) var AgencyName            : String? = null,
+  @SerializedName("FirstName"              ) var FirstName             : String? = null,
+  @SerializedName("EmailID"                ) var EmailID               : String? = null,
+  @SerializedName("DOB"                    ) var DOB                   : String? = null,
+  @SerializedName("AlternateMobileNo"      ) var AlternateMobileNo     : String? = null,
+  @SerializedName("PermanentAddress"       ) var PermanentAddress      : String? = null,
+  @SerializedName("State"                  ) var State                 : String? = null,
+  @SerializedName("AddharCardNo"           ) var AddharCardNo          : String? = null,
+  @SerializedName("WebSite"                ) var WebSite               : String? = null,
+  @SerializedName("PanCardNumber"          ) var PanCardNumber         : String? = null,
+  @SerializedName("MobileNo"               ) var MobileNo              : String? = null,
+  @SerializedName("OfficeAddress"          ) var OfficeAddress         : String? = null,
+  @SerializedName("City"                   ) var City                  : String? = null,
+  @SerializedName("LastName"               ) var LastName              : String? = null,
+  @SerializedName("Pincode"                ) var Pincode               : String? = null,
+  @SerializedName("BusinessType"           ) var BusinessType          : String? = null,
+  @SerializedName("GSTNO"                  ) var GSTNO                 : String? = null,
+  @SerializedName("AccountHolderName"      ) var AccountHolderName     : String? = null,
+  @SerializedName("BankName"               ) var BankName              : String? = null,
+  @SerializedName("BranchName"             ) var BranchName            : String? = null,
+  @SerializedName("AccountType"            ) var AccountType           : String? = null,
+  @SerializedName("IFSCCode"               ) var IFSCCode              : String? = null,
+  @SerializedName("AccountNo"              ) var AccountNo             : String? = null,
+  @SerializedName("CompanyCode"            ) var CompanyCode             : String? = null
+
+)

@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_black"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:elevation="2dp"
+        android:layout_height="60dp">
+        <ImageView
+            android:layout_width="30dp"
+            android:src="@drawable/ic_back"
+            android:layout_marginLeft="15dp"
+            android:id="@+id/ivBack"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_height="30dp"/>
+
+        <!--        <TextView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:text="@string/app_name"-->
+        <!--            android:id="@+id/tvToolbarName"-->
+        <!--            android:textSize="19dp"-->
+        <!--            android:fontFamily="@font/roboto_medium"-->
+        <!--            android:textColor="@color/black"-->
+        <!--            android:layout_centerInParent="true"-->
+        <!--            android:layout_height="wrap_content"/>-->
+
+        <ImageView
+            android:layout_width="30dp"
+            android:src="@drawable/menu_bar"
+            android:layout_marginLeft="15dp"
+            android:id="@+id/menuBarBtn"
+            android:layout_marginEnd="@dimen/dimen_10sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_height="30dp"/>
+
+    </RelativeLayout>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/operatorLogo"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/green_circle"
+                    android:padding="@dimen/dimen_4sp"
+                    android:src="@drawable/check_sign" />
+
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/operatorLogo"-->
+                <!--                    android:layout_width="@dimen/dimen_50dp"-->
+                <!--                    android:layout_height="@dimen/dimen_50dp"-->
+                <!--                    android:layout_gravity="center"-->
+                <!--                    android:backgroundTint="@color/white"-->
+                <!--                    android:background="@drawable/bg_circle_blue"-->
+                <!--                    />-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/operatorName"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:textColor="@color/grey"-->
+                <!--                    android:layout_gravity="center"-->
+                <!--                    android:textSize="@dimen/dimen_16dp"-->
+                <!--                    android:layout_marginTop="@dimen/dimen_10sp"/>-->
+                <TextView
+                    android:id="@+id/totalAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:text="₹ 780.90"
+                    android:textColor="@color/grey"
+                    android:textSize="@dimen/dimen_44dp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/repeatRecharge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dimen_30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:background="@drawable/bg_button"
+                    android:backgroundTint="@color/colorAccent"
+                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:paddingRight="@dimen/dimen_20dp"
+                    android:text="Repeat Recharge"
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/dimen_14dp" />
+
+                <LinearLayout
+                    android:id="@+id/llSeeAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/circle"
+                        android:layout_width="@dimen/dimen_16sp"
+                        android:layout_height="@dimen/dimen_16sp"
+                        android:layout_marginEnd="@dimen/dimen_4sp"
+                        android:background="@drawable/green_circle"
+                        android:padding="@dimen/dimen_4sp"
+                        android:src="@drawable/check_sign" />
+
+                    <TextView
+                        android:id="@+id/status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Completed"
+                        android:textColor="@color/grey"
+                        android:textSize="@dimen/dimen_16sp" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0.1dp"
+                    android:layout_marginLeft="@dimen/dimen_50dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:layout_marginRight="@dimen/dimen_50dp"
+                    android:background="@color/grey"
+                    android:backgroundTint="@color/grey"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/dateAndTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:text="Jan 16, 2024, 2:25 PM"
+                    android:textColor="@color/grey"
+                    android:textSize="@dimen/dimen_12sp" />
+                <!--                <androidx.cardview.widget.CardView-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_margin="@dimen/dimen_20dp"-->
+                <!--                    app:cardElevation="@dimen/dimen_10dp"-->
+                <!--                    bac-->
+                <!--                    app:cardCornerRadius="@dimen/dimen_10dp"-->
+                <!--                    app:cardMaxElevation="@dimen/dimen_10dp">-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_20dp"
+                    android:layout_marginTop="@dimen/dimen_20dp"
+                    android:layout_marginEnd="@dimen/dimen_20dp"
+                    android:background="@drawable/price_background"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="10dp"
+                            android:text="Amount"
+                            android:textAllCaps="false"
+                            android:textColor="@color/grey"
+                            android:textSize="@dimen/dimen_12sp" />
+
+                        <TextView
+                            android:id="@+id/amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/dimen_10dp"
+                            android:layout_weight="1"
+                            android:padding="10dp"
+                            android:text="₹ 779"
+                            android:textAlignment="textEnd"
+                            android:textAllCaps="false"
+                            android:textColor="@color/grey"
+                            android:textSize="@dimen/dimen_12sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <!--                        <LinearLayout-->
+                        <!--                            android:id="@+id/retailerCommissionLayout"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:orientation="vertical">-->
+                        <!--                            <LinearLayout-->
+                        <!--                                android:id="@+id/retailerCommWithoutTDSNamelayout"-->
+                        <!--                                android:layout_width="match_parent"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:weightSum="4"-->
+                        <!--                                android:orientation="horizontal">-->
+
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/retailerCommWithoutTDSName"-->
+                        <!--                                    android:layout_width="wrap_content"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:layout_weight="3"-->
+                        <!--                                    android:padding="10dp"-->
+                        <!--                                    android:text="Retailer Commission without TDS"-->
+                        <!--                                    android:textAllCaps="false"-->
+                        <!--                                    android:textColor="@color/grey"-->
+                        <!--                                    android:textSize="@dimen/dimen_12sp" />-->
+
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/retailerCommWithoutTDSText"-->
+                        <!--                                    android:layout_width="wrap_content"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:text="₹ 0"-->
+                        <!--                                    android:layout_weight="1"-->
+                        <!--                                    android:layout_marginEnd="@dimen/dimen_10dp"-->
+                        <!--                                    android:textAlignment="textEnd"-->
+                        <!--                                    android:textSize="@dimen/dimen_12sp"-->
+                        <!--                                    android:textColor="@color/white"-->
+                        <!--                                    android:textAllCaps="false"-->
+                        <!--                                    android:padding="10dp"/>-->
+                        <!--                            </LinearLayout>-->
+                        <!--                            <LinearLayout-->
+                        <!--                                android:id="@+id/customerCommWithoutTDSNameLayout"-->
+                        <!--                                android:layout_width="match_parent"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:weightSum="4"-->
+                        <!--                                android:orientation="horizontal">-->
+
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/customerCommWithoutTDSName"-->
+                        <!--                                    android:layout_width="wrap_content"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:layout_weight="3"-->
+                        <!--                                    android:padding="10dp"-->
+                        <!--                                    android:text="Customer Commission without TDS"-->
+                        <!--                                    android:textAllCaps="false"-->
+                        <!--                                    android:textColor="@color/grey"-->
+                        <!--                                    android:textSize="@dimen/dimen_12sp" />-->
+
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/customerCommWithoutTDSText"-->
+                        <!--                                    android:layout_width="wrap_content"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:text="₹ 0"-->
+                        <!--                                    android:layout_weight="1"-->
+                        <!--                                    android:layout_marginEnd="@dimen/dimen_10dp"-->
+                        <!--                                    android:textAlignment="textEnd"-->
+                        <!--                                    android:textSize="@dimen/dimen_12sp"-->
+                        <!--                                    android:textColor="@color/white"-->
+                        <!--                                    android:textAllCaps="false"-->
+                        <!--                                    android:padding="10dp"/>-->
+                        <!--                            </LinearLayout>-->
+                        <!--                            <LinearLayout-->
+                        <!--                                android:layout_width="match_parent"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:weightSum="4"-->
+                        <!--                                android:orientation="horizontal">-->
+
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/tdsName"-->
+                        <!--                                    android:layout_width="wrap_content"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:layout_weight="3"-->
+                        <!--                                    android:padding="10dp"-->
+                        <!--                                    android:text="TDS"-->
+                        <!--                                    android:textAllCaps="false"-->
+                        <!--                                    android:textColor="@color/grey"-->
+                        <!--                                    android:textSize="@dimen/dimen_12sp" />-->
+
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/tdsText"-->
+                        <!--                                    android:layout_width="wrap_content"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:text="₹ 0"-->
+                        <!--                                    android:layout_weight="1"-->
+                        <!--                                    android:layout_marginEnd="@dimen/dimen_10dp"-->
+                        <!--                                    android:textAlignment="textEnd"-->
+                        <!--                                    android:textSize="@dimen/dimen_12sp"-->
+                        <!--                                    android:textColor="@color/white"-->
+                        <!--                                    android:textAllCaps="false"-->
+                        <!--                                    android:padding="10dp"/>-->
+                        <!--                            </LinearLayout>-->
+                        <!--                        </LinearLayout>-->
+                        <LinearLayout
+                            android:id="@+id/serviceChargeLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <!--                            <LinearLayout-->
+                            <!--                                android:layout_width="match_parent"-->
+                            <!--                                android:layout_height="wrap_content"-->
+                            <!--                                android:weightSum="4"-->
+                            <!--                                android:orientation="horizontal">-->
+
+                            <!--                                <TextView-->
+                            <!--                                    android:id="@+id/serviceChargeName"-->
+                            <!--                                    android:layout_width="wrap_content"-->
+                            <!--                                    android:layout_height="wrap_content"-->
+                            <!--                                    android:layout_weight="3"-->
+                            <!--                                    android:padding="10dp"-->
+                            <!--                                    android:text="Service Charge"-->
+                            <!--                                    android:textAllCaps="false"-->
+                            <!--                                    android:textColor="@color/grey"-->
+                            <!--                                    android:textSize="@dimen/dimen_12sp" />-->
+
+                            <!--                                <TextView-->
+                            <!--                                    android:id="@+id/serviceChargeText"-->
+                            <!--                                    android:layout_width="wrap_content"-->
+                            <!--                                    android:layout_height="wrap_content"-->
+                            <!--                                    android:text="₹ 0"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    android:layout_marginEnd="@dimen/dimen_10dp"-->
+                            <!--                                    android:textAlignment="textEnd"-->
+                            <!--                                    android:textSize="@dimen/dimen_12sp"-->
+                            <!--                                    android:textColor="@color/white"-->
+                            <!--                                    android:textAllCaps="false"-->
+                            <!--                                    android:padding="10dp"/>-->
+                            <!--                            </LinearLayout>-->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="4">
+
+                                <TextView
+                                    android:id="@+id/serviceChargeWithGSTName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="3"
+                                    android:padding="10dp"
+                                    android:text="Service Charge with GST"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/grey"
+                                    android:textSize="@dimen/dimen_12sp" />
+
+                                <TextView
+                                    android:id="@+id/serviceChargeWithGSTText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="@dimen/dimen_10dp"
+                                    android:layout_weight="1"
+                                    android:padding="10dp"
+                                    android:text="₹ 0"
+                                    android:textAlignment="textEnd"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/dimen_12sp" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="4">
+
+                            <TextView
+                                android:id="@+id/totalTransactionName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:padding="10dp"
+                                android:text="Total payment transaction"
+                                android:textAllCaps="false"
+                                android:textColor="@color/grey"
+                                android:textSize="@dimen/dimen_12sp" />
+
+                            <TextView
+                                android:id="@+id/totalTransactionText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/dimen_10dp"
+                                android:layout_weight="1"
+                                android:padding="10dp"
+                                android:text="₹ 0"
+                                android:textAlignment="textEnd"
+                                android:textAllCaps="false"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/dimen_12sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!--                    <LinearLayout-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:weightSum="2"-->
+                    <!--                        android:orientation="horizontal">-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:text="Customer Charge"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:textSize="@dimen/dimen_12sp"-->
+                    <!--                            android:textColor="@color/grey"-->
+                    <!--                            android:textAllCaps="false"-->
+                    <!--                            android:padding="10dp"/>-->
+                    <!--                        <TextView-->
+                    <!--                            android:id="@+id/customerCharge"-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:text="₹ 0"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:layout_marginEnd="@dimen/dimen_10dp"-->
+                    <!--                            android:textAlignment="textEnd"-->
+                    <!--                            android:textSize="@dimen/dimen_12sp"-->
+                    <!--                            android:textColor="@color/white"-->
+                    <!--                            android:textAllCaps="false"-->
+                    <!--                            android:padding="10dp"/>-->
+                    <!--                    </LinearLayout>-->
+                    <!--                    <LinearLayout-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:weightSum="2"-->
+                    <!--                        android:orientation="horizontal">-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:text="BC Charge"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:textSize="@dimen/dimen_12sp"-->
+                    <!--                            android:textColor="@color/grey"-->
+                    <!--                            android:textAllCaps="false"-->
+                    <!--                            android:padding="10dp"/>-->
+                    <!--                        <TextView-->
+                    <!--                            android:id="@+id/bcCharge"-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:text="₹ 0"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:layout_marginEnd="@dimen/dimen_10dp"-->
+                    <!--                            android:textAlignment="textEnd"-->
+                    <!--                            android:textSize="@dimen/dimen_12sp"-->
+                    <!--                            android:textColor="@color/white"-->
+                    <!--                            android:textAllCaps="false"-->
+                    <!--                            android:padding="10dp"/>-->
+                    <!--                    </LinearLayout>-->
+                    <!--                    <LinearLayout-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:weightSum="2"-->
+                    <!--                        android:orientation="horizontal">-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:text="Net Commission"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:textSize="@dimen/dimen_12sp"-->
+                    <!--                            android:textColor="@color/grey"-->
+                    <!--                            android:textAllCaps="false"-->
+                    <!--                            android:padding="10dp"/>-->
+                    <!--                        <TextView-->
+                    <!--                            android:id="@+id/netCommission"-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:text="₹ 0"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:layout_marginEnd="@dimen/dimen_10dp"-->
+                    <!--                            android:textAlignment="textEnd"-->
+                    <!--                            android:textSize="@dimen/dimen_12sp"-->
+                    <!--                            android:textColor="@color/white"-->
+                    <!--                            android:textAllCaps="false"-->
+                    <!--                            android:padding="10dp"/>-->
+                    <!--                    </LinearLayout>-->
+
+                    <!--                    <LinearLayout-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:weightSum="2"-->
+                    <!--                        android:orientation="horizontal">-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:text="GST"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:textSize="@dimen/dimen_12sp"-->
+                    <!--                            android:textColor="@color/grey"-->
+                    <!--                            android:textAllCaps="false"-->
+                    <!--                            android:padding="10dp"/>-->
+                    <!--                        <TextView-->
+                    <!--                            android:id="@+id/gstCharge"-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:text="₹ 0"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:layout_marginEnd="@dimen/dimen_10dp"-->
+                    <!--                            android:textAlignment="textEnd"-->
+                    <!--                            android:textSize="@dimen/dimen_12sp"-->
+                    <!--                            android:textColor="@color/white"-->
+                    <!--                            android:textAllCaps="false"-->
+                    <!--                            android:padding="10dp"/>-->
+                    <!--                    </LinearLayout>-->
+                    <!--                    <LinearLayout-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:weightSum="2"-->
+                    <!--                        android:orientation="horizontal">-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:text="TDS"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:textSize="@dimen/dimen_12sp"-->
+                    <!--                            android:textColor="@color/grey"-->
+                    <!--                            android:textAllCaps="false"-->
+                    <!--                            android:padding="10dp"/>-->
+                    <!--                        <TextView-->
+                    <!--                            android:id="@+id/tdsCharge"-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:text="₹ 0"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:layout_marginEnd="@dimen/dimen_10dp"-->
+                    <!--                            android:textAlignment="textEnd"-->
+                    <!--                            android:textSize="@dimen/dimen_12sp"-->
+                    <!--                            android:textColor="@color/white"-->
+                    <!--                            android:textAllCaps="false"-->
+                    <!--                            android:padding="10dp"/>-->
+                    <!--                    </LinearLayout>-->
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_20dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:layout_marginEnd="@dimen/dimen_20dp"
+                    android:background="@drawable/price_background"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_16dp"
+                        android:paddingLeft="@dimen/dimen_10dp"
+                        android:text="From Wallet"
+                        android:textColor="@color/grey"
+                        android:textSize="@dimen/dimen_12sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10sp"
+                        android:paddingStart="@dimen/dimen_10dp"
+                        android:text="Customer Bank Name:"
+                        android:textColor="@color/grey"
+                        android:textSize="@dimen/dimen_12sp" />
+
+                    <TextView
+                        android:id="@+id/customerName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_4dp"
+                        android:paddingStart="@dimen/dimen_10dp"
+                        android:text="RK SINGH"
+                        android:textColor="@color/grey"
+                        android:textSize="@dimen/dimen_12sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10sp"
+                        android:paddingStart="@dimen/dimen_10dp"
+                        android:text="Customer Account Number:"
+                        android:textColor="@color/grey"
+                        android:textSize="@dimen/dimen_12sp" />
+
+                    <TextView
+                        android:id="@+id/accountNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_4dp"
+                        android:paddingStart="@dimen/dimen_10dp"
+                        android:text="12426548579"
+                        android:textColor="@color/grey"
+                        android:textSize="@dimen/dimen_12sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10sp"
+                        android:paddingStart="@dimen/dimen_10sp"
+                        android:text="Bank IFSC Code:"
+                        android:textColor="@color/grey"
+                        android:textSize="@dimen/dimen_12sp" />
+
+                    <TextView
+                        android:id="@+id/ifscCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_4dp"
+                        android:paddingStart="@dimen/dimen_10dp"
+                        android:text="12426548579"
+                        android:textColor="@color/grey"
+                        android:textSize="@dimen/dimen_12sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_16dp"
+                        android:paddingStart="@dimen/dimen_10dp"
+                        android:text="UTR Number"
+                        android:textColor="@color/grey"
+                        android:textSize="@dimen/dimen_12sp" />
+
+                    <TextView
+                        android:id="@+id/utrNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_4dp"
+                        android:paddingStart="@dimen/dimen_10sp"
+                        android:text="12345678909"
+                        android:textColor="@color/grey"
+                        android:textSize="@dimen/dimen_12sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10sp"
+                        android:paddingStart="@dimen/dimen_10dp"
+                        android:text="Reference ID"
+                        android:textColor="@color/grey"
+                        android:textSize="@dimen/dimen_12sp" />
+
+                    <TextView
+                        android:id="@+id/referenceId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_4dp"
+                        android:layout_marginBottom="@dimen/dimen_40sp"
+                        android:paddingStart="@dimen/dimen_10dp"
+                        android:text="12345678909"
+                        android:textColor="@color/grey"
+                        android:textSize="@dimen/dimen_12sp" />
+
+
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/mobileText"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:text="Mobile Number"-->
+                    <!--                        android:layout_marginTop="@dimen/dimen_16dp"-->
+                    <!--                        android:textSize="@dimen/dimen_12sp"-->
+                    <!--                        android:textColor="@color/white"-->
+                    <!--                        android:paddingStart="@dimen/dimen_10dp"/>-->
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/mobileNo"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:text="9876543215"-->
+                    <!--                        android:layout_marginTop="@dimen/dimen_4dp"-->
+                    <!--                        android:textSize="@dimen/dimen_12sp"-->
+                    <!--                        android:textColor="@color/grey"-->
+                    <!--                        android:paddingStart="@dimen/dimen_10dp"-->
+                    <!--                        android:layout_marginBottom="@dimen/dimen_40dp"/>-->
+                </LinearLayout>
+
+                <!--                <LinearLayout-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:orientation="vertical"-->
+                <!--                    android:layout_marginBottom="@dimen/dimen_32dp"-->
+                <!--                    android:background="@drawable/price_background"-->
+                <!--                    android:layout_marginStart="@dimen/dimen_20dp"-->
+                <!--                    android:layout_marginEnd="@dimen/dimen_20dp"-->
+                <!--                    android:layout_marginTop="@dimen/dimen_10dp">-->
+                <!--                    <TextView-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:text="From Wallet"-->
+                <!--                        android:layout_marginTop="@dimen/dimen_16dp"-->
+                <!--                        android:textSize="@dimen/dimen_12sp"-->
+                <!--                        android:textColor="@color/grey"-->
+                <!--                        android:paddingLeft="@dimen/dimen_10dp"/>-->
+
+                <!--                    <TextView-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:text="Order ID"-->
+                <!--                        android:layout_marginTop="@dimen/dimen_16dp"-->
+                <!--                        android:textSize="@dimen/dimen_12sp"-->
+                <!--                        android:textColor="@color/grey"-->
+                <!--                        android:paddingStart="@dimen/dimen_10dp"/>-->
+                <!--                    <TextView-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:text="12345678909"-->
+                <!--                        android:layout_marginTop="@dimen/dimen_4dp"-->
+                <!--                        android:textSize="@dimen/dimen_12sp"-->
+                <!--                        android:textColor="@color/grey"-->
+                <!--                        android:paddingStart="@dimen/dimen_10dp"/>-->
+
+                <!--                    <TextView-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:text="Transaction ID"-->
+                <!--                        android:layout_marginTop="@dimen/dimen_16sp"-->
+                <!--                        android:textSize="@dimen/dimen_12sp"-->
+                <!--                        android:textColor="@color/grey"-->
+                <!--                        android:paddingStart="@dimen/dimen_10dp"/>-->
+                <!--                    <TextView-->
+                <!--                        android:id="@+id/transactionId"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:text="12345678909"-->
+                <!--                        android:layout_marginTop="@dimen/dimen_4dp"-->
+                <!--                        android:textSize="@dimen/dimen_12sp"-->
+                <!--                        android:textColor="@color/grey"-->
+                <!--                        android:paddingStart="@dimen/dimen_10dp"/>-->
+
+                <!--                    <TextView-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:text="Reference ID"-->
+                <!--                        android:layout_marginTop="@dimen/dimen_16dp"-->
+                <!--                        android:textSize="@dimen/dimen_12sp"-->
+                <!--                        android:textColor="@color/grey"-->
+                <!--                        android:paddingStart="@dimen/dimen_10dp"/>-->
+                <!--                    <TextView-->
+                <!--                        android:id="@+id/referenceId"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:text="12345678909"-->
+                <!--                        android:layout_marginTop="@dimen/dimen_4dp"-->
+                <!--                        android:textSize="@dimen/dimen_12sp"-->
+                <!--                        android:textColor="@color/grey"-->
+                <!--                        android:paddingStart="@dimen/dimen_10dp"/>-->
+                <!--                    <TextView-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:text="Mobile Number"-->
+                <!--                        android:layout_marginTop="@dimen/dimen_16dp"-->
+                <!--                        android:textSize="@dimen/dimen_12sp"-->
+                <!--                        android:textColor="@color/white"-->
+                <!--                        android:paddingStart="@dimen/dimen_10dp"/>-->
+                <!--                    <TextView-->
+                <!--                        android:id="@+id/mobileNo"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:text="9876543215"-->
+                <!--                        android:layout_marginTop="@dimen/dimen_4dp"-->
+                <!--                        android:textSize="@dimen/dimen_12sp"-->
+                <!--                        android:textColor="@color/grey"-->
+                <!--                        android:paddingStart="@dimen/dimen_10dp"-->
+                <!--                        android:layout_marginBottom="@dimen/dimen_40dp"/>-->
+
+
+                <!--                </LinearLayout>-->
+                <!--                </androidx.cardview.widget.CardView>-->
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

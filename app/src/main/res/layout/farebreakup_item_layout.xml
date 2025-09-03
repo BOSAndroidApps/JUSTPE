@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/dimen_50dp">
+
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/cross"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dimen_10dp"
+            android:src="@drawable/cross_icon"
+            app:tint="@color/edittext_color" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_10dp"
+            android:text="@string/farebreak"
+            android:textColor="@color/lightBlack"
+            android:textSize="@dimen/dimen_16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/dimen_10dp"
+        android:paddingBottom="@dimen/dimen_50dp"
+        app:layout_constraintTop_toBottomOf="@+id/header"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/dimen_30dp">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/basefaree"
+            android:textSize="@dimen/dimen_16sp"
+            android:padding="@dimen/dimen_4dp"
+            android:textStyle="bold"
+            android:textColor="@color/edittext_color"/>
+
+
+        <TextView
+            android:id="@+id/totalbasefare"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="₹ 10,28365"
+            android:textSize="@dimen/dimen_16sp"
+            android:gravity="right"
+            android:padding="@dimen/dimen_4dp"
+            android:textStyle="bold"
+            android:textColor="@color/edittext_color"/>
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/adultlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dimen_10dp">
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Adult"
+                android:textSize="@dimen/dimen_14sp"
+                android:padding="@dimen/dimen_4dp"
+                android:textColor="@color/edittext_color"/>
+
+            <TextView
+                android:id="@+id/adultcount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(1x₹ 10,285)"
+                android:textSize="@dimen/dimen_14sp"
+                android:padding="@dimen/dimen_4dp"
+                android:textColor="@color/edittext_color"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/totalamountofadult"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="₹ 10,2836"
+                android:gravity="right"
+                android:padding="@dimen/dimen_4dp"
+                android:textColor="@color/edittext_color"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/childlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Children"
+                android:textSize="@dimen/dimen_14sp"
+                android:padding="@dimen/dimen_4dp"
+                android:textColor="@color/edittext_color"/>
+
+            <TextView
+                android:id="@+id/childcount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(1x₹ 10,285)"
+                android:textSize="@dimen/dimen_14sp"
+                android:padding="@dimen/dimen_4dp"
+                android:textColor="@color/edittext_color"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/totalamountofchild"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="₹ 10,265"
+                android:gravity="right"
+                android:padding="@dimen/dimen_4dp"
+                android:textColor="@color/edittext_color"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/infantlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Infant"
+                android:padding="@dimen/dimen_4dp"
+                android:textSize="@dimen/dimen_14sp"
+                android:textColor="@color/edittext_color"/>
+
+                <TextView
+                    android:id="@+id/infantcount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(1x₹ 10,285)"
+                    android:padding="@dimen/dimen_4dp"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textColor="@color/edittext_color"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/totalamountofinfant"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="₹ 10,285"
+                android:gravity="right"
+                android:padding="@dimen/dimen_4dp"
+                android:textColor="@color/edittext_color"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/grey"
+            android:layout_marginTop="@dimen/dimen_4dp"
+            android:layout_height="@dimen/dimen_2dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dimen_4dp">
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/taxes"
+                android:padding="@dimen/dimen_4dp"
+                android:textStyle="bold"
+                android:textSize="@dimen/dimen_16sp"
+                android:textColor="@color/edittext_color"/>
+
+
+            <TextView
+                android:id="@+id/totaltaxesfare"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="₹ 10,28365"
+                android:gravity="right"
+                android:padding="@dimen/dimen_4dp"
+                android:textSize="@dimen/dimen_16sp"
+                android:textStyle="bold"
+                android:textColor="@color/edittext_color"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/adultairporttaxlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dimen_10dp">
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Adult"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:padding="@dimen/dimen_4dp"
+                    android:textColor="@color/edittext_color"/>
+
+                <TextView
+                    android:id="@+id/adult_airporttax_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(1x₹ 10,285)"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:padding="@dimen/dimen_4dp"
+                    android:textColor="@color/edittext_color"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/totaltaxesofadult"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="₹ 10,2836"
+                android:gravity="right"
+                android:padding="@dimen/dimen_4dp"
+                android:textColor="@color/edittext_color"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/childairporttaxlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Children"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:padding="@dimen/dimen_4dp"
+                    android:textColor="@color/edittext_color"/>
+
+                <TextView
+                    android:id="@+id/child_airporttax_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(1x₹ 10,285)"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:padding="@dimen/dimen_4dp"
+                    android:textColor="@color/edittext_color"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/totaltaxesofchild"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="₹ 10,265"
+                android:gravity="right"
+                android:padding="@dimen/dimen_4dp"
+                android:textColor="@color/edittext_color"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/infantairporttaxlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Infant"
+                    android:padding="@dimen/dimen_4dp"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textColor="@color/edittext_color"/>
+
+                <TextView
+                    android:id="@+id/infant_airporttax_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(1x₹ 10,285)"
+                    android:padding="@dimen/dimen_4dp"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textColor="@color/edittext_color"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/totaltaxesofinfant"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="₹ 10,285"
+                android:gravity="right"
+                android:padding="@dimen/dimen_4dp"
+                android:textColor="@color/edittext_color"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="@dimen/dimen_10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dimen_10dp"
+             android:text="Total Amount"
+            android:textStyle="bold"
+            android:gravity="left"
+            android:textSize="@dimen/dimen_16sp"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/overalltotalamount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_10dp"
+            android:text="₹ 12,28365"
+            android:gravity="right"
+            android:textColor="@color/lightBlack"
+            android:textSize="@dimen/dimen_16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

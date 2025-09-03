@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- seat_item.xml -->
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="4dp"
+    android:radius="8dp">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/seatButton"
+        android:layout_width="50dp"
+        android:layout_height="@dimen/dimen_60dp"
+        android:background="@drawable/bg_edittext"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+</androidx.cardview.widget.CardView>

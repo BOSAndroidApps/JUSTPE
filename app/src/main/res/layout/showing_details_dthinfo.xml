@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dimen_6dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/maincard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dimen_2dp"
+        app:cardCornerRadius="@dimen/dimen_6dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/dimen_6dp"
+            android:layout_margin="@dimen/dimen_4dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_6dp">
+
+                <TextView
+                    android:id="@+id/customerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Raja Yadav"
+                    android:textSize="@dimen/dimen_16dp"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/rechargetxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/customerName"
+                    android:text="Next Recharge Date : "
+                    android:textSize="@dimen/dimen_12sp"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/rechargeDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/rechargetxt"
+                    android:layout_alignTop="@id/rechargetxt"
+                    android:layout_alignBottom="@+id/rechargetxt"
+                    android:layout_below="@+id/customerName"
+                    android:gravity="center"
+                    android:text=" "
+                    android:textSize="@dimen/dimen_10sp"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/emiamounttitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="Monthly Pack"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_10sp"/>
+
+                <TextView
+                    android:id="@+id/packamount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="₹_ _ _"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/dimen_16sp"
+                    android:textColor="@color/blue"
+                    android:layout_below="@+id/emiamounttitle"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_1sp"
+                android:background="@color/grey"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/dimen_6dp">
+
+                <TextView
+                    android:id="@+id/plantxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Plan Name"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/planname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/plantxt"
+                    android:padding="@dimen/dimen_2dp"
+                    android:text="NCF 267PRNT,Hindi Ultimate 1M,Airtel Free Chnls Bundle_ROI "
+                    android:textSize="@dimen/dimen_12sp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/black"/>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:cardBackgroundColor="@color/db_brown"
+        android:elevation="@dimen/dimen_6dp"
+        app:layout_constraintStart_toStartOf="@+id/maincard">
+        <TextView
+            android:id="@+id/status"
+            android:text="SUSPENDED"
+            android:textSize="@dimen/dimen_10sp"
+            android:paddingHorizontal="@dimen/dimen_6dp"
+            android:paddingVertical="@dimen/dimen_2dp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

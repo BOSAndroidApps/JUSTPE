@@ -1,0 +1,788 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/lightest_blue"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark">
+
+        <!--        <ImageView-->
+        <!--            android:id="@+id/ivClose"-->
+        <!--            android:layout_width="50dp"-->
+        <!--            android:layout_height="50dp"-->
+        <!--            android:layout_alignParentRight="true"-->
+        <!--            android:layout_margin="15dp"-->
+        <!--            android:src="@drawable/bos_pic" />-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ownerPhoto"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="@dimen/dimen_20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="@dimen/dimen_10dp"
+                android:src="@drawable/ic_d_profile" />
+            <!--            <ImageView-->
+            <!--                android:layout_width="20dp"-->
+            <!--                android:layout_height="20dp"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:gravity="center"-->
+            <!--                android:layout_marginStart="@dimen/dimen_20dp"-->
+            <!--                android:src="@drawable/photo_camera" />-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="@dimen/dimen_20dp"
+                android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/customerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Hello BOS"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/walletBalance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RS 500000"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+            </LinearLayout>
+
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_marginTop="5dp"-->
+            <!--                android:drawableLeft="@drawable/ic_green_dot"-->
+            <!--                android:drawablePadding="5dp"-->
+            <!--                android:gravity="center"-->
+            <!--                android:text="Online"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="15dp" />-->
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:layout_marginTop="15dp"-->
+<!--        android:background="@color/button_text_gray" />-->
+
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_10dp"
+            tools:listitem="@layout/drawer_slider_item_layout"/>
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:src="@drawable/generate_qr_code" />-->
+
+<!--                <androidx.appcompat.widget.AppCompatTextView-->
+<!--                    android:id="@+id/dashboard"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center_vertical"-->
+<!--                    android:layout_marginStart="15dp"-->
+<!--                    android:focusable="true"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="Generate QR Code"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="@dimen/dimen_16sp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/manageCustomerLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:visibility="gone">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="25dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:src="@drawable/ic_coin" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="Manage Customer"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="17dp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/commissionLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:visibility="gone">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="25dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:src="@drawable/ic_coin" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="Commission Chart"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="17dp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/bankDetailsLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:visibility="gone">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="25dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:src="@drawable/ic_coin" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="Bank Details"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="17dp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/myAccountLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:visibility="gone">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="25dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:src="@drawable/ic_coin" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="My Account Details"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="17dp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/updateKycLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal">-->
+<!--                &lt;!&ndash;            <ImageView&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:layout_width="25dp"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:src="@drawable/ic_d_6"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:layout_height="25dp"/> &ndash;&gt;-->
+<!--                <ImageView-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:src="@drawable/update_kyc" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/updateKYCBtn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="Update KYC"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="17sp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/makePaymentLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:src="@drawable/make_payment" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/makePaymentBtn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="Make Payment"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="17sp" />-->
+<!--            </LinearLayout>-->
+
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/walletTransferLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:visibility="gone">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="25dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:src="@drawable/ic_coin" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="Wallet Transfer"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="17dp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/serviceWiseLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:visibility="visible">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:src="@drawable/service_wise_transaction" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/serviceWiseReports"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center_vertical"-->
+<!--                    android:layout_marginStart="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="Service Wise Transaction"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="@dimen/dimen_16sp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/myPaymentLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:visibility="gone">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="25dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:src="@drawable/ic_coin" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginStart="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="My Payment"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="17sp" />-->
+<!--            </LinearLayout>-->
+
+            <RelativeLayout
+                android:id="@+id/fingerPrintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/screen_lock" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="40dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Screen Lock"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
+
+                <Switch
+                    android:id="@+id/switchButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center"
+                    android:checked="false" />
+            </RelativeLayout>
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/refundLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:visibility="gone">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="25dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:src="@drawable/ic_coin" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="Refund Management"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="17dp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/otherServiceLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:visibility="gone">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="25dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:src="@drawable/ic_coin" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="Other Services"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="17dp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="6">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:layout_weight=".1"-->
+<!--                    android:src="@drawable/reports" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/reports"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginStart="@dimen/dimen_20dp"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    android:layout_weight="4.9"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="Reports"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="17sp" />-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/reportsImage"-->
+<!--                    android:layout_width="25dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:layout_gravity="end"-->
+<!--                    android:layout_marginEnd="@dimen/dimen_20sp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:src="@drawable/left_arrow" />-->
+
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/reportsLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/dimen_44dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="vertical"-->
+<!--                android:visibility="gone">-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="@dimen/dimen_20dp"-->
+<!--                        android:layout_height="25dp"-->
+<!--                        android:src="@drawable/ic_account" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/rechargeAndBill"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:layout_marginStart="@dimen/dimen_20dp"-->
+<!--                        android:layout_marginLeft="15dp"-->
+<!--                        android:layout_marginEnd="@dimen/dimen_20dp"-->
+<!--                        android:fontFamily="@font/roboto_medium"-->
+<!--                        android:text="Recharge &amp; Bill Payment Report"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="@dimen/dimen_14sp" />-->
+<!--                </LinearLayout>-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/dimen_14dp"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:visibility="gone">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="@dimen/dimen_20dp"-->
+<!--                        android:layout_height="25dp"-->
+<!--                        android:src="@drawable/ic_coin" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/panCardReports"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:layout_marginStart="@dimen/dimen_20dp"-->
+<!--                        android:layout_marginEnd="@dimen/dimen_20dp"-->
+<!--                        android:fontFamily="@font/roboto_medium"-->
+<!--                        android:text="Pan Card Report"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="@dimen/dimen_14sp" />-->
+<!--                </LinearLayout>-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/dimen_14dp"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:visibility="gone">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="@dimen/dimen_20dp"-->
+<!--                        android:layout_height="25dp"-->
+<!--                        android:src="@drawable/ic_coin" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/moneyTransReport"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:layout_marginStart="@dimen/dimen_20dp"-->
+<!--                        android:layout_marginEnd="@dimen/dimen_20dp"-->
+<!--                        android:fontFamily="@font/roboto_medium"-->
+<!--                        android:text="Money Transfer Report"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="@dimen/dimen_14sp" />-->
+<!--                </LinearLayout>-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/dimen_14dp"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:visibility="gone">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="@dimen/dimen_20dp"-->
+<!--                        android:layout_height="25dp"-->
+<!--                        android:src="@drawable/ic_coin" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/aEpsReport"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:layout_marginStart="@dimen/dimen_20dp"-->
+<!--                        android:layout_marginEnd="@dimen/dimen_20dp"-->
+<!--                        android:fontFamily="@font/roboto_medium"-->
+<!--                        android:text="AEPS Report"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="@dimen/dimen_14sp" />-->
+<!--                </LinearLayout>-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/dimen_14dp"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:visibility="gone">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="@dimen/dimen_20dp"-->
+<!--                        android:layout_height="25dp"-->
+<!--                        android:src="@drawable/ic_coin" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/payInReports"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:layout_marginStart="@dimen/dimen_20dp"-->
+<!--                        android:layout_marginEnd="@dimen/dimen_20dp"-->
+<!--                        android:fontFamily="@font/roboto_medium"-->
+<!--                        android:text="Payin Report"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="@dimen/dimen_14sp" />-->
+<!--                </LinearLayout>-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/dimen_14dp"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:visibility="gone">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="@dimen/dimen_20dp"-->
+<!--                        android:layout_height="25dp"-->
+<!--                        android:src="@drawable/ic_coin" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/payoutReports"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:layout_marginStart="@dimen/dimen_20dp"-->
+<!--                        android:layout_marginEnd="@dimen/dimen_20dp"-->
+<!--                        android:fontFamily="@font/roboto_medium"-->
+<!--                        android:text="Payout Report"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="@dimen/dimen_14sp" />-->
+<!--                </LinearLayout>-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:visibility="gone">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="@dimen/dimen_20dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:src="@drawable/ic_coin" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginStart="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="GST &amp; TDS Report"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="@dimen/dimen_14sp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:visibility="gone">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="25dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:src="@drawable/ic_coin" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="GST Request"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="@dimen/dimen_16sp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:src="@drawable/change_password" />-->
+
+<!--                <androidx.appcompat.widget.AppCompatTextView-->
+<!--                    android:id="@+id/changePasswordBtn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center_vertical"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="Change Password"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="@dimen/dimen_16sp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:src="@drawable/change_pin" />-->
+
+<!--                <androidx.appcompat.widget.AppCompatTextView-->
+<!--                    android:id="@+id/changePinBtn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center_vertical"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="Change PIN"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="@dimen/dimen_16sp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:visibility="gone">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="25dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:src="@drawable/ic_coin" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="Support Management"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="17dp" />-->
+<!--            </LinearLayout>-->
+
+            <LinearLayout
+                android:id="@+id/llLogout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/logout" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="15dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Logout"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+            </LinearLayout>
+<!--        </LinearLayout>-->
+<!--    </androidx.core.widget.NestedScrollView>-->
+
+
+</LinearLayout>

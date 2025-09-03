@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#0371B0</color>
+    <color name="blue">#002E5D</color>
+
+    <color name="purple_500">#0371B0</color>
+    <color name="purple_700">#DD4B39</color>
+    <color name="teal_200">#0371B0</color>
+    <color name="teal_700">#005B8F</color>
+    <color name="teal_300">#3793C5</color>
+    <color name="black">#FF000000</color>
+    <color name="orange">#ffa928</color>
+    <color name="lightBlack">#0E0E0E</color>
+    <color name="light_black">#1E1E1E</color>
+    <color name="white">#FFFFFF</color>
+    <color name="light_Red">#FF6260</color>
+    <color name="light_orange">#F5A522</color>
+    <color name="purple">#7EA1FA</color>
+    <color name="colorPrimary">#0371B0</color>
+    <color name="colorPrimaryDark">#005B8F</color>
+    <color name="colorAccent">#92B4DF</color>
+    <color name="bluelight">#C9DDF3</color>
+    <color name="bluelightt">#DCEBFA</color>
+    <!--    <color name="colorAccent">#124586</color>-->
+    <color name="edittext_color">#3D3D3D</color>
+    <color name="text_hint_color">#AAAAAA</color>
+    <color name="grey">#EDEBEB</color>
+    <color name="greylight">#F4F3F3</color>
+    <color name="greydark">#D3D1D1</color>
+    <color name="fail">#ff0000</color>
+    <color name="text_color">#605F5F</color>
+    <color name="hint_color_add_leads">#F2D6D5D5</color>
+    <color name="inputtext_boxstroke">#605F5F</color>
+    <color name="invertible_white">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="progress_bg">#33144372</color>
+    <color name="cardview_bg">#F8F8F8</color>
+
+    <color name="mode_color">#373636</color>
+    <color name="menu_color">#DDD</color>
+    <color name="button_text_gray">#AFAFAF</color>
+    <color name="button_text_light_gray">#DFDFDF</color>
+    <color name="red">#DD4B39</color>
+    <color name="db_brown_light">#F4F1E6</color>
+    <color name="light_blue">#cbd9e8</color>
+    <color name="lightest_blue">#DBE7F4</color>
+    <color name="db_brown">#efe7cf</color>
+    <color name="green">#268703</color>
+
+    <color name="primary">#4CAF50</color>
+
+    <color name="light_grey">#F5F5F5</color>
+
+    <color name="blurlight">#D0E6F2</color>
+
+
+</resources>

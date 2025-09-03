@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.view.Dashboard.activity.MakePayment">
+
+    <include
+        android:id="@+id/makePaymentToolBar"
+        layout="@layout/custom_toolbar2" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:gravity="center"
+                android:text="Make Payment"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_20dp"
+                android:layout_marginTop="@dimen/dimen_32dp"
+                android:layout_marginEnd="@dimen/dimen_20dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_edittext">
+
+                    <Spinner
+                        android:id="@+id/paymentModeSp"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/dropdownListPreferredItemHeight"
+                        android:background="@drawable/bg_edittext"
+                        android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight" />
+
+                </RelativeLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/amount_txt"
+                    style="@style/inputtextlayout_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/amount"
+                        style="@style/edittext_addform"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_44sp"
+                        android:hint="Enter your amount"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/button_text_gray" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/depositBank_txt"
+                    style="@style/inputtextlayout_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/depositingBank"
+                        style="@style/edittext_addform"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_44sp"
+                        android:hint="Enter your bank"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/button_text_gray" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/branchCode_txt"
+                    style="@style/inputtextlayout_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/branchCode"
+                        style="@style/edittext_addform"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_44sp"
+                        android:hint="Enter your branch code/Name"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/button_text_gray" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/inputtextlayout_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/transitionId"
+                        style="@style/edittext_addform"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_44sp"
+                        android:hint="Enter your transaction Id"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/button_text_gray" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/inputtextlayout_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/remarks"
+                        style="@style/edittext_addform"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_44sp"
+                        android:hint="Enter remarks"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/button_text_gray" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_80dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_16sp"
+                    android:background="@drawable/border_bg">
+
+                    <ImageView
+                        android:id="@+id/slipImage"
+                        android:layout_width="@dimen/dimen_60dp"
+                        android:layout_height="@dimen/dimen_60dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/dimen_20dp"
+                        android:src="@android:drawable/ic_menu_camera" />
+
+                    <TextView
+                        android:id="@+id/uploadSlipBtn"
+                        style="?attr/colorPrimary"
+                        android:layout_width="@dimen/dimen_100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/dimen_30dp"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="Upload your slip" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="@dimen/dimen_20dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/tvBtnCancel"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="7.5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_button_border_blue"
+                        android:fontFamily="@font/roboto_medium"
+                        android:gravity="center"
+                        android:text="Cancel"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/proceedBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="7.5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_button_blue"
+                        android:fontFamily="@font/roboto_medium"
+                        android:gravity="center"
+                        android:text="Proceed"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.appcompat.widget.LinearLayoutCompat>

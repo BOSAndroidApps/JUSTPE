@@ -1,0 +1,603 @@
+<resources>
+    <string name="app_name">AO PAY</string>
+    <string name="Pay_india">Pay India</string>
+    <string name="Amazing_pay">Amazing Pay</string>
+    <string name="Bos_Pay">BOS Pay</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <!--TODO change the all static value to the string form by RK_SINGH -->
+
+    <string-array name="login_array">
+        <item>Select your type</item>
+        <item>Customer</item>
+        <item>Retailer</item>
+    </string-array>
+
+    <string-array name="title_type">
+        <item>Select your title</item>
+        <item>Mr</item>
+        <item>Mrs</item>
+        <item>Ms</item>
+    </string-array>
+
+    <string-array name="gender_array">
+        <item>Select Gender</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="recharge_array">
+        <item>Select Type</item>
+        <item>All</item>
+        <item>Mobile</item>
+        <item>DTH</item>
+        <item>Electricity</item>
+        <item>PostPaid</item>
+        <item>Broadband</item>
+        <item>Landline</item>
+        <item>Water</item>
+        <item>EMI</item>
+        <item>Municipality</item>
+        <item>LPG</item>
+        <item>Cable</item>
+        <item>Insurance</item>
+    </string-array>
+
+    <string-array name="transaction_array">
+        <item>Select transaction type</item>
+        <!--        <item>All Transactions</item>-->
+        <!--        <item>Balance Transfer</item>-->
+        <item>Commission</item>
+        <item>Service Charges</item>
+        <item>Money Transfer</item>
+        <!--        <item>PAN CARD</item>-->
+        <!--        <item>AEPS</item>-->
+        <!--        <item>Recharge &amp; Bill Payment</item>-->
+        <!--        <item>Net Worth</item>-->
+        <!--        <item>Load Balance</item>-->
+        <item>Payin</item>
+        <item>Payout</item>
+
+    </string-array>
+
+
+    <string-array name="makePayment_array">
+        <item>Select your payment mode</item>
+        <item>Cash Deposit</item>
+        <item>UPI/IMPS</item>
+        <item>Net Banking</item>
+        <item>CDM Deposit</item>
+        <item>RTGS/NEFT</item>
+        <item>Others</item>
+    </string-array>
+
+
+    <string-array name="transactionDMT_array">
+        <item>Select your transfer mode</item>
+        <item>IMPS</item>
+        <item>NEFT</item>
+    </string-array>
+
+
+    <string-array name="recharge_circle">
+        <item>Andhra Pradesh Telangana</item>
+        <item>Assam</item>
+        <item>Bihar</item>
+        <item>Jharkhand</item>
+        <item>Chennai</item>
+        <item>Delhi NCR</item>
+        <item>Gujarat</item>
+        <item>Haryana</item>
+        <item>Himachal Pradesh</item>
+        <item>Jammu Kashmir</item>
+        <item>Karnataka</item>
+        <item>Kerala</item>
+        <item>Kolkata</item>
+        <item>Madhya Pradesh</item>
+        <item>Chhattisgarh</item>
+        <item>Maharashtra</item>
+        <item>Goa</item>
+        <item>Mumbai</item>
+        <item>North East</item>
+        <item>Orissa</item>
+        <item>Punjab</item>
+        <item>Rajasthan</item>
+        <item>Tamil Nadu</item>
+        <item>UP East</item>
+        <item>UP West</item>
+        <item>West Bengal</item>
+    </string-array>
+
+
+    <string name="login_signup_hint">Don\'t have an account? Sign Up</string>
+
+    <string name="responseNULL" translatable="false">Try again later!</string>
+    <string name="catch_msg" translatable="false">Please try after sometime!</string>
+    <string name="responseNotSuccessful" translatable="false">Something went wrong!</string>
+    <string name="Onfailure" translatable="false">Oops..Something went wrong!!</string>
+    <string name="NoInternet" translatable="false">No Internet!!</string>
+
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+    <string name="create_acc">Create Account</string>
+    <string name="title_activity_dayinand_out_scrolling">DayinandOutScrollingActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="day_out">Day out</string>
+    <string name="day_in">Day In</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="add_task">Add Task</string>
+    <string name="add_leads">Add GSP</string>
+    <string name="add_issue">Add Issue</string>
+    <string name="add_event">Add Event</string>
+    <string name="Dashboard_Heading_textview">Items assigned to me across all projects with tasks including start date</string>
+    <string name="milestones">Milestones</string>
+    <string name="tasks">Application Status</string>
+    <string name="events">Events</string>
+    <string name="title_activity_calling">CallingActivity</string>
+    <string name="last_day_in">Last day in : </string>
+    <string name="last_day_out">Last day out :</string>
+    <string name="title_activity_meetings">MeetingsActivity</string>
+    <string name="title_activity_splash">Splash</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_one_time_login">Sign in</string>
+    <string name="isourse">Grofers Help Desk</string>
+    <string name="logout">Logout</string>
+    <string name="passWorld">Change Password</string>
+    <string name="share_app_link">Share</string>
+    <string name="search">Search</string>
+    <string name="owner_details">Owner Details</string>
+    <string name="xB_details">XB Details</string>
+    <string name="store_detail">Store Details</string>
+    <string name="deliverer_detail">Deliverer Details</string>
+    <string name="onboarding_detail">OnBoarding Fee Details</string>
+    <string name="store_front_picture">Store Front Picture</string>
+    <string name="store_state">State</string>
+    <string name="driving_license_picture">Driving License Picture</string>
+    <string name="store_details">Store Details</string>
+    <string name="deliverer_details">Deliverer Details</string>
+    <string name="onboarding_fee_details">OnBoarding Fee Details</string>
+    <string name="van_owner_details">Van Owner Details</string>
+    <string name="dp_longitude">Dp Longitude</string>
+    <string name="dp_latitute">Dp Latitute</string>
+    <string name="frnt_driving_licence_img">Front Driving Licence Image</string>
+    <string name="bck_driving_licence_img">Back Driving Licence Image</string>
+    <string name="agreementSigned">Agreement Signed</string>
+    <string name="agreementNOTSigned">Agreement Not Signed</string>
+    <string name="enter_delivery_boy_contact_no"><font size="15">Enter Delivery Boy Contact No</font></string>
+    <string name="service_partners">Service Partners</string>
+    <string name="powered_by_isourse">Powered by <a href="https://isourse.com/">Isourse</a></string>
+    <string name="welcome_to_service_partners">Welcome to Service Partners</string>
+    <string name="please_enter_userID">Enter user id</string>
+    <string name="oldPassword">Enter Old Password</string>
+    <string name="please_enter_password">Please enter your password</string>
+    <string name="newPassword">Enter New Password</string>
+    <string name="confirmPassword">Confirm Password</string>
+    <string name="conPassword">Oops..password does not match</string>
+    <string name="samePass">Old or New Password can\'t be same</string>
+    <string name="forgot_password">Update password?</string>
+    <string name="login_res">Login</string>
+    <string name="backBtn">Back</string>
+    <string name="login_signup">Create Account</string>
+    <string name="add_gsp">Add GSP</string>
+    <string name="gsp_form">Gsp Form</string>
+    <string name="add_dp">Add DP</string>
+    <string name="add_vsp">Add VSP</string>
+    <!--    <String name= "add_grp">Add GEP</String>-->
+
+    <string name="logout_title">Log Out from BOS Pay</string>
+    <string name="logout_message">Are you sure you want would like to Log Out from BOS Pay</string>
+
+
+    <string name="gsp">GSP</string>
+    <string name="vsp">VSP</string>
+    <string name="dp">DP</string>
+    <string name="all_dp">All DP</string>
+    <string name="all_gsp">All GSP</string>
+    <string name="all_znpl">All ZHPL</string>
+    <string name="all_bcpl">All BCPL</string>
+    <string name="all_vsp">All VSP</string>
+    <string name="created">Created</string>
+    <string name="view">View</string>
+    <string name="approved">Approved</string>
+    <string name="pending">Pending</string>
+    <string name="rejected">Rejected</string>
+    <string name="internet_msg">Please Check Your Internet Connection</string>
+    <string name="dialogtitle">Confirm</string>
+    <string name="progressMsg">Loading</string>
+    <string name="retry">Retry</string>
+    <string name="couldnt_retry">Couldn\'t retry</string>
+    <string name="file_uploaded">File Uploaded</string>
+    <string name="form_update">Form Updated</string>
+    <string name="dismiss_text">GOT IT</string>
+    <string name="context_arrow">Update your status card.</string>
+    <string name="view_ol_gsp_vsp_dp">View all vsp, gsp, dp.</string>
+    <string name="view_ol_store_rsc_dp">View all store, rsc, dp.</string>
+    <string name="view_ol_ba">View all BA</string>
+    <string name="popup_img_context">Click to view image</string>
+    <string name="verifying_training_txt">Know verification status.</string>
+    <string name="please_wait">Please Wait</string>
+    <string name="vsp_form">Vsp Form</string>
+    <string name="dp_form">Dp Form</string>
+    <string name="fail">Fail</string>
+    <string name="success">Success</string>
+    <string name="court_verify_stts">Court verification status :</string>
+    <string name="pan_verify_stts">PAN verification status :</string>
+    <string name="post_verify_stts">Postal address verification status :</string>
+    <string name="store_verify_stts">Store address verification status :</string>
+    <string name="aadhaar_verify_stts">Aadhaar verification status :</string>
+    <string name="agreement_verify_stts">Agreement verification status :</string>
+    <string name="document_verify_stts">Document verification status :</string>
+    <string name="update">Update</string>
+    <string name="sign_up">Create Account</string>
+    <string name="tracking_status">Tracking Status</string>
+    <string name="date_amp_time">Date &amp; Time</string>
+    <string name="status">Status</string>
+    <string name="stages">Stages</string>
+    <string name="id_creation">ID Creation</string>
+    <string name="list_of_gsp">List of Gsps</string>
+    <string name="list_of_vsp">List of Vsps</string>
+    <string name="list_of_dp">List of Dps</string>
+    <string name="search_hint">Store name &amp; Owner name</string>
+    <string name="create_account">Create Account</string>
+    <string name="view_mode_only">View Only Mode</string>
+    <string name="onlyTextPattern">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="alphaNumbericPattern">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-</string>
+    <string name="addressPattern">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,-/</string>
+    <string name="default_keyboard">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&amp;-*()_+}{_,.=</string>
+    <string name="default_emailkeyboard">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@.</string>
+    <string name="onlyNumbericPattern">0123456789</string>
+    <string name="latlongPattern">0123456789.</string>
+    <string name="store_address_proof">Store Address Proof</string>
+    <string name="dp_address_proof">Dp Address Proof</string>
+    <string name="bank_deposit_receipt">Bank Deposit Receipt</string>
+
+    <!--Todo New Cargo Changes Entity Type  By  Prakash Mehta as on 13/08/2021 CG13/08/2021-->
+
+    <string name="onlyNumbericPatterncolon">0123456789 ,</string>
+
+    /***************** Asterisk marks in all Mandatory fields ******************/
+    <string name="passworld">Password<font color='#FF0000'>*</font></string>
+    <string name="name">UserName<font color='#FF0000'>*</font></string>
+    <string name="email">Your Email Id<font color='#FF0000'>*</font></string>
+    <string name="owner_photo">Candidate Photo<font color='#FF0000'>*</font></string>
+    <string name="other_photo">Other Document<font color='#FF0000'>*</font></string>
+    <string name="resume_photo">Resume<font color='#FF0000'>*</font></string>
+    <string name="aadhaarFront">Aadhaar Front<font color='#FF0000'>*</font></string>
+    <string name="aadhaarBack">Aadhaar Back<font color='#FF0000'>*</font></string>
+    <string name="father_husband_Name">Father/Husband Name<font color='#FF0000'>*</font></string>
+    <string name="Date_of_birth">Date of Birth<font color='#FF0000'>*</font></string>
+    <string name="permanent_Address">Permanent Address<font color='#FF0000'>*</font></string>
+    <string name="contact_Number">Mobile Number<font color='#FF0000'>*</font></string>
+    <string name="aadhaar_Card_Number">Aadhaar Card Number<font color='#FF0000'>*</font></string>
+    <string name="aadhaar_Card_Front_Side">Aadhaar Card - Front Side<font color='#FF0000'>*</font></string>
+    <string name="aadhaar_Card_Back_Side">Aadhaar Card - Back Side<font color='#FF0000'>*</font></string>
+    <string name="driving_licence_number_Voter_ID">Driving licence number/Voter ID<font color='#FF0000'>*</font></string>
+    <string name="driveLicenceNo_picture_Voter_ID_Picture">DriveLicenceNo picture/Voter ID Picture<font color='#FF0000'>*</font></string>
+    <string name="emergency_Contact_No">Emergency Contact No<font color='#FF0000'>*</font></string>
+    <string name="emergency_Address">Emergency Address<font color='#FF0000'>*</font></string>
+    <string name="panCardNo">PanCard Number</string>
+
+
+    /**************************************************************************************************/
+
+    <string name="grofers_onboarding_fee_slip">Grofers Onboarding Fee Slip</string>
+    <string name="on_boarding_fee_ref_no">On-boarding Fee-Ref no</string>
+    <string name="img_selection_tc">You can select upto 4 photos</string>
+    <string name="viewMode_tc">Not allowed in view mode</string>
+    <string name="ownerAdhaarFront">owner_adhaar_front</string>
+    <string name="ownerAdhaarBack">owner_adhaar_back</string>
+    <string name="ownerPan">owner_pan</string>
+    <string name="cancelledCheque1">cancelled_cheque</string>
+    <string name="DriveLicenceNoImage">DriveLicenceNoImage</string>
+    <string name="null_list">pic list null</string>
+    <string name="insert_0">Failed to resubmit</string>
+    <string name="gstin">Goods and Services Tax Identification Number</string>
+    <string name="form_inserted">inserted successfully</string>
+    <string name="add_store">Add Store</string>
+    <string name="add_rsc">Add RSC</string>
+    <string name="all_store">All Store</string>
+    <string name="all_RSC">All RSC</string>
+    <string name="store">Store</string>
+    <string name="RSC">RSC</string>
+    <string name="store_form">Store Form</string>
+    <string name="xb_form">XB Staff Form</string>
+    <string name="list_of_store">List of stores</string>
+    <string name="list_of_rsc">List of RSCs</string>
+    <string name="RSC_form">RSC Form</string>
+    <string name="xb_onboarding_fee_slip">Xpressbees Onboarding Fee Slip</string>
+    <string name="xb_select_dc_name">Select HUB/Service Centre Name</string>
+    <string name="select_dc_name">Select Dc Name</string>
+    <string name="xb_select_dc_code">Select HUB Code</string>
+    <string name="select_dc_code">Select Dc Code Station Code</string>
+    <string name="xb_enter_storefullAdres">"Enter Office/Business Address "</string>
+    <string name="enter_storefullAdres">Enter Store Full Address</string>
+    <string name="dropdown_excep_atres">Please reload your form</string>
+    <string name="min_age_person">Minimum age should be 18 years</string>
+    <string name="max_age_person">Maximum age limit is 60 years</string>
+    <string name="explicit_form_cancel">Form Canceled</string>
+    <string name="double_back_press_msg">Please click back again to exit</string>
+    <string name="gep">GEP</string>
+    <string name="all_gep">All GEP</string>
+    <string name="add_gep">Add GEP</string>
+    <string name="gep_form">Gep Form</string>
+    <string name="enter_ow_father_name">Enter owner\'s father name</string>
+    <string name="en_own_martial_sts">select owner marital status</string>
+    <string name="en_own_dob">Enter owner\'s dob</string>
+    <string name="upload_store_add_proof_pics">Upload Store Address Proof Photo</string>
+    <string name="upload_chklst_pics">Upload Checklist Photos</string>
+    <string name="select_store_type">Select Store Type</string>
+    <string name="en_store_type_other">Enter Store Type Other</string>
+    <string name="en_store_name">Enter Store Name</string>
+    <string name="en_own_name">Enter Owner Name</string>
+    <string name="en_contact_no">Enter Contact No.</string>
+    <string name="invalid_phone_no">Contact No must be of 10 digits</string>
+    <string name="select_dc">Select Dc Name</string>
+    <string name="select_city"> Select City</string>
+    <string name="select_state">Select State</string>
+    <string name="select_belonging_state">Select Belonging State</string>
+    <string name="select_dcode_station">Select Dc Code Station Code</string>
+    <string name="en_store_full_address">Enter Store Full Address</string>
+    <string name="en_pincode">Enter Pin Code</string>
+    <string name="en_store_phoneno">Enter Store Contact No.</string>
+    <string name="en_landmark">Enter Landmark</string>
+    <string name="en_store_shop_plot_no">Enter Store/Shop/Plot/House No.</string>
+    <string name="en_own_Aadhaar_no">Enter Owner Aadhaar No.</string>
+    <string name="upload_own_Aadhaar_front">Upload Owner Aadhaar Front Side Photo</string>
+    <string name="en_own_Aadhaar_back">Upload Owner Aadhaar Back Side Photo</string>
+    <string name="en_own_pan">Enter Owner Pan No.</string>
+    <string name="invalid_pan_no">Invalid Owner PanCard </string>
+    <string name="upload_own_pan">Upload Owner PanCard Photo</string>
+    <string name="upload_cancelled_or_passbook">Upload Cancelled Cheque Or Passbook Photo</string>
+    <string name="select_bnk_name">Select Bank Name</string>
+    <string name="en_beificiary">Enter Beificiary Name</string>
+    <string name="en_bnk_no">Enter Bank Account No.</string>
+    <string name="en_ifsc_code">Enter IFSC code</string>
+    <string name="en_deliverer_name">Enter Deliverer Name </string>
+    <string name="en_deliverer_father_name">Enter deliverer father\'s name</string>
+    <string name="en_deliverer_no">Enter Deliver Boy Contact No.</string>
+    <string name="upload_grofers_onboarding_feeSlip">Upload Grofers Onboarding Fee Slip Photo</string>
+    <string name="en_own_permanant_add">Enter Owner\'s Permanant Address</string>
+    <string name="en_deliverer_dob">Enter Delivery Person D.O.B</string>
+    <string name="upload_fe_Aadhaar_front_side">Upload Deliverer Aadhaar Front Side Photo</string>
+    <string name="upload_fe_Aadhaar_back">Upload Deliverer Adhaar Back Side Photo</string>
+    <string name="en_fe_Aadhaar_no">Enter Delivery Aadhaar No.</string>
+    <string name="invalid_fe_Aadhaar_no">Invalid Delivery Aadhaar No</string>
+    <string name="dp_lat_long_empty">Dp Latitude/Longitude is Empty</string>
+    <string name="select_billing_cycle">Select billing cycle</string>
+    <string name="invalid_email">Enter Valid Email</string>
+    <string name="invalid_pincode">Enter valid pincode</string>
+    <string name="invalid_own_Aadhaar">Invalid Aadhaar Number</string>
+    <string name="upload_own_Aadhaar_back">Upload owner Aadhaar back image</string>
+    <string name="upload_drivingLicense_pic">Upload Driving License Photo</string>
+    <string name="Invalid_licenese">Invalid License Number</string>
+    <string name="upload_onboarding_deposit_pic">Upload Onboarding Deposit Photo</string>
+    <string name="invalid_deliverer_boy_no">Invalid  Deliver Boy Contact No.</string>
+    <string name="en_onboarding_fe_ref_no">Enter Onboarding fee number</string>
+    <string name="upload_own_pic">Upload Owner Photo</string>
+    <string name="select_dc_station_code">Select Dc Code Station Code</string>
+    <string name="van_own_Aadhaar_fron">Upload Van Owner Aadhaar Front Side Photo</string>
+    <string name="van_own_Aadhaar_back">Upload Van Owner Aadhaar Front Side Photo</string>
+    <string name="vsp_driver_license_pic">Upload VSP driver Valid Driving License Photo</string>
+    <string name="upload_van_rc">Upload VAN RC(Registration Certificate) Photo</string>
+    <string name="upload_van_pc">Upload VAN PC(Pollution Certificate) Photo</string>
+    <string name="upload_insurance_pic">Upload Vehicle Insurance Photo</string>
+    <string name="upload_vanFront_pic_with_no_plate">Upload Van  Picture Along with No. Plate front Photo</string>
+    <string name="upload_vanBck_pic_with_no_plate">Upload Van Picture Along with No. Plate back Photo</string>
+    <string name="en_van_number">Enter Van No.</string>
+    <string name="van_driverer_Aadhaar_front">Upload Van Driver Aadhaar Front Photo</string>
+    <string name="van_driverer_Aadhaar_back">Upload Van Driver Aadhaar Back Photo</string>
+    <string name="select_vehicle_reg">Select Type Of Vehicle Registration</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="field_error_msg">PLEASE EDIT THIS FIELD</string>
+    <string name="add_Ba">Add BA</string>
+    <string name="xb_staff">Xb Staff</string>
+    <string name="grofers_staff">ZHPL(Warehouse)</string>
+    <string name="bcpl_staff">BCPL(Express Store)</string>
+    <string name="all_ba">All BA</string>
+    <string name="AllXb">All Xb</string>
+    <string name="enterGst">Enter Gst Number</string>
+    <string name="upload_gstPic">Upload Gst Certificate</string>
+    <string name="en_bnk_brnch">Enter Bank Branch</string>
+    <string name="en_orgComAd">Enter organisation communication address</string>
+    <string name="en_orgRegAd">Enter orgranisation registration address</string>
+    <string name="uploadBnkStatement">Upload bank statement</string>
+    <string name="up_ref_pan_frnt">Upload reference pan front</string>
+    <string name="up_ref_pan_bck">Upload reference pan back</string>
+    <string name="up_ref_adhr_frnt">Upload reference adhaar front side</string>
+    <string name="up_ref_adhr_bck">Upload reference adhaar back side</string>
+    <string name="ba_form">BA Form</string>
+    <string name="selectPinCode">Select PinCode</string>
+    <string name="confirm">Confirm</string>
+    <string name="All_ba">All BA</string>
+    <string name="_3pl">3PL</string>
+    <string name="flp">FLP</string>
+    <string name="cpu">CPU</string>
+    <string name="express_store_details">Express Store Details</string>
+    <string name="emergency_contact_detail">Emergency Contact Detail</string>
+    <string name="xb_spinner">XB Spinner</string>
+    <string name="all_asc">All ASC</string>
+    <string name="asc">ASC</string>
+
+    <string name="signUp">Don\'t have an account?\'s <a href="https://isourse.com/privacyPolicyUrbanRojgar.html">Privacy Policy</a></string>
+    <string name="remember_me">Remember me</string>
+    <string name="loginId">LoginID</string>
+    <string name="otp">Please enter your OTP</string>
+    <string name="user_password">User Password</string>
+    <string name="forgot_password_pin">Forgot Password/PIN</string>
+    <string name="login">Login</string>
+    <string name="signup">SignUp</string>
+    <string name="create_naccount">Create an\nAccount</string>
+    <string name="company_name">Company Name<font color='#FF0000'>*</font></string>
+    <string name="company_code">Company Code</string>
+    <string name="bos_center">BOS Center</string>
+    <string name="reference_id">Reference ID</string>
+    <string name="reference_type">Reference Type</string>
+    <string name="reference_code">Reference Code<font color='#FF0000'>*</font></string>
+    <string name="first_name">First Name<font color='#FF0000'>*</font></string>
+    <string name="last_name">Last Name</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="update_id">Update PassWord</string>
+    <string name="email_id">Please enter your email Id</string>
+    <string name="login_id">Enter your login Id</string>
+    <string name="submit_otp">Submit OTP</string>
+    <string name="login_details">Enter registered Email Id or Mobile Number to\nreceive your login details</string>
+    <string name="enter_your_agency_name">Enter your agency name</string>
+    <string name="done">Done</string>
+    <string name="pnr">PNR</string>
+    <string name="order">Order ID</string>
+    <string name="depart">DEPARTURE</string>
+    <string name="arrival">ARRIVAL</string>
+    <string name="bon">Bus Operator Name:</string>
+    <string name="boardpoint">Boarding Point:</string>
+    <string name="reporttime">Reporting Time:</string>
+    <string name="bstype">Bus Type:</string>
+    <string name="driverdetails">Driver Contact &amp; Vehicle Number:</string>
+    <string name="droppoint">Dropping Point:</string>
+    <string name="boardingtime">Boarding Time:</string>
+    <string name="ticketqr">Ticket QR</string>
+    <string name="traveldetails">Traveller Details</string>
+    <string name="namee">Name</string>
+    <string name="gender">Gender</string>
+    <string name="seatno">Seat No</string>
+    <string name="ticketnumber">Ticket Number</string>
+    <string name="farepayment">Fare &amp; Payment Details</string>
+    <string name="basefare">Base Fare (Traveller)</string>
+    <string name="gst">Operator GST</string>
+    <string name="othercharges">Other Charges</string>
+    <string name="convencfee">Convenience fees</string>
+    <string name="totalamt">Total Amount Paid</string>
+    <string name="flightsearch">Flight Search</string>
+    <string name="oneway">ONEWAY</string>
+    <string name="roundtrip">ROUNDTRIP</string>
+    <string name="multicity">MULTICITY</string>
+    <string name="fromcity">FROM</string>
+    <string name="addreturndate">+ADD RETURN DATE</string>
+    <string name="tocity">TO</string>
+    <string name="departuredate">DEPARTURE DATE</string>
+    <string name="returndate">RETURN DATE</string>
+    <string name="travellers">TRAVELLERS &amp; CLASS</string>
+    <string name="roundtripmsg">Save more on round trips!</string>
+    <string name="spcloffer">SPECIAL FARES (OPTIONAL)</string>
+    <string name="extrasaving">EXTRA SAVINGS</string>
+    <string name="searchflights">SEARCH FLIGHTS</string>
+    <string name="selectclass">Select Travellers &amp; Class </string>
+    <string name="numbertravellers">ADD NUMBER OF TRAVELLERS </string>
+    <string name="ontheway">on the day of travel </string>
+    <string name="adult">Adult </string>
+    <string name="children">Children</string>
+    <string name="infant">Infant</string>
+    <string name="adultage">12 yrs &amp; above </string>
+    <string name="childage">2-12 yrs</string>
+    <string name="infantage">Under 2 yrs</string>
+    <string name="chooseclass">CHOOSE CABIN CLASS</string>
+    <string name="economy">ECONOMY</string>
+    <string name="business">BUSINESS</string>
+    <string name="first">FIRST CLASS</string>
+    <string name="preeconomy">PREMIUM ECONOMY</string>
+    <string name="hint">Enter any City/AirPort Name</string>
+    <string name="edit">Edit</string>
+    <string name="fareoffermsg">Fare offered by airline</string>
+    <string name="cabinbag">Cabin bag</string>
+    <string name="checkin">Check - in</string>
+    <string name="meal">Meal</string>
+    <string name="booknow">BOOK NOW</string>
+    <string name="flightdetails">Flight Details</string>
+    <string name="continuee">CONTINUE</string>
+    <string name="changeplane">Change of planes</string>
+    <string name="faredetails">VIEW FLIGHT &amp; FARE DETAILS </string>
+    <string name="bagpolicy">Baggage Policy </string>
+    <string name="promocode">Offers  &amp; Promo Codes</string>
+    <string name="offermsg">To help you save more</string>
+    <string name="promomsg">Enter promo code here</string>
+    <string name="apply">APPLY</string>
+    <string name="adultage1">ADULT(12 yrs+)</string>
+    <string name="childage1">CHILD(2-12 yrs)</string>
+    <string name="infantage1">INFANT(15 days-2 yrs)</string>
+    <string name="addadult">+ ADD NEW ADULT</string>
+    <string name="addchild">+ ADD NEW CHILD</string>
+    <string name="addinfant">+ ADD NEW INFANT</string>
+    <string name="booksentmsg">Booking details will be sent to </string>
+    <string name="addtraveller">Add Traveller</string>
+    <string name="userentrywarning">Enter name as mentioned on your passport or Government approved IDs</string>
+    <string name="firstname">First &amp; Middle Name</string>
+    <string name="lastname">Last Name</string>
+    <string name="dob">dob (MM/DD/YYYY)</string>
+    <string name="passportno">Passport no</string>
+    <string name="passportcountryname">Passport issuing country name</string>
+    <string name="passportexpiredate">Passport expiry date (MM/DD/YYYY)</string>
+    <string name="cnfrm">CONFIRM</string>
+    <string name="continfo">Contact information</string>
+    <string name="continfomsg">Your ticket and flights information will be sent here .</string>
+
+    <string name="mailid">Email Id</string>
+    <string name="mob">Mobile Number</string>
+
+    <string name="farebreak">Fare Breakup</string>
+    <string name="gstmsg">I have a GST number (Optional)</string>
+
+    <string name="gsttitle">GST Information</string>
+    <string name="compnayname">Company Name</string>
+    <string name="regis">Registration No</string>
+
+    <string name="basefaree">Base Fare</string>
+    <string name="taxes">Taxes and Surcharges</string>
+    <string name="airlinetaxes">Airline Taxes  and Surcharges</string>
+    <string name="reviewtitle">Review Details</string>
+    <string name="reviwmsg">Please ensure that the spelling of your name and other details match with your travel document/govt. ID, as these cannot be changed later.Errorr might lead to cancellation penalties .</string>
+
+    <string name="sortfilters">Sort &amp; Filters</string>
+
+    <string name="flighttype">Flight Type</string>
+
+    <string name="departure">Departure</string>
+
+    <string name="chooseairlines">Choose Airlines</string>
+
+    <string name="filterflighttype">Filter by Flight Type</string>
+
+    <string name="filterflightop">Filter by Flight Operators</string>
+
+    <string name="filterflight">Filter Your Flight</string>
+
+    <string name="filterclear">Clear All Filter</string>
+
+    <string name="boardingpass">BOARDING PASS</string>
+
+    <string name="downloadticket">DOWNLOAD TICKET</string>
+
+
+    <string name="flighttickettitle">For Any Support / Cancellation &amp; Refund Issue Call +91 1234567890 or Whatsapp at +91 1234567890 Email : help@boscenter.in </string>
+    <string name="ticketstatustitle">TICKET CONFIRMATION</string>
+    <string name="flightdetail">Flight Details</string>
+    <string name="passangerdetails">Passenger Details </string>
+    <string name="paymentdetails">Payment Details</string>
+    <string name="passangeremail">Email </string>
+    <string name="phone">( Phone</string>
+    <string name="flightmsg">ALL TIMINGS MENTIONED ARE IN 24HRS FORMAT AND LOCAL AIRPORT TIMINGS AT THE DEPARTURE/ARRIVAL AIRPORT.</string>
+    <string name="view_ticket">VIEW TICKET</string>
+    <string name="view_cancel">VIEW CANCEL</string>
+    <string name="flight_details">Flight Details</string>
+    <string name="travellers_information">Travellers Information</string>
+
+
+</resources>

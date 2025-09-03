@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemLayput"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_button_border_blue">
+
+        <!--        <androidx.core.widget.NestedScrollView-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content">-->
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/dimen_6dp"
+                        android:orientation="horizontal">
+
+<!--                        <androidx.appcompat.widget.AppCompatButton-->
+<!--                            android:id="@+id/printPdf"-->
+<!--                            android:layout_width="@dimen/dimen_50sp"-->
+<!--                            android:layout_height="@dimen/dimen_32sp"-->
+<!--                            android:background="@drawable/bg_button_blue"-->
+<!--                            android:text="Print"-->
+<!--                            android:textAlignment="center"-->
+<!--                            android:textColor="@color/white" />-->
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/serialNoRecharge"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginStart="@dimen/dimen_10dp"-->
+<!--                            android:fontFamily="@font/roboto_medium"-->
+<!--                            android:text="Sr NO"-->
+<!--                            android:textAlignment="center"-->
+<!--                            android:textColor="@color/black"-->
+<!--                            android:textSize="@dimen/dimen_14sp"-->
+<!--                            android:textStyle="bold" />-->
+                        <TextView
+                            android:id="@+id/mobileNoRecharge"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="center"
+                            android:hint="Mobile No"
+                            android:textColor="@color/black"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/dateRecharge"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_10dp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="center"
+                            android:hint="DATE"
+                            android:textColor="@color/black"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+
+
+                        <TextView
+                            android:id="@+id/operatorRecharge"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_10dp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="center"
+                            android:hint="Operator"
+                            android:textColor="@color/black"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/amountRecharge"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_10dp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="center"
+                            android:hint="Amount"
+                            android:textColor="@color/black"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/transactionRecharge"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_10dp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="center"
+                            android:hint="TRANSACTION No"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/statusRecharge"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_10dp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="center"
+                            android:layout_marginEnd="@dimen/dimen_10sp"
+                            android:hint="Status"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/remarksRecharge"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_10dp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="center"
+                            android:hint="type"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </RelativeLayout>
+</LinearLayout>

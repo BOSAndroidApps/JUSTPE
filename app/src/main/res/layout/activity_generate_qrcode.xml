@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:elevation="2dp">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="15dp"
+            android:src="@drawable/ic_back" />
+
+<!--        <ImageView-->
+<!--            android:id="@+id/menuBarBtn"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_marginEnd="15dp"-->
+<!--            android:src="@drawable/menu_bar" />-->
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/qrCodeImageView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:background="@color/white" />
+
+    <TextView
+        android:id="@+id/openScanner"
+        android:layout_width="200dp"
+        android:layout_height="@dimen/dimen_44dp"
+        android:layout_below="@id/qrCodeImageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="Open Scanner"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:background="@drawable/scanner_border"
+        android:padding="10dp" />
+
+</RelativeLayout>

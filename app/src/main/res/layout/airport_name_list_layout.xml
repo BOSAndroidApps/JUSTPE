@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dimen_6dp"
+   >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <ImageView
+            android:id="@+id/flighticon"
+            android:layout_width="@dimen/dimen_20dp"
+            android:layout_height="@dimen/dimen_30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/take_off"
+            app:tint="@color/text_hint_color"
+            android:layout_marginLeft="@dimen/dimen_4dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/cityName"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Gorakhpur"
+            android:textSize="@dimen/dimen_14sp"
+            android:layout_marginLeft="@dimen/dimen_14dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            app:layout_constraintLeft_toRightOf="@+id/flighticon"/>
+
+        <TextView
+            android:id="@+id/airportName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Gorakhpur Airport"
+            android:textSize="@dimen/dimen_12sp"
+            android:layout_marginLeft="@dimen/dimen_14dp"
+            android:textColor="@color/inputtext_boxstroke"
+            android:textColorHint="@color/inputtext_boxstroke"
+            app:layout_constraintTop_toBottomOf="@+id/cityName"
+            app:layout_constraintLeft_toRightOf="@+id/flighticon"/>
+
+        <TextView
+            android:id="@+id/airportCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="GOP"
+            android:textSize="@dimen/dimen_12sp"
+            android:textColor="@color/inputtext_boxstroke"
+            android:textColorHint="@color/inputtext_boxstroke"
+            android:padding="@dimen/dimen_10dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

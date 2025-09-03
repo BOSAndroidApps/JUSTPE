@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Title and Full Name -->
+        <TextView
+            android:id="@+id/tvTitleName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Mr. John Doe"
+            android:textSize="@dimen/dimen_14sp"
+            android:textStyle="bold"
+            android:textColor="@color/orange"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Gender Row -->
+        <LinearLayout
+            android:id="@+id/genderlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Gender"
+                android:textSize="@dimen/dimen_12sp"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvGender"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:hint="Male"
+                android:textSize="@dimen/dimen_12sp"
+                android:textColor="@android:color/darker_gray" />
+        </LinearLayout>
+
+        <!-- DOB Row -->
+        <LinearLayout
+            android:id="@+id/doblayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="DOB"
+                android:textSize="@dimen/dimen_12sp"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvDob"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:hint="01/07/1995"
+                android:textSize="@dimen/dimen_12sp"
+                android:textColor="@android:color/darker_gray" />
+        </LinearLayout>
+
+        <!-- Passport No Row -->
+        <LinearLayout
+            android:id="@+id/passportlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Passport No"
+                android:textSize="@dimen/dimen_12sp"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/psno"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:hint="A1234567"
+                android:textSize="@dimen/dimen_12sp"
+                android:textColor="@android:color/darker_gray" />
+        </LinearLayout>
+
+        <!-- passport issuing country name  Row -->
+        <LinearLayout
+            android:id="@+id/passportissuingcountrylayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Passport Issuing Country Name"
+                android:textSize="@dimen/dimen_12sp"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/pass_country_name"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:hint="India"
+                android:textSize="@dimen/dimen_12sp"
+                android:textColor="@android:color/darker_gray" />
+        </LinearLayout>
+
+        <!-- DOB Row -->
+        <LinearLayout
+            android:id="@+id/passportexpirydatelayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Passport Expiry Date"
+                android:textSize="@dimen/dimen_12sp"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/pass_expiry_date"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:hint="01/07/1995"
+                android:textSize="@dimen/dimen_12sp"
+                android:textColor="@android:color/darker_gray" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

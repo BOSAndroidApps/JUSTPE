@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/custom_toolbar" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="25dp"
+                android:layout_marginRight="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="My Wallet"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="25dp"-->
+<!--                android:layout_marginRight="15dp"-->
+<!--                android:fontFamily="@font/roboto_medium"-->
+<!--                android:text="My Wallet Details"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="15dp"-->
+<!--                android:textStyle="bold" />-->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity=""
+                android:text="My Main Balance"
+                android:textColor="@color/black"
+                android:textSize="12dp" />
+
+            <EditText
+                android:id="@+id/mainBalance"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_gray"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:focusable="false"
+                android:editable="false"
+                android:paddingLeft="10dp"
+                android:text="105"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity=""
+                android:text="My Credit Limit"
+                android:textColor="@color/black"
+                android:textSize="12dp" />
+
+            <EditText
+                android:id="@+id/creditLimit"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_gray"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:paddingLeft="10dp"
+                android:focusable="false"
+                android:editable="false"
+                android:text="500"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity=""
+                android:text="Available Credit"
+                android:textColor="@color/black"
+                android:textSize="12dp" />
+
+            <EditText
+                android:id="@+id/availableCredit"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_gray"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:paddingLeft="10dp"
+                android:focusable="false"
+                android:editable="false"
+                android:text="500"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity=""
+                android:text="Hold Amount"
+                android:textColor="@color/black"
+                android:textSize="12dp" />
+
+            <EditText
+                android:id="@+id/holdAmount"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_gray"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:paddingLeft="10dp"
+                android:text="100.00"
+                android:focusable="false"
+                android:editable="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity=""
+                android:text="Actual Available Balance To Transfer"
+                android:textColor="@color/black"
+                android:textSize="12dp" />
+
+            <EditText
+                android:id="@+id/actualBalance"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_gray"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:paddingLeft="10dp"
+                android:text="505.00"
+                android:textColor="@color/black"
+                android:focusable="false"
+                android:editable="false"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="12sp" />
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="25dp"-->
+<!--                android:layout_marginRight="15dp"-->
+<!--                android:fontFamily="@font/roboto_medium"-->
+<!--                android:text="Last 10 Transaction"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="15dp"-->
+<!--                android:textStyle="bold" />-->
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

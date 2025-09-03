@@ -1,0 +1,900 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".ui.view.travel.busactivity.SeatBookingConfirmation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@color/blue"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/backBtn"
+                    android:layout_width="@dimen/dimen_40dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="@dimen/dimen_10dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:gravity="start"
+                    android:src="@drawable/ic_back" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="@dimen/dimen_60dp"
+                    android:layout_marginTop="@dimen/dimen_4sp"
+                    android:layout_marginEnd="@dimen/dimen_60dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Departure"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/fromLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:gravity="center"
+                        android:text="Pune at 8:00 PM"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/departureTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:gravity="center"
+                        android:text="8:00 PM, 20 - April - 2025"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="@dimen/dimen_60dp"
+                    android:layout_marginEnd="@dimen/dimen_60dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:gravity="center"
+                        android:src="@drawable/bus" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Arrival"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+
+                    <!--            <ImageView-->
+                    <!--                android:layout_width="match_parent"-->
+                    <!--                android:layout_height="20dp"-->
+                    <!--                android:layout_weight="1"-->
+                    <!--                android:src="@drawable/arrow_swap" />-->
+
+                    <TextView
+                        android:id="@+id/toLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/roboto_medium"
+                        android:gravity="center"
+                        android:text="Mumbai at 5:00 AM"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/dateAndTime"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="4dp"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:fontFamily="@font/roboto_medium"-->
+<!--                        android:gravity="center_horizontal"-->
+<!--                        android:text="20 - April - 2025"-->
+<!--                        android:textColor="@color/white"-->
+<!--                        android:textSize="14sp" />-->
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_10dp"
+                android:background="@drawable/bg_button_plane"
+                android:padding="@dimen/dimen_10dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/dimen_10dp"
+                app:cardPreventCornerOverlap="true"
+                app:cardUseCompatPadding="false">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/dimen_10dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1.5"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="center"
+                            android:text="Booking Details"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_18sp"
+                            android:textStyle="bold" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="Ticket Status"
+                            android:textColor="@color/green"
+                            android:textSize="@dimen/dimen_14sp"
+                            android:textStyle="bold" />
+
+
+                        <TextView
+                            android:id="@+id/ticketStatus"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="Confirmed"
+                            android:textColor="@color/green"
+                            android:textSize="@dimen/dimen_14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1.3"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="Booking reference Number"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp"
+                            android:textStyle="bold" />
+
+
+                        <TextView
+                            android:id="@+id/referenceNumber"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight=".7"
+                            android:gravity="end"
+                            android:text="BJJJ57BB"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="Supplier Reference No"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+
+                        <TextView
+                            android:id="@+id/supplier_RefNo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="CX6khxjgq0"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="PNR Number"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+
+                        <TextView
+                            android:id="@+id/transport_PNR"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="5AE5JVR6"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="Bus operator name:"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+
+                        <TextView
+                            android:id="@+id/busOperatorName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="Sanjay Singh"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="Driver contact number:"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+
+                        <TextView
+                            android:id="@+id/driverContactNo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="9007372534"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="Boarding Point:"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+
+                        <TextView
+                            android:id="@+id/boardingAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="Pune"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="Dropping Point:"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+
+                        <TextView
+                            android:id="@+id/droppingAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="Mumbai"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1.4"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="Reporting &amp; Boardiing time:"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+
+                        <TextView
+                            android:id="@+id/boardingTime"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight=".6"
+                            android:gravity="end"
+                            android:text="Mumbai"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1.4"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="Reporting &amp; Boardiing time:"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+
+                        <TextView
+                            android:id="@+id/droppingingTime"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight=".6"
+                            android:gravity="end"
+                            android:text="9: AM"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="Bus type:"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+
+                        <TextView
+                            android:id="@+id/busType"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="Volvo"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:text="Ticket QR"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/dimen_16sp" />
+
+                        <ImageView
+                            android:id="@+id/ticketQRCode"
+                            android:layout_width="140dp"
+                            android:layout_height="140dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="@dimen/dimen_10dp"
+                            android:background="@drawable/bg_edittext"
+                            android:gravity="center" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_14dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="Traveller Details"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/dimen_16sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dimen_4dp"
+                            android:orientation="horizontal">
+
+
+                            <LinearLayout
+                                android:id="@+id/reviewPassengerLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/dimen_10dp"
+                                    android:background="@drawable/bg_button_plane"
+                                    android:padding="@dimen/dimen_10dp"
+                                    app:cardBackgroundColor="@color/white"
+                                    app:cardCornerRadius="@dimen/dimen_10dp"
+                                    app:cardPreventCornerOverlap="true"
+                                    app:cardUseCompatPadding="false">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:padding="@dimen/dimen_10dp">
+
+<!--                                        <LinearLayout-->
+<!--                                            android:layout_width="match_parent"-->
+<!--                                            android:layout_height="wrap_content"-->
+<!--                                            android:layout_marginTop="@dimen/dimen_4dp"-->
+<!--                                            android:orientation="horizontal">-->
+
+<!--                                            <TextView-->
+<!--                                                android:id="@+id/userName"-->
+<!--                                                android:layout_width="0dp"-->
+<!--                                                android:layout_height="wrap_content"-->
+<!--                                                android:layout_marginStart="10dp"-->
+<!--                                                android:layout_weight="1"-->
+<!--                                                android:textStyle="bold"-->
+<!--                                                android:fontFamily="@font/roboto_medium"-->
+<!--                                                android:gravity="start"-->
+<!--                                                android:text="MR. Ravi"-->
+<!--                                                android:textColor="@color/black"-->
+<!--                                                android:textSize="@dimen/dimen_14sp" />-->
+
+<!--                                            <TextView-->
+<!--                                                android:id="@+id/userAge"-->
+<!--                                                android:layout_width="0dp"-->
+<!--                                                android:layout_height="wrap_content"-->
+<!--                                                android:layout_marginEnd="10dp"-->
+<!--                                                android:layout_weight="1"-->
+<!--                                                android:textStyle="bold"-->
+<!--                                                android:gravity="end"-->
+<!--                                                android:text="25 yrs"-->
+<!--                                                android:textColor="@color/black"-->
+<!--                                                android:textSize="@dimen/dimen_14sp" />-->
+
+<!--                                            <TextView-->
+<!--                                                android:id="@+id/seatNumber"-->
+<!--                                                android:layout_width="0dp"-->
+<!--                                                android:layout_height="wrap_content"-->
+<!--                                                android:layout_marginEnd="10dp"-->
+<!--                                                android:layout_weight="1"-->
+<!--                                                android:gravity="end"-->
+<!--                                                android:text="seat L4"-->
+<!--                                                android:textStyle="bold"-->
+<!--                                                android:textColor="@color/black"-->
+<!--                                                android:textSize="@dimen/dimen_14sp" />-->
+<!--                                        </LinearLayout>-->
+
+<!--                                        <LinearLayout-->
+<!--                                            android:layout_width="match_parent"-->
+<!--                                            android:layout_height="wrap_content"-->
+<!--                                            android:layout_marginTop="@dimen/dimen_4dp"-->
+<!--                                            android:orientation="horizontal">-->
+
+<!--                                            <TextView-->
+<!--                                                android:id="@+id/mobileNo"-->
+<!--                                                android:layout_width="0dp"-->
+<!--                                                android:layout_height="wrap_content"-->
+<!--                                                android:layout_marginStart="10dp"-->
+<!--                                                android:layout_weight="1"-->
+<!--                                                android:fontFamily="@font/roboto_medium"-->
+<!--                                                android:gravity="start"-->
+<!--                                                android:text="9762363923"-->
+<!--                                                android:textStyle="bold"-->
+<!--                                                android:textColor="@color/black"-->
+<!--                                                android:textSize="@dimen/dimen_14sp" />-->
+
+<!--                                            <TextView-->
+<!--                                                android:id="@+id/emailId"-->
+<!--                                                android:layout_width="0dp"-->
+<!--                                                android:layout_height="wrap_content"-->
+<!--                                                android:layout_marginEnd="10dp"-->
+<!--                                                android:layout_weight="1"-->
+<!--                                                android:gravity="end"-->
+<!--                                                android:textStyle="bold"-->
+<!--                                                android:text="ravikumar@gmail.com"-->
+<!--                                                android:textColor="@color/black"-->
+<!--                                                android:textSize="@dimen/dimen_14sp" />-->
+<!--                                        </LinearLayout>-->
+
+                                        <androidx.recyclerview.widget.RecyclerView
+                                            android:id="@+id/recyclerViewPassenger"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            tools:itemCount="1"
+                                            tools:listitem="@layout/booking_item"/>
+
+
+                                    </LinearLayout>
+                                </androidx.cardview.widget.CardView>
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="Fare &amp; Payment Details"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/dimen_16sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dimen_4dp"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:padding="@dimen/dimen_10dp">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/dimen_4dp"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginStart="10dp"
+                                                android:layout_weight="1"
+                                                android:textStyle="bold"
+                                                android:fontFamily="@font/roboto_medium"
+                                                android:gravity="start"
+                                                android:text="Base fare (Traveller)"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/dimen_14sp" />
+
+
+                                            <TextView
+                                                android:id="@+id/baseFare"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginEnd="10dp"
+                                                android:layout_weight="1"
+                                                android:gravity="end"
+                                                android:text="₹ 600"
+                                                android:textStyle="bold"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/dimen_14sp" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/dimen_4dp"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginStart="10dp"
+                                                android:layout_weight="1"
+                                                android:fontFamily="@font/roboto_medium"
+                                                android:gravity="start"
+                                                android:text="GST &amp; service charge"
+                                                android:textStyle="bold"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/dimen_14sp" />
+
+                                            <TextView
+                                                android:id="@+id/gstCharge"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginEnd="10dp"
+                                                android:layout_weight="1"
+                                                android:gravity="end"
+                                                android:textStyle="bold"
+                                                android:text="₹ 60"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/dimen_14sp" />
+                                        </LinearLayout>
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/dimen_4dp"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginStart="10dp"
+                                                android:layout_weight="1"
+                                                android:fontFamily="@font/roboto_medium"
+                                                android:gravity="start"
+                                                android:text="Conveniences Fees"
+                                                android:textStyle="bold"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/dimen_14sp" />
+
+                                            <TextView
+                                                android:id="@+id/conveniencesFees"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginEnd="10dp"
+                                                android:layout_weight="1"
+                                                android:gravity="end"
+                                                android:textStyle="bold"
+                                                android:text="20"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/dimen_14sp" />
+                                        </LinearLayout>
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/dimen_4dp"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginStart="10dp"
+                                                android:layout_weight="1"
+                                                android:fontFamily="@font/roboto_medium"
+                                                android:gravity="start"
+                                                android:text="Other charge"
+                                                android:textStyle="bold"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/dimen_14sp" />
+
+                                            <TextView
+                                                android:id="@+id/otherCharge"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginEnd="10dp"
+                                                android:layout_weight="1"
+                                                android:gravity="end"
+                                                android:textStyle="bold"
+                                                android:text="₹ 60"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/dimen_14sp" />
+                                        </LinearLayout>
+
+
+                                        <View
+                                            android:layout_width="match_parent"
+                                            android:layout_height="1dp"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginTop="10dp"
+                                            android:layout_marginRight="10dp"
+                                            android:background="@color/button_text_gray" />
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/dimen_10dp"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginStart="10dp"
+                                                android:layout_weight="1"
+                                                android:fontFamily="@font/roboto_medium"
+                                                android:gravity="start"
+                                                android:text="Total amount paid"
+                                                android:textStyle="bold"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/dimen_14sp" />
+
+                                            <TextView
+                                                android:id="@+id/totalAmount"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginEnd="10dp"
+                                                android:layout_weight="1"
+                                                android:gravity="end"
+                                                android:textStyle="bold"
+                                                android:text="₹ 740"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/dimen_14sp" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="@dimen/dimen_40dp"
+                                            android:layout_marginTop="@dimen/dimen_40dp"
+                                            android:orientation="horizontal">
+
+                                            <Button
+                                                android:id="@+id/printBtn"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginStart="10dp"
+                                                android:layout_marginEnd="@dimen/dimen_4dp"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/bg_edittext"
+                                                android:fontFamily="@font/roboto_medium"
+                                                android:gravity="center"
+                                                android:text="Print Ticket"
+                                                android:textAllCaps="false"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/dimen_16sp"
+                                                android:textStyle="bold" />
+
+                                            <Button
+                                                android:id="@+id/bookAgainBtn"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginEnd="10dp"
+                                                android:background="@drawable/bg_edittext"
+                                                android:layout_weight="1"
+                                                android:gravity="center"
+                                                android:textAllCaps="false"
+                                                android:layout_marginStart="4dp"
+                                                android:textStyle="bold"
+                                                android:text="Book Again"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/dimen_16sp" />
+
+                                        </LinearLayout>
+
+
+                                    </LinearLayout>
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+</LinearLayout>

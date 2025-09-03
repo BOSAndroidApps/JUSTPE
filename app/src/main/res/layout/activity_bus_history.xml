@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.bos.payment.appName.ui.view.Dashboard.Wallet.Fragment.RechargeFragment">
+
+    <include
+        android:id="@+id/serviceWiseToolbar"
+        layout="@layout/custom_toolbar2" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dimen_10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="@dimen/dimen_10dp"
+            android:background="@drawable/bg_button_plane"
+            android:padding="@dimen/dimen_10dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/dimen_10dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="false">
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Bus Booking History"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_20sp" />
+
+                <LinearLayout
+                    android:id="@+id/fromToDateLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/lvSignUpDob1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:hint="From Date"
+                        android:textColorHint="@color/text_color"
+                        android:visibility="visible"
+                        style="@style/inputtextlayout_style">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/fromDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:drawableEnd="@drawable/calendar_icon"
+                            android:focusable="false"
+                            android:inputType="date"
+                            android:textColor="@color/black"
+                            style="@style/inputtext_style" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_4sp"
+                        android:layout_weight="2"
+                        android:hint="To Date"
+                        android:textColorHint="@color/text_color"
+                        android:visibility="visible"
+                        style="@style/inputtextlayout_style">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/toDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:drawableEnd="@drawable/calendar_icon"
+                            android:focusable="false"
+                            android:inputType="date"
+                            android:textColor="@color/black"
+                            style="@style/inputtext_style" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <Spinner
+                    android:id="@+id/monthSp"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/dropdownListPreferredItemHeight"
+                    android:layout_marginTop="@dimen/dimen_14dp"
+                    android:padding="@dimen/dimen_10dp"
+                    android:tooltipText=" Select month"
+                    android:paddingStart="@dimen/dimen_10dp"
+                    android:paddingEnd="@dimen/dimen_10dp"
+                    android:background="@drawable/bg_edittext"
+                    android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight" />
+
+                <Spinner
+                    android:id="@+id/yearSp"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/dropdownListPreferredItemHeight"
+                    android:layout_marginTop="@dimen/dimen_14dp"
+                    android:paddingStart="@dimen/dimen_10dp"
+                    android:paddingEnd="@dimen/dimen_10dp"
+                    android:background="@drawable/bg_edittext"
+                    android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/cancelBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_marginRight="7.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_button_border_blue"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
+                    android:text="Cancel"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/proceedBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="7.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_button_blue"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
+                    android:text="Proceed"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+<!--            <HorizontalScrollView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content">-->
+
+                <LinearLayout
+                    android:id="@+id/recLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:layout_marginTop="@dimen/dimen_20dp"
+                    android:layout_marginEnd="20dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycle_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        tools:listitem="@layout/booking_history_item"
+                        android:padding="@dimen/dimen_10dp"
+                        android:paddingBottom="@dimen/dimen_32dp" />
+
+                </LinearLayout>
+<!--            </HorizontalScrollView>-->
+            <!--            </androidx.core.widget.NestedScrollView>-->
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.cardview.widget.CardView>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

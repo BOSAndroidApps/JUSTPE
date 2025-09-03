@@ -1,0 +1,238 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+        <item name="android:textColorSecondary">@color/menu_color</item>
+        <item name="tabTextColor">@color/black</item>
+        <item name="tabSelectedTextColor">@color/blue</item>
+        <item name="tabIndicatorColor">@color/blue</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+<!--    <declare-styleable name="SearchableSpinner">-->
+
+<!--        <attr name="hintText" format="string" />-->
+
+<!--    </declare-styleable>-->
+    <!-- Base application theme. -->
+    <style name="AppTheme_actionBar" parent="Theme.AppCompat.DayNight">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="titleTextColor">@color/white</item>
+<!--        <item name="titleTextStyle">@font/lato_bold</item>-->
+<!--        <item name="homeAsUpIndicator">@drawable/ic_action_navigation_arrow_back_inverted</item>-->
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+<!--        <item name="android:textColorSecondary">@color/menu_color</item>-->
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/white</item>
+    </style>
+
+    <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+    </style>
+
+
+
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottom_sheet_border</item>
+    </style>
+
+    <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">@dimen/dimen_16sp</item>
+    </style>
+    <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="edittext_style" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:inputType">text</item>
+        <item name="android:padding">@dimen/dimen_10sp</item>
+        <item name="android:textColor">@color/edittext_color</item>
+        <item name="android:textColorHint">@color/text_hint_color</item>
+        <item name="android:editTextColor">@color/text_hint_color</item>
+        <item name="android:background">@drawable/border_bg</item>
+        <item name="android:textSize">@dimen/dimen_16sp</item>
+    </style>
+
+
+    <style name="button_style" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:layout_margin">@dimen/dimen_8sp</item>
+        <item name="android:background">@drawable/button_background_blue</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/white</item>
+
+    </style>
+
+    <style name="greyBtnStyle" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:layout_margin">@dimen/dimen_8sp</item>
+        <item name="android:backgroundTint">@color/grey</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/black</item>
+
+    </style>
+
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/fail</item>
+    </style>
+    <style name="DropdownStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="android:drawablePadding">2dp</item>
+    </style>
+    <style name="TextInputLayoutStyle1" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/colorPrimaryDark</item>
+        <item name="android:paddingStart">2dp</item>
+    </style>
+    <style name="input_text_style1" parent="">
+        <item name="android:digits">@string/default_keyboard</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingEnd">4dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:inputType">numberDecimal</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">@dimen/dimen_14sp</item>
+    </style>
+
+    <style name="pan_properities" parent="inputtext_style">
+        <item name="android:maxLength">10</item>
+        <item name="android:digits">@string/alphaNumbericPattern</item>
+    </style>
+
+    <style name="aadhaar_properties" parent="inputtext_style">
+        <item name="android:maxLength">12</item>
+        <item name="android:digits">@string/onlyNumbericPattern</item>
+        <item name="android:inputType">number</item>
+    </style>
+
+    <style name="mobile_properties" parent="inputtext_style">
+        <item name="android:maxLength">10</item>
+        <item name="android:digits">@string/onlyNumbericPattern</item>
+        <item name="android:inputType">number</item>
+    </style>
+    <style name="bankAcNo_properities" parent="inputtext_style">
+        <item name="android:digits">@string/onlyNumbericPattern</item>
+        <item name="android:inputType">number</item>
+    </style>
+    <style name="alphaNum_properities" parent="inputtext_style">
+        <item name="android:digits">@string/alphaNumbericPattern</item>
+    </style>
+
+    <!--    add form editext properties-->
+    <style name="edittext_addform" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:digits">@string/default_keyboard</item>
+        <item name="android:padding">@dimen/dimen_14sp</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textColorHint">@color/hint_color_add_leads</item>
+        <item name="android:textSize">@dimen/dimen_16sp</item>
+    </style>
+
+    <!--    add form editext properties-->
+    <style name="inputtext_style" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:digits">@string/onlyTextPattern</item>
+        <item name="android:padding">@dimen/dimen_14sp</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/dimen_16sp</item>
+    </style>
+    <!--    add form editext properties-->
+    <style name="inputtextlayout_style" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/inputtext_boxstroke</item>
+<!--        <item name="android:background">@drawable/bg_edittext</item>-->
+        <item name="android:layout_marginTop">@dimen/dimen_16sp</item>
+        <item name="android:textColorHint">@color/mode_color</item>
+    </style>
+
+    //splash screen theme
+
+<!--    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">-->
+<!--        <item name="android:windowBackground">@drawable/splash_screen_background</item>-->
+<!--    </style>-->
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="spinnerTheme">
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+
+    <style name="text_style_bold" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/dimen_16sp</item>
+    </style>
+
+
+    <style name="text_style_light" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/dimen_16sp</item>
+    </style>
+
+
+    <style name="dialog_bg" parent="android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/progress_bg</item>
+        <item name="android:background">@color/transparent</item>
+
+    </style>
+
+
+    <style name="FullScreenDialog" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+
+    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="MyDatePickerDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryVariant">@color/blue</item>
+        <item name="colorAccent">@color/blue</item>
+        <item name="android:textColorPrimary">@color/black</item>
+    </style>
+
+
+        <style name="textstyle" parent="Theme.MaterialComponents.Light.NoActionBar">
+            <!-- Customize your theme here. -->
+            <item name="colorPrimary">@color/colorPrimary</item>
+            <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+            <item name="colorAccent">@color/colorAccent</item>
+        </style>
+
+
+
+    <style name="BottomSheetDialogThemee" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+
+
+</resources>

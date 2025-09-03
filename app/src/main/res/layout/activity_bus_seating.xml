@@ -1,0 +1,696 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.view.travel.busactivity.BusSearchDetails">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/fullLayout"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@color/blue"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/backBtn"
+                    android:layout_width="@dimen/dimen_40dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="@dimen/dimen_10dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:gravity="start"
+                    android:src="@drawable/ic_back" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="Select your seat!"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="@dimen/dimen_60dp"
+                android:layout_marginTop="@dimen/dimen_4dp"
+                android:layout_marginEnd="@dimen/dimen_60dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/fromLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="end"
+                    android:text="Pune"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:layout_weight=".8"
+                    android:src="@drawable/arrow_swap" />
+
+                <TextView
+                    android:id="@+id/toLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="start"
+                    android:text="Mumbai"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/dateAndTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="20 - April - 2025"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <!-- Card with Bus Info -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_4dp"
+                android:layout_marginEnd="@dimen/dimen_10dp"
+                android:background="@drawable/bg_button_plane"
+                android:padding="@dimen/dimen_10dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/dimen_10dp"
+                app:cardPreventCornerOverlap="true"
+                app:cardUseCompatPadding="false">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/dimen_10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/companyName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1.5"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="Company Name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/travelAmount"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/dimen_10dp"
+                            android:layout_weight=".5"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="end"
+                            android:text="₹ 600"
+                            android:textColor="@color/light_orange"
+                            android:textSize="@dimen/dimen_16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/busName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="@dimen/dimen_4dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:gravity="start"
+                        android:text="Bus Name"
+                        android:textSize="@dimen/dimen_14sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_4dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/arrivalTime"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto_medium"
+                            android:gravity="start"
+                            android:text="6:00 PM - 3:00 AM"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_10sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/totalTime"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="9h"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-30dp"
+            android:layout_marginBottom="@dimen/dimen_20dp"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <!-- Seat Booking Layout -->
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dimen_10dp"
+                        android:layout_weight="6"
+                        android:padding="@dimen/dimen_10dp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/dimen_10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:weightSum="4"
+                            android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/seatSelectBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1.5"
+                            android:fontFamily="@font/roboto_medium"
+                            android:paddingStart="10sp"
+                            android:textStyle="bold"
+                            android:text="Select seat"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/dimen_16sp" />
+
+                            <TextView
+                                android:id="@+id/pickupAndDroppingPoint"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="2.5"
+                                android:fontFamily="@font/roboto_medium"
+                                android:paddingStart="10sp"
+                                android:textStyle="bold"
+                                android:text="Pick-up &amp; Dropping point"
+                                android:textAllCaps="false"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/dimen_16sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/seatBookingLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="30dp"
+                            android:orientation="vertical"
+                            android:visibility="visible">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dimen_20dp"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_weight="2"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="18dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginStart="10dp"
+                                        android:src="@drawable/booked" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:paddingStart="10sp"
+                                        android:text="Booked"
+                                        android:textAllCaps="false"
+                                        android:textSize="@dimen/dimen_16sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="-20dp"
+                                    android:layout_marginEnd="@dimen/dimen_10dp"
+                                    android:layout_weight="2"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginStart="@dimen/dimen_20dp"
+                                        android:src="@drawable/available_seat" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:paddingStart="10sp"
+                                        android:text="Available"
+                                        android:textAllCaps="false"
+                                        android:textSize="@dimen/dimen_16sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="-20dp"
+                                    android:layout_marginEnd="@dimen/dimen_10dp"
+                                    android:layout_weight="2"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginStart="@dimen/dimen_10dp"
+                                        android:src="@drawable/your_seat" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:paddingStart="10sp"
+                                        android:text="Your Seat"
+                                        android:textAllCaps="false"
+                                        android:textSize="@dimen/dimen_16sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <HorizontalScrollView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fillViewport="true"
+                                android:scrollbars="none">
+                                <include
+                                    android:id="@+id/seatLayout"
+                                    layout="@layout/bus_seat_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center" />
+
+                            </HorizontalScrollView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/boardingPointLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dimen_30dp"
+                            android:layout_marginStart="@dimen/dimen_20dp"
+                            android:layout_marginEnd="@dimen/dimen_20dp"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/dimen_10dp"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:paddingStart="10sp"
+                                        android:text="Boarding Details"
+                                        android:textAllCaps="false"
+                                        android:textSize="@dimen/dimen_18sp"
+                                        android:textStyle="bold" />
+
+                                    <Spinner
+                                        android:id="@+id/boardingPointSp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="?attr/dropdownListPreferredItemHeight"
+                                        android:layout_marginTop="@dimen/dimen_24dp"
+                                        android:background="@drawable/bg_edittext"
+                                        android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
+                                        android:paddingStart="@dimen/dimen_10dp"
+                                        android:paddingEnd="@dimen/dimen_10dp" />
+
+                                    <Spinner
+                                        android:id="@+id/droppingPointSp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="?attr/dropdownListPreferredItemHeight"
+                                        android:layout_marginTop="@dimen/dimen_14dp"
+                                        android:background="@drawable/bg_edittext"
+                                        android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
+                                        android:paddingStart="@dimen/dimen_10dp"
+                                        android:paddingEnd="@dimen/dimen_10dp" />
+
+<!--                                    <LinearLayout-->
+<!--                                        android:layout_width="match_parent"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:orientation="vertical">-->
+
+<!--                                        <TextView-->
+<!--                                            android:layout_width="match_parent"-->
+<!--                                            android:layout_height="wrap_content"-->
+<!--                                            android:gravity="center"-->
+<!--                                            android:text="Passenger Details"-->
+<!--                                            android:textAllCaps="false"-->
+<!--                                            android:textSize="@dimen/dimen_18sp"-->
+<!--                                            android:textStyle="bold" />-->
+
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            style="@style/inputtextlayout_style"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <EditText
+                                                android:id="@+id/userEmailId"
+                                                style="@style/edittext_addform"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="@dimen/dimen_44sp"
+                                                android:hint="@string/email"
+                                                android:text="ravikumar@gmail.com"
+                                                android:inputType="text"
+                                                android:singleLine="true"
+                                                android:textAllCaps="true"
+                                                android:textColor="@color/text_color"
+                                                android:textColorHint="@color/button_text_gray" />
+                                        </com.google.android.material.textfield.TextInputLayout>
+
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            style="@style/inputtextlayout_style"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="14dp">
+
+                                            <EditText
+                                                android:id="@+id/userMobileNo"
+                                                style="@style/edittext_addform"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="@dimen/dimen_44sp"
+                                                android:hint="Enter your mobile number"
+                                                android:inputType="number"
+                                                android:text="9699889883"
+                                                android:maxLength="10"
+                                                android:singleLine="true"
+                                                android:textAllCaps="true"
+                                                android:textColor="@color/text_color"
+                                                android:textColorHint="@color/button_text_gray" />
+                                        </com.google.android.material.textfield.TextInputLayout>
+<!--                                    </LinearLayout>-->
+
+
+                                </LinearLayout>
+<!--                            </androidx.cardview.widget.CardView>-->
+                        </LinearLayout>
+
+                        <androidx.core.widget.NestedScrollView
+                            android:layout_width="match_parent"
+                            android:layout_marginStart="@dimen/dimen_20dp"
+                            android:layout_marginEnd="@dimen/dimen_20dp"
+                            android:layout_marginTop="@dimen/dimen_40dp"
+                            android:layout_height="wrap_content">
+
+                            <include
+                                android:id="@+id/passengerDetails"
+                                layout="@layout/passenger_details"/>
+
+                        </androidx.core.widget.NestedScrollView>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <LinearLayout
+                        android:id="@+id/finalSeatLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_edittext"
+                        android:layout_gravity="bottom|center"
+                        android:layout_marginStart="@dimen/dimen_10dp"
+                        android:layout_marginEnd="@dimen/dimen_10dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dimen_10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="2"
+                                android:fontFamily="@font/roboto_medium"
+                                android:paddingStart="10sp"
+                                android:text="Seats selected"
+                                android:textAllCaps="false"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/dimen_16sp" />
+
+                            <TextView
+                                android:id="@+id/finalAmount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/dimen_20dp"
+                                android:layout_weight="2"
+                                android:gravity="end"
+                                android:paddingStart="10sp"
+                                android:text="₹ 6000"
+                                android:textAllCaps="false"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/dimen_16sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/selectedSeat"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="2"
+                                android:paddingStart="10sp"
+                                android:text="L1 U2"
+                                android:textAllCaps="false"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/dimen_16sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/dimen_20dp"
+                                android:layout_weight="2"
+                                android:gravity="end"
+                                android:paddingStart="10sp"
+                                android:text="+taxes"
+                                android:textAllCaps="false"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/dimen_16sp" />
+
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/NextBtn"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/dimen_30dp"
+                            android:background="@drawable/bg_edittext"
+                            android:layout_marginBottom="@dimen/dimen_20dp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:text="Next"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/dimen_18sp"
+                            android:textStyle="bold" />
+                        <Button
+                            android:id="@+id/proceedBtn"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/dimen_30dp"
+                            android:background="@drawable/bg_edittext"
+                            android:layout_marginBottom="@dimen/dimen_20dp"
+                            android:visibility="gone"
+                            android:fontFamily="@font/roboto_medium"
+                            android:text="Proceed"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/dimen_18sp"
+                            android:textStyle="bold" />
+                        <Button
+                            android:id="@+id/proceedToBookBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/dimen_30dp"
+                            android:layout_marginStart="@dimen/dimen_50dp"
+                            android:layout_marginEnd="@dimen/dimen_50dp"
+                            android:background="@drawable/bg_edittext"
+                            android:layout_marginBottom="@dimen/dimen_20dp"
+                            android:visibility="gone"
+                            android:fontFamily="@font/roboto_medium"
+                            android:text="Proceed to Pay"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/dimen_18sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/reviewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical">
+    <include
+        android:id="@+id/reviewBookingInclude"
+        layout="@layout/review_booking"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/confirmBookingLayoutList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical">
+
+    <include
+        layout="@layout/activity_seat_booking_confirmation"
+        android:id="@+id/confirmBookingLayout"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dimen_40dp"
+            android:layout_marginTop="@dimen/dimen_40dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/printBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="@dimen/dimen_4dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="Print Ticket"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_14sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/bookAgainBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textAllCaps="false"
+                android:layout_marginStart="4dp"
+                android:textStyle="bold"
+                android:text="Book Again"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_14sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

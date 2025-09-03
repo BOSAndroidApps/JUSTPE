@@ -1,0 +1,5 @@
+<style android:name="animation"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:name="android:windowEnterAnimation">@android:anim/fade_in</item>
+    <item android:name="android:windowExitAnimation">@android:anim/fade_out</item>
+</style>

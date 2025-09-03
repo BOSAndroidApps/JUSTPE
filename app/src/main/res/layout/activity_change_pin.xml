@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".app.ui.view.Dashboard.Wallet.Fragment.RechargeFragment">
+
+    <include
+        layout="@layout/custom_toolbar"
+        android:id="@+id/changePinToolbar"/>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp">
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_gravity="center"
+                android:text="Transaction pin change"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="New Pin No"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_16sp" />
+
+            <EditText
+                android:id="@+id/newPinNo"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="textPassword"
+                android:hint="Enter new pin number"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp"
+                android:visibility="visible" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Confirm New Pin"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+
+            <EditText
+                android:id="@+id/confirmNewPin"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="textPassword"
+                android:hint="Enter your confirm number"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+        </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:id="@+id/ll"
+                android:layout_marginBottom="5dp"
+                android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvBtnCancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginRight="7.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_button_border_blue"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
+                    android:text="Cancel"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="Proceed"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:layout_marginLeft="7.5dp"
+                    android:id="@+id/tvBtnProceed"
+                    android:textSize="15dp"
+                    android:background="@drawable/bg_button_blue"
+                    android:layout_height="45dp"/>
+            </LinearLayout>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

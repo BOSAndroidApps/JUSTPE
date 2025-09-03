@@ -1,0 +1,19 @@
+package com.bos.payment.appName.data.model.travel.bus.searchBus
+
+import com.google.gson.annotations.SerializedName
+
+
+data class FareMasters (
+
+  @SerializedName("basic_Amount"         ) var basicAmount         : Int?                   = null,
+  @SerializedName("cancellation_Charges" ) var cancellationCharges : Int?                   = null,
+  @SerializedName("fareDetails"          ) var fareDetails         : ArrayList<FareDetails> = arrayListOf(),
+  @SerializedName("gst"                  ) var gst                 : Int?                   = null,
+  @SerializedName("gross_Commission"     ) var grossCommission     : Int?                   = null,
+  @SerializedName("net_Commission"       ) var netCommission       : Int?                   = null,
+  @SerializedName("other_Amount"         ) var otherAmount         : Double?                = null,
+  @SerializedName("service_Fee_Amount"   ) var serviceFeeAmount    : Int?                   = null,
+  @SerializedName("total_Amount"         ) var totalAmount         : Double?                = null,
+  @SerializedName("trade_Markup_Amount"  ) var tradeMarkupAmount   : Int?                   = null
+
+)

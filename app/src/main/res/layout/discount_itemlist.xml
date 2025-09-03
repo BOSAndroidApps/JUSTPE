@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/notificationImage"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/bg_edittext"
+        android:padding="@dimen/dimen_10sp"/>
+
+<!--    <TextView-->
+<!--        android:id="@+id/notificationImage"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="110dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:gravity="center"-->
+<!--        android:text="Notification Date"-->
+<!--        android:textSize="14sp"-->
+<!--        android:textColor="@android:color/black"/>-->
+
+</LinearLayout>

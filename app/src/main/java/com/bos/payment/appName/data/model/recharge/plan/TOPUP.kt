@@ -1,0 +1,13 @@
+package com.bos.payment.appName.data.model.recharge.plan
+
+import com.google.gson.annotations.SerializedName
+
+
+data class TOPUP (
+
+  @SerializedName("rs"          ) var rs         : String? = null,
+  @SerializedName("desc"        ) var desc       : String? = null,
+  @SerializedName("validity"    ) var validity   : String? = null,
+  @SerializedName("last_update" ) var lastUpdate : String? = null
+
+)

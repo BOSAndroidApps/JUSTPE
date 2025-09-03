@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#151414"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:layout_marginBottom="@dimen/dimen_44dp"
+        app:layout_constraintBottom_toTopOf="@id/previewView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/crossBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="@dimen/dimen_6sp"
+            android:layout_weight=".5"
+            android:src="@drawable/cross_icon"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_weight="1.5" />
+
+
+        <ImageView
+            android:id="@+id/torchBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/flashlight_on"
+            android:layout_weight=".5"
+            android:layout_marginTop="@dimen/dimen_4sp"
+            android:gravity="end|center"/>
+
+        <ImageView
+            android:id="@+id/barCodeBtn"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dimen_30dp"
+            android:src="@drawable/ic_icon"
+            android:layout_weight=".5"
+            android:gravity="end|center"/>
+
+    </LinearLayout>
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@color/grey"
+        android:layout_marginStart="@dimen/dimen_50dp"
+        android:layout_marginEnd="@dimen/dimen_50dp"
+        android:layout_marginBottom="@dimen/dimen_100sp"
+        app:circularflow_defaultRadius="@dimen/dimen_14dp"
+        app:layout_constraintBottom_toTopOf="@id/scanLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.378" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/uploadImage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_32dp"
+        android:gravity="center"
+        android:layout_marginStart="@dimen/dimen_100dp"
+        android:layout_marginEnd="@dimen/dimen_100dp"
+        android:backgroundTint="@color/grey"
+        android:layout_marginTop="@dimen/dimen_20dp"
+        app:layout_constraintTop_toBottomOf="@id/previewView"
+        android:background="@drawable/bg_button"
+        android:text="Upload from Gallery"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="@dimen/dimen_12dp" />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/scanLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardMaxElevation="@dimen/dimen_20dp"
+        app:cardElevation="@dimen/dimen_32dp"
+        app:cardCornerRadius="@dimen/dimen_32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+        android:id="@+id/scannedData"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_80dp"
+        android:gravity="center"
+        android:background="@drawable/scan_border"
+        android:text="Scan any QR code to pay \n BHIM - UPI"
+        android:textColor="@color/grey"
+        android:textStyle="bold"
+        android:textSize="@dimen/dimen_14sp" />
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

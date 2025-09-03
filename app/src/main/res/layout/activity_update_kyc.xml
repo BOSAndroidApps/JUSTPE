@@ -1,0 +1,983 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <include
+        layout="@layout/custom_toolbar"
+        android:id="@+id/mainManu"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/ownerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="@dimen/dimen_4sp"
+            app:cardMaxElevation="@dimen/dimen_4sp"
+            app:cardUseCompatPadding="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dimen_22sp"
+                android:layout_marginBottom="@dimen/dimen_20sp"
+                android:text="Update KYC Details"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Registration ID"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <EditText
+                    android:id="@+id/registration_ID"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_button_plane"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="left|center"
+                    android:inputType="text"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:hint="Enter your Registration ID"
+                    android:paddingStart="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/button_text_gray"
+                    android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Agent Type"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_16sp" />
+
+            <EditText
+                android:id="@+id/agentType"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:enabled="false"
+                android:focusable="false"
+                android:hint="Enter Agent Type"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp"
+                android:visibility="visible" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Reference ID"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+
+            <EditText
+                android:id="@+id/referenceID"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="text"
+                android:enabled="false"
+                android:focusable="false"
+                android:hint="Enter your Reference ID"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Reference Type"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+
+            <EditText
+                android:id="@+id/referenceTypeKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="text"
+                android:enabled="false"
+                android:focusable="false"
+                android:hint="Enter your Reference Type"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Agent Name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/agentNameKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:enabled="false"
+                android:focusable="false"
+                android:inputType="text"
+                android:hint="Enter your Reference ID"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Pan Card Number"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/panCardNoKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="text"
+                android:maxLength="10"
+                android:hint="Enter pan card number"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/first_name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/firstNameKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:enabled="false"
+                android:focusable="false"
+                android:inputType="text"
+                android:hint="Enter your first name"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/last_name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/lastNameKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:enabled="false"
+                android:focusable="false"
+                android:inputType="text"
+                android:hint="Enter your Reference ID"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/inputtextlayout_style"
+                    android:id="@+id/lvSignUpDob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Date of Birth"
+                    android:textColorHint="@color/text_color"
+                    android:visibility="visible">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/dobKYC"
+                        style="@style/inputtext_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:drawableEnd="@drawable/calendar_icon"
+                        android:focusable="false"
+                        android:inputType="date"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:fontFamily="@font/roboto_medium"-->
+<!--                android:text="DOB"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="@dimen/dimen_14sp" />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/dobKYC"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="45dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:background="@drawable/bg_button_plane"-->
+<!--                android:fontFamily="@font/roboto_medium"-->
+<!--                android:gravity="left|center"-->
+<!--                android:inputType="date"-->
+<!--                android:paddingEnd="@dimen/dimen_16dp"-->
+<!--                android:drawableEnd="@drawable/calendar_icon"-->
+<!--                android:hint="Enter your DOB"-->
+<!--                android:paddingStart="10dp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textColorHint="@color/button_text_gray"-->
+<!--                android:textSize="@dimen/dimen_14sp" />-->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Email Id"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/emailIdKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="text"
+                android:enabled="false"
+                android:focusable="false"
+                android:hint="Enter your Email ID"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/contact_Number"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/mobileNoKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="phone"
+                android:enabled="false"
+                android:focusable="false"
+                android:maxLength="10"
+                android:hint="Enter your Mobile number"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Alternate Mobile Number"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/alternateNoKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:hint="Enter your alternate Numnber"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Permenent Address"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/permanentAddKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="text"
+                android:hint="Enter permanent address"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Business Type"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/businessTypeKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="text"
+                android:hint="Enter business Type"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Office Address"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/officeAddKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="text"
+                android:hint="Enter Office Address"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="State"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+                <EditText
+                    android:id="@+id/stateKYC"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_button_plane"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="left|center"
+                    android:inputType="text"
+                    android:hint="Enter State"
+                    android:paddingStart="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/button_text_gray"
+                    android:textSize="@dimen/dimen_14sp" />
+
+
+<!--                <Spinner-->
+<!--                android:id="@+id/stateKYC"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="?attr/dropdownListPreferredItemHeight"-->
+<!--                android:layout_marginTop="@dimen/dimen_16sp"-->
+<!--                android:background="@drawable/bg_button_plane"-->
+<!--                android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight" />-->
+
+                <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="District"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/districtKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="text"
+                android:hint="Enter District"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/select_city"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/cityKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="text"
+                android:hint="Enter city"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/en_pincode"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/pinCodeKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="number"
+                android:maxLength="6"
+                android:hint="@string/en_pincode"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/aadhaar_Card_Number"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/aadharNoKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="number"
+                android:maxLength="12"
+                android:hint="@string/aadhaar_Card_Number"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="GSt No"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/gstNoKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="text"
+                android:hint="Enter GST NUmber"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Website"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/websiteKYC"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_plane"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="left|center"
+                android:inputType="text"
+                android:hint="Enter Website"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/button_text_gray"
+                android:textSize="@dimen/dimen_14sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/dimen_20dp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Bank Details(optional)"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_22sp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Account Holder Name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <EditText
+                    android:id="@+id/accountHolderNameKYC"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_button_plane"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="left|center"
+                    android:inputType="text"
+                    android:hint="Enter Account holder name"
+                    android:paddingStart="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/button_text_gray"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Bank Name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <EditText
+                    android:id="@+id/backNameKYC"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_button_plane"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="left|center"
+                    android:inputType="text"
+                    android:hint="Enter your Bank"
+                    android:paddingStart="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/button_text_gray"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Branch Name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <EditText
+                    android:id="@+id/branchNameKYC"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_button_plane"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="left|center"
+                    android:inputType="text"
+                    android:hint="Enter Branch Name"
+                    android:paddingStart="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/button_text_gray"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Account Number"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <EditText
+                    android:id="@+id/accountNoKYC"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_button_plane"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="left|center"
+                    android:inputType="text"
+                    android:hint="Enter your account number"
+                    android:paddingStart="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/button_text_gray"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Account Type"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <EditText
+                    android:id="@+id/accountTypeKYC"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_button_plane"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="left|center"
+                    android:inputType="text"
+                    android:hint="Enter your account Type"
+                    android:paddingStart="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/button_text_gray"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="IFSC Code"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <EditText
+                    android:id="@+id/ifdcCodeKYC"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_button_plane"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="left|center"
+                    android:inputType="text"
+                    android:hint="Enter your IFSC Code"
+                    android:paddingStart="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/button_text_gray"
+                    android:textSize="@dimen/dimen_14sp" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_20dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Upload Document"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="@dimen/dimen_16dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_18sp"/>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_80dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_16sp"
+                    android:background="@drawable/border_bg">
+
+                    <ImageView
+                        android:id="@+id/panImage"
+                        android:layout_width="@dimen/dimen_60dp"
+                        android:layout_height="@dimen/dimen_60dp"
+                        android:layout_marginStart="@dimen/dimen_20dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@android:drawable/ic_menu_camera" />
+
+                    <TextView
+                        android:id="@+id/panImageBtn"
+                        style="?attr/colorPrimary"
+                        android:layout_width="@dimen/dimen_100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="@dimen/dimen_30dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/upload_own_pan" />
+
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_80dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_16sp"
+                    android:background="@drawable/border_bg">
+
+                    <ImageView
+                        android:id="@+id/aadharFrontImage"
+                        android:layout_width="@dimen/dimen_60dp"
+                        android:layout_height="@dimen/dimen_60dp"
+                        android:layout_marginStart="@dimen/dimen_20dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@android:drawable/ic_menu_camera" />
+
+                    <TextView
+                        android:id="@+id/aadharFrontImageBtn"
+                        style="?attr/colorPrimary"
+                        android:layout_width="@dimen/dimen_100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="@dimen/dimen_30dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/ownerAdhaarFront" />
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_80dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_16sp"
+                    android:background="@drawable/border_bg">
+
+                    <ImageView
+                        android:id="@+id/aadharBackImage"
+                        android:layout_width="@dimen/dimen_60dp"
+                        android:layout_height="@dimen/dimen_60dp"
+                        android:layout_marginStart="@dimen/dimen_20dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@android:drawable/ic_menu_camera" />
+
+                    <TextView
+                        android:id="@+id/aadharBackImageBtn"
+                        style="?attr/colorPrimary"
+                        android:layout_width="@dimen/dimen_100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="@dimen/dimen_30dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/ownerAdhaarBack" />
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_80dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_16sp"
+                    android:background="@drawable/border_bg">
+
+                    <ImageView
+                        android:id="@+id/photoImage"
+                        android:layout_width="@dimen/dimen_60dp"
+                        android:layout_height="@dimen/dimen_60dp"
+                        android:layout_marginStart="@dimen/dimen_20dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@android:drawable/ic_menu_camera" />
+
+                    <TextView
+                        android:id="@+id/photoImageBtn"
+                        style="?attr/colorPrimary"
+                        android:layout_width="@dimen/dimen_100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="@dimen/dimen_30dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/owner_photo" />
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_80dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_16sp"
+                    android:background="@drawable/border_bg">
+
+                    <ImageView
+                        android:id="@+id/otherImage"
+                        android:layout_width="@dimen/dimen_60dp"
+                        android:layout_height="@dimen/dimen_60dp"
+                        android:layout_marginStart="@dimen/dimen_20dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@android:drawable/ic_menu_camera" />
+
+                    <TextView
+                        android:id="@+id/otherImageBtn"
+                        style="?attr/colorPrimary"
+                        android:layout_width="@dimen/dimen_100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="@dimen/dimen_30dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/other_photo" />
+                </FrameLayout>
+
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginTop="40dp"
+                android:id="@+id/ll"
+                android:layout_marginBottom="@dimen/dimen_20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvBtnCancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginRight="7.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_button_border_blue"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
+                    android:text="Cancel"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="Proceed"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:layout_marginLeft="7.5dp"
+                    android:id="@+id/proceedBtn"
+                    android:textSize="15dp"
+                    android:background="@drawable/bg_button_blue"
+                    android:layout_height="45dp"/>
+            </LinearLayout>
+        </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

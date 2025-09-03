@@ -1,0 +1,551 @@
+{
+	"info": {
+		"_postman_id": "852cd51e-aeb0-47f3-926f-450809213d0a",
+		"name": "BOS UAT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26627116"
+	},
+	"item": [
+		{
+			"name": "Pan Card",
+			"item": [
+				{
+					"name": "PanNewGenerate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "mobileno",
+									"value": "9898989898",
+									"type": "text"
+								},
+								{
+									"key": "lastname",
+									"value": "Kumar",
+									"type": "text"
+								},
+								{
+									"key": "firstname",
+									"value": "Sunil",
+									"type": "text"
+								},
+								{
+									"key": "middlename",
+									"value": "test",
+									"type": "text"
+								},
+								{
+									"key": "nep_key",
+									"value": "MTExLjIyLjMzMy40NA==",
+									"type": "text"
+								},
+								{
+									"key": "refid",
+									"value": "012345684",
+									"type": "text"
+								},
+								{
+									"key": "domain",
+									"value": "nsdlepan.com",
+									"type": "text"
+								},
+								{
+									"key": "partnerId",
+									"value": "UAT1234",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "info@nsdlepan.com",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:44324/api/BOS/PanNewGenerate",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44324",
+							"path": [
+								"api",
+								"BOS",
+								"PanNewGenerate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "nep_key",
+									"value": "MTExLjIyLjMzMy40NA==",
+									"type": "text"
+								},
+								{
+									"key": "refid",
+									"value": "012345685",
+									"type": "text"
+								},
+								{
+									"key": "domain",
+									"value": "nsdlepan.com",
+									"type": "text"
+								},
+								{
+									"key": "partnerId",
+									"value": "UAT1234",
+									"type": "text"
+								},
+								{
+									"key": "encdata",
+									"value": "ZXlKaGNIQnNhV05oYm5SRWRHOGlPbnNpWVhCd2JHbFVlWEJsSWpvaVFTSXNJbU5oZEdWbmIzSjVJam9pVUNJc0luUnBkR3hsSWpvaU1TSXNJbXhoYzNST1lXMWxJam9pUzNWdFlYSWlMQ0ptYVhKemRFNWhiV1VpT2lKVGRXNXBiQ0lzSW0xcFpHUnNaVTVoYldVaU9pSjBaWE4wSWl3aVlYQndiRzVOYjJSbElqb2lJbjBzSW05MGFHVnlSR1YwWVdsc2N5STZleUp3YUhsUVlXNUpjMUpsY1NJNklsa2lmWDA9",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:44324/api/BOS/Validate",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44324",
+							"path": [
+								"api",
+								"BOS",
+								"Validate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pan Card Status",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "nep_key",
+									"value": "MTExLjIyLjMzMy40NA==",
+									"type": "text"
+								},
+								{
+									"key": "refid",
+									"value": "012345683",
+									"type": "text"
+								},
+								{
+									"key": "domain",
+									"value": "nsdlepan.com",
+									"type": "text"
+								},
+								{
+									"key": "partnerId",
+									"value": "UAT1234",
+									"type": "text"
+								},
+								{
+									"key": "encdata",
+									"value": "ZXlKaGNIQnNhV05oYm5SRWRHOGlPbnNpWVhCd2JHbFVlWEJsSWpvaVFTSXNJbU5oZEdWbmIzSjVJam9pVUNJc0luUnBkR3hsSWpvaU1TSXNJbXhoYzNST1lXMWxJam9pUzNWdFlYSWlMQ0ptYVhKemRFNWhiV1VpT2lKVGRXNXBiQ0lzSW0xcFpHUnNaVTVoYldVaU9pSjBaWE4wSWl3aVlYQndiRzVOYjJSbElqb2lJbjBzSW05MGFHVnlSR1YwWVdsc2N5STZleUp3YUhsUVlXNUpjMUpsY1NJNklsa2lmWDA9",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:44324/api/BOS/Status",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44324",
+							"path": [
+								"api",
+								"BOS",
+								"Status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Balance",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "nep_key",
+									"value": "MTExLjIyLjMzMy40NA==",
+									"type": "text"
+								},
+								{
+									"key": "domain",
+									"value": "nsdlepan.com",
+									"type": "text"
+								},
+								{
+									"key": "partnerId",
+									"value": "UAT1234",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:44324/api/BOS/Balance",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44324",
+							"path": [
+								"api",
+								"BOS",
+								"Balance"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Mobile Recharge",
+			"item": [
+				{
+					"name": "RechargeOperatorsList",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://api.bos.center/api/BOS/RechargeOperatorsList",
+							"protocol": "https",
+							"host": [
+								"api",
+								"bos",
+								"center"
+							],
+							"path": [
+								"api",
+								"BOS",
+								"RechargeOperatorsList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HLRCheck",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOiIxNjg2NzM4MDQ1IiwicGFydG5lcklkIjoiUFMwMDgzMyIsInJlcWlkIjoiMTY4NjczODA0NSJ9.SjfB0NZaUrvW5ehuKrFrbtUyGQ8t-S4Hq8nsF9yHifw",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"number\":\"9999179728\",\r\n    \"type\":\"mobile\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.bos.center/api/BOS/hlrcheck",
+							"protocol": "https",
+							"host": [
+								"api",
+								"bos",
+								"center"
+							],
+							"path": [
+								"api",
+								"BOS",
+								"hlrcheck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BrowsPlan",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"circle\": \"Delhi NCR\",\r\n  \"op\": \"Jio\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.bos.center/api/BOS/BrowsPlan",
+							"protocol": "https",
+							"host": [
+								"api",
+								"bos",
+								"center"
+							],
+							"path": [
+								"api",
+								"BOS",
+								"BrowsPlan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DoRecharge",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"operator\": \"22\",\r\n  \"canumber\": \"9455217271\",\r\n  \"amount\": \"10\",\r\n  \"referenceid\": \"1234578\",\r\n  \"RegisterID\":\"RTE-554\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44324/api/BOS/DoRecharge",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44324",
+							"path": [
+								"api",
+								"BOS",
+								"DoRecharge"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RechargesStatus",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"referenceid\": \"1234568\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.bos.center/api/BOS/RechargesStatus",
+							"protocol": "https",
+							"host": [
+								"api",
+								"bos",
+								"center"
+							],
+							"path": [
+								"api",
+								"BOS",
+								"RechargesStatus"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bill Payment",
+			"item": [
+				{
+					"name": "BillPaymentOperatorsList",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n  \"mode\": \"online\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.bos.center/api/BOS/BillPaymentOperatorsList",
+							"protocol": "https",
+							"host": [
+								"api",
+								"bos",
+								"center"
+							],
+							"path": [
+								"api",
+								"BOS",
+								"BillPaymentOperatorsList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FetchBilPaymentDetails",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"operator\": \"20\",\r\n  \"canumber\": \"60009497284\",\r\n  \"mode\": \"online\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.bos.center/api/BOS/FetchBilPaymentDetails",
+							"protocol": "https",
+							"host": [
+								"api",
+								"bos",
+								"center"
+							],
+							"path": [
+								"api",
+								"BOS",
+								"FetchBilPaymentDetails"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BillPaymentPaybill",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"operator\": \"sample string 1\",\r\n  \"canumber\": \"sample string 2\",\r\n  \"amount\": \"sample string 3\",\r\n  \"referenceid\": \"sample string 4\",\r\n  \"latitude\": \"sample string 5\",\r\n  \"longitude\": \"sample string 6\",\r\n  \"mode\": \"sample string 7\",\r\n  \"bill_fetch\": {\r\n    \"billAmount\": \"sample string 1\",\r\n    \"billnetamount\": \"sample string 2\",\r\n    \"billdate\": \"sample string 3\",\r\n    \"dueDate\": \"sample string 4\",\r\n    \"acceptPayment\": true,\r\n    \"acceptPartPay\": true,\r\n    \"cellNumber\": \"sample string 7\",\r\n    \"userName\": \"sample string 8\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.bos.center/api/BOS/BillPaymentPaybill",
+							"protocol": "https",
+							"host": [
+								"api",
+								"bos",
+								"center"
+							],
+							"path": [
+								"api",
+								"BOS",
+								"BillPaymentPaybill"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BillPaymentStatus",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"referenceid\": \"sample string 1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.bos.center/api/BOS/BillPaymentStatus",
+							"protocol": "https",
+							"host": [
+								"api",
+								"bos",
+								"center"
+							],
+							"path": [
+								"api",
+								"BOS",
+								"BillPaymentStatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RechargesHistory",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"RetailerID\": \"RTE-554\",\r\n  \"RechrageType\": \"dth\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.bos.center/api/BOS/RechargesHistory",
+							"protocol": "https",
+							"host": [
+								"api",
+								"bos",
+								"center"
+							],
+							"path": [
+								"api",
+								"BOS",
+								"RechargesHistory"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
