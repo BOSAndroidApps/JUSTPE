@@ -331,6 +331,7 @@ class BookingTravel : AppCompatActivity() {
         }
     }
 
+
     private fun setHoverSelection(){
         bin.flightcard.setCardBackgroundColor(resources.getColor(R.color.blue))
         bin.buscard.setCardBackgroundColor(resources.getColor(R.color.blue))
@@ -346,7 +347,6 @@ class BookingTravel : AppCompatActivity() {
         bin.bus.setTextColor(resources.getColor(R.color.white))
         bin.trains.setTextColor(resources.getColor(R.color.white))
         bin.hotels.setTextColor(resources.getColor(R.color.white))
-
 
     }
 

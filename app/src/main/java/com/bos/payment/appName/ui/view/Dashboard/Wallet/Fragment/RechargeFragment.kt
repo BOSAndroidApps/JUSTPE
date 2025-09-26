@@ -212,7 +212,9 @@ class RechargeFragment : Fragment() {
     }
 
 
-    private fun isUserLoggedIn(): Boolean {
+    private fun isUserLoggedIn(): Boolean
+
+    {
         // Add your logic to check if the user is logged in (e.g., check SharedPreferences)
         return mStash!!.getBoolanValue(Constants.IS_LOGIN.toString(), false)
     }
@@ -3444,7 +3446,7 @@ class RechargeFragment : Fragment() {
 
 
     fun hitApiForMobileRecharge(rechargeAmt:String, mobileNo :String){
-        var registrationId =  /*mStash?.getStringValue(Constants.MerchantId, "")*/ "AOP-554"
+        var registrationId =  /*mStash?.getStringValue(Constants.MerchantId, "")*/ /*"AOP-554"*/ "AOP-554"
         var productID =  mStash!!.getStringValue(Constants.OperatorId.toString(),"")
 
         var latlong = ConstantClass.latdouble.toString().plus(",").plus(ConstantClass.longdouble)
@@ -3514,6 +3516,7 @@ class RechargeFragment : Fragment() {
                                     if(response.data!!.size>0){
                                         var getdata =  response.data
                                         getdata.forEach { it->
+
                                             if(it!!.displayName!!.lowercase().contains("prepaid") && rechargeType == "mobile"){
                                                 DisplayName = it!!.displayName
                                                 if (DisplayName!!.isNotEmpty()) {
@@ -3522,20 +3525,26 @@ class RechargeFragment : Fragment() {
                                                     hitApiForRechargeOperatorNameList(DisplayName!!)
                                                 }
                                             }
+
                                             else{
+
                                                 if(it!!.displayName!!.lowercase().contains("dth") && rechargeType == "dth"){
                                                     DisplayName = it!!.displayName
                                                 }
+
                                                 if (DisplayName!!.isNotEmpty()) {
                                                     Constants.operatorName = ArrayList()
                                                     Constants.productIdList = ArrayList()
                                                     hitApiForRechargeOperatorNameList(DisplayName!!)
                                                 }
-
                                             }
-                                        }
 
+                                        }
                                     }
+                                }
+                                else{
+                                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_LONG).show()
+                                    pd.dismiss()
                                 }
                             }
                         }

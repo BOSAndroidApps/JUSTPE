@@ -40,6 +40,7 @@ import com.bos.payment.appName.databinding.ActivityDashboardBinding
 import com.bos.payment.appName.network.RetrofitClient
 import com.bos.payment.appName.ui.view.fragment.DashboardFragment
 import com.bos.payment.appName.ui.view.moneyTransfer.ScannerFragment
+import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightFilterActivity.Companion.TAG
 import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
 import com.bos.payment.appName.utils.ApiStatus
 import com.bos.payment.appName.utils.Utils.PD
@@ -49,6 +50,9 @@ import com.bos.payment.appName.utils.Utils.toast
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 
@@ -62,6 +66,7 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var menuListAdapter: MenuListAdapter
     private lateinit var getMenuListData: ArrayList<Data>
     lateinit var toolbar: Toolbar
+    lateinit var storageRef : StorageReference
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,8 +80,29 @@ class DashboardActivity : AppCompatActivity() {
         // Load and parse menu data
 //        parseMenuData(getMenuListData)
 //        displayParentMenus()
+        getfirebasetoken()
         getWalletBalance()
         btnListener()
+    }
+
+
+    fun getfirebasetoken(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@addOnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+            Log.d(TAG, "FCM Token: $token")
+
+            // Send this token to your server if you need to send targeted notifications
+            // sendRegistrationToServer(token)
+        }
+
+        val storage = FirebaseStorage.getInstance()
+        storageRef = storage.reference
     }
 
     @SuppressLint("RestrictedApi")
@@ -294,12 +320,24 @@ class DashboardActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n", "DefaultLocale")
     private fun getAllWalletBalanceRes(response: GetBalanceRes) {
+        val data = Gson().toJson(response).toByteArray(Charsets.UTF_8)
+        val fileRef = storageRef.child(Constants.FileName)
+
+        val uploadTask = fileRef.putBytes(data)
+        uploadTask.addOnSuccessListener {
+            Toast.makeText(this, "File uploaded successfully!", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener { e ->
+            Toast.makeText(this, "Upload failed: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+
+
         if (response.isSuccess == true) {
             binding.nav.walletBalance.text = "₹" + response.data[0].result.toString()
             Log.d("actualBalance", response.data[0].result.toString())
         } else {
             toast(response.returnMessage.toString())
         }
+
     }
 
 

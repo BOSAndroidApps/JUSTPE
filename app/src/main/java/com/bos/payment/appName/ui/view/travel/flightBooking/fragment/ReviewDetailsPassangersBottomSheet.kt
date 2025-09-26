@@ -538,6 +538,7 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
         return bookingFlightDetails
     }
 
+
     fun getpaxDetails(): MutableList<PaXDetailsFlight> {
         val paxDetailsList = mutableListOf<PaXDetailsFlight>()
 

@@ -175,11 +175,7 @@ class FlightBookingPage : AppCompatActivity() {
                                             }
 
                                             if (!filteredAirPnrDetails.isNullOrEmpty()) {
-                                                booking.copy(
-                                                    apiData = booking.apiData?.copy(
-                                                        airPNRDetails = filteredAirPnrDetails
-                                                    )!!
-                                                )
+                                                booking.copy(apiData = booking.apiData?.copy(airPNRDetails = filteredAirPnrDetails)!!)
                                             } else {
                                                 null
                                             }

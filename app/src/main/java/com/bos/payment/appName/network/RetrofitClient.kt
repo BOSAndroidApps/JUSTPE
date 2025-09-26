@@ -11,9 +11,10 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
 
      private const val BASE_URL: String = "https://payout.boscenter.in/" //  with UPI live url
-//   private const val BASE_URL: String = "https://api.boscenter.in/"  // login with Live Url
 
-   //  private const val BASE_URLAPI: String = "https://api.boscenter.in/" // for recharge all functionality test & live url
+    // private const val BASE_URL: String = "https://api.boscenter.in/"  // login with Live Url
+
+    // private const val BASE_URLAPI: String = "https://api.boscenter.in/" // for recharge all functionality test & live url
 
      /*Demo Api*/
      private const val BASE_URLAPI: String = "https://api.boscenter.in/"
@@ -25,9 +26,10 @@ object RetrofitClient {
     private const val BASE_GETURL: String = "https://bosapi.bos.center/"
 
     /*Demo Api*/
-    private const val TRAVEL_URL: String = "https://travel.bospay.co.in/"
+   // private const val TRAVEL_URL: String = "https://travel.bospay.co.in/"
+
     /*Live Api*/
-   // private const val TRAVEL_URL: String = "https://travel.bospay.in/"
+    private const val TRAVEL_URL: String = "https://travel.bospay.in/"
 
     private const val PAYOUT_URL: String = "https://payout.aopay.in/"
 
@@ -136,7 +138,6 @@ object RetrofitClient {
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
             .build()
     }
-
 
     private fun getAllPayoutInstance(): Retrofit {
         // Create OkHttpClient with 1-minute timeout settings

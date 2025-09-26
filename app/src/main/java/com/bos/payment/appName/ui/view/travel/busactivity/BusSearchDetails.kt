@@ -58,6 +58,7 @@ class BusSearchDetails : AppCompatActivity() {
         )
 
         Log.d("busSearchReq", Gson().toJson(busSearchReq))
+
         viewModel.getAllBusSearchList(busSearchReq).observe(this) { resource ->
             resource?.let {
                 when(it.apiStatus) {
@@ -72,6 +73,7 @@ class BusSearchDetails : AppCompatActivity() {
                     }
                     ApiStatus.ERROR -> {
                         pd.dismiss()
+                        Log.d("busListError",it.message.toString())
                         toast(it.message.toString())
                     }
                     ApiStatus.LOADING -> {
@@ -94,6 +96,7 @@ class BusSearchDetails : AppCompatActivity() {
             busSearchAdapter.notifyDataSetChanged()
         }
         else {
+            Log.d("BookList",response.responseHeader?.errorDesc.toString())
             Toast.makeText(this, response.responseHeader?.errorDesc.toString(), Toast.LENGTH_SHORT).show()
         }
     }
@@ -113,9 +116,8 @@ class BusSearchDetails : AppCompatActivity() {
         bin.fromLocation.text = mStash?.getStringValue(Constants.fromDesignationName, "")
         bin.toLocation.text = mStash?.getStringValue(Constants.toDesignationName, "")
         bin.dateAndTime.text = mStash?.getStringValue(Constants.dateAndTime, "")
-        viewModel = ViewModelProvider(
-            this,
-            TravelViewModelFactory(TravelRepository(RetrofitClient.apiAllTravelAPI,RetrofitClient.apiBusAddRequestlAPI))
+
+        viewModel = ViewModelProvider(this, TravelViewModelFactory(TravelRepository(RetrofitClient.apiAllTravelAPI,RetrofitClient.apiBusAddRequestlAPI))
         )[TravelViewModel::class.java]
 
         bin.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

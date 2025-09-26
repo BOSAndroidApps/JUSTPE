@@ -171,6 +171,7 @@ class BusSeating : AppCompatActivity() {
         getAllMappingSeat()
         setDropDown()
         setClickListeners()
+
     }
 
 
@@ -199,23 +200,11 @@ class BusSeating : AppCompatActivity() {
             validationPassenger()
         }
 
-//        bin.passengerDetails.passengerDob.setOnClickListener {
-//            val calendar = Calendar.getInstance()
-//            val year = calendar.get(Calendar.YEAR)
-//            val month = calendar.get(Calendar.MONTH)
-//            val day = calendar.get(Calendar.DAY_OF_MONTH)
-//
-//            val datePicker = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
-//                val selectedCalendar = Calendar.getInstance()
-//                selectedCalendar.set(selectedYear, selectedMonth, selectedDay)
-//                val formattedDate = dateFormatter.format(selectedCalendar.time)
-//                bin.passengerDetails.passengerDob.setText(formattedDate)
-//            }, year, month, day)
-//
-//            datePicker.show()
-//        }
 
+        bin.passengerDetails.passengerDob.parent.requestDisallowInterceptTouchEvent(true)
         bin.passengerDetails.passengerDob.setOnClickListener {
+            Toast.makeText(this@BusSeating,"Hii",Toast.LENGTH_SHORT).show()
+            Utils.hideKeyboard(this)
             DatePickerDialog(
                 this,
                 date,
@@ -225,45 +214,7 @@ class BusSeating : AppCompatActivity() {
             ).show()
         }
 
-//        bin.passengerDob.setOnClickListener {
-//            Utils.hideKeyboard(this)
-//            DatePickerDialog(
-//                this,
-//                date,
-//                myCalender[Calendar.YEAR],
-//                myCalender[Calendar.MONTH],
-//                myCalender[Calendar.DAY_OF_MONTH]
-//            ).show()
-//        }
 
-//        bin.passengerDob.setOnClickListener {
-//            val calendar = Calendar.getInstance()
-//
-//            val datePickerDialog = DatePickerDialog(
-//                this,
-//                { _, year, monthOfYear, dayOfMonth ->
-//                    val selectedCalendar = Calendar.getInstance()
-//                    selectedCalendar.set(year, monthOfYear, dayOfMonth)
-//
-//                    val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-//                    val selectedDate = sdf.format(selectedCalendar.time)
-//                    bin.passengerDob.setText(selectedDate)
-//                },
-//                calendar.get(Calendar.YEAR) - 18,
-//                calendar.get(Calendar.MONTH),
-//                calendar.get(Calendar.DAY_OF_MONTH)
-//            )
-//
-//            val eighteenYearsAgo = Calendar.getInstance()
-//            eighteenYearsAgo.add(Calendar.YEAR, -18)
-//            datePickerDialog.datePicker.maxDate = eighteenYearsAgo.timeInMillis
-//
-//            val minDate = Calendar.getInstance()
-//            minDate.set(1900, Calendar.JANUARY, 1)
-//            datePickerDialog.datePicker.minDate = minDate.timeInMillis
-//
-//            datePickerDialog.show()
-//        }
 
         bin.seatSelectBtn.setOnClickListener {
             getAllMappingSeat()
@@ -299,6 +250,7 @@ class BusSeating : AppCompatActivity() {
 
     }
 
+
     private fun getAllBusRequaryTicket() {
         val busRequery = BusRequeryReq(
             bookingRefNo = mStash.getStringValue(Constants.booking_RefNo, ""),
@@ -331,6 +283,7 @@ class BusSeating : AppCompatActivity() {
         }
 
     }
+
 
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     private fun getAllBusRequaryTicketRes(response: BusRequeryRes?) {
@@ -472,7 +425,6 @@ class BusSeating : AppCompatActivity() {
     }
 
 
-
     fun generateQrCode(content: String, size: Int = 512): Bitmap {
         val hints = Hashtable<EncodeHintType, String>().apply {
             put(EncodeHintType.CHARACTER_SET, "UTF-8")
@@ -519,17 +471,10 @@ class BusSeating : AppCompatActivity() {
     }
 
 
-    private fun buildQrDataWithPassengers(
-        pnr: String?,
-        bookingRefNo: String?,
-        fromCity: String?,
-        toCity: String?,
-        travelDate: String?,
+    private fun buildQrDataWithPassengers(pnr: String?, bookingRefNo: String?, fromCity: String?, toCity: String?, travelDate: String?,
         busType: String?,
         passengerList: ArrayList<com.bos.payment.appName.data.model.travel.bus.busRequery.PaXDetails>
-
-
-    ): String {
+        ): String {
         val builder = StringBuilder()
 
         builder.appendLine("🚌 Bus Ticket")
@@ -924,7 +869,7 @@ class BusSeating : AppCompatActivity() {
             getAllBusTicketing(mStash.getStringValue(Constants.booking_RefNo, "").toString())
         }
         else {
-            Toast.makeText(this, response?.responseHeader?.errorInnerException.toString(), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, response?.responseHeader?.errorInnerException.plus("Amount: ").plus(response!!.amount), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -1363,6 +1308,7 @@ class BusSeating : AppCompatActivity() {
              }*/
     }
 
+
     @SuppressLint("SetTextI18n")
     private fun setupUI() {
         pd = showLoadingDialog(this)
@@ -1395,6 +1341,7 @@ class BusSeating : AppCompatActivity() {
         bin.confirmBookingLayout.recyclerViewPassenger.adapter = userPassengerDetailsAdapter
     }
 
+
     private fun getAllMappingSeat() {
         val request = BusSeatMapReq(
             boardingId = intent.getStringExtra(Constants.boarding_Id),
@@ -1425,6 +1372,7 @@ class BusSeating : AppCompatActivity() {
             }
         }
     }
+
 
     private fun setupSeatGrid(response: BusSeatMapRes) {
         val lowerGrid = bin.seatLayout.lowerBerthGrid
@@ -1486,14 +1434,7 @@ class BusSeating : AppCompatActivity() {
 
 
     @SuppressLint("InflateParams", "SetTextI18n")
-    private fun createSeatView(
-        seatName: String,
-        context: Context,
-        row: Int,
-        column: Int,
-        length: Int,
-        seat: SeatMap
-    ): View {
+    private fun createSeatView(seatName: String, context: Context, row: Int, column: Int, length: Int, seat: SeatMap): View {
         val seatView = LayoutInflater.from(context).inflate(R.layout.seat_item, null)
         val tvPrice = seatView.findViewById<TextView>(R.id.tvPrice)
         tvPrice.text = seatName
@@ -1569,6 +1510,8 @@ class BusSeating : AppCompatActivity() {
             bin.selectedSeat.text = seatLabels.joinToString(" ")
             val totalAmount = selectedSeats.sumOf { it.fareMaster?.basicAmount ?: 0 }
             bin.finalAmount.text = "₹ $totalAmount"
+            bin.reviewBookingInclude.totalprice.text = "₹ $totalAmount"
+            Log.d("Total Amount", " $totalAmount")
         }
 
         return seatView

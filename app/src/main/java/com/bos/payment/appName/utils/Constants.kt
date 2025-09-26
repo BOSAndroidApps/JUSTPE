@@ -9,6 +9,8 @@ object Constants {
 
     var agentTypeAdapter: ArrayTypeAdapter<String>? = null
 
+    val FileName="notes/aopaytravel.txt"
+
     var RegistrationId = "RegistrationId"
     var MerchantId = "MerchantId"
     var MerchantList = "MerchantList"
