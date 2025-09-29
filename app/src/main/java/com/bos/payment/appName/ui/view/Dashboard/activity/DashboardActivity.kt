@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -40,9 +41,11 @@ import com.bos.payment.appName.databinding.ActivityDashboardBinding
 import com.bos.payment.appName.network.RetrofitClient
 import com.bos.payment.appName.ui.view.fragment.DashboardFragment
 import com.bos.payment.appName.ui.view.moneyTransfer.ScannerFragment
+import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightDetailListActivity.Companion.context
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightFilterActivity.Companion.TAG
 import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
 import com.bos.payment.appName.utils.ApiStatus
+import com.bos.payment.appName.utils.Constants.uploadDataOnFirebaseConsole
 import com.bos.payment.appName.utils.Utils.PD
 import com.bos.payment.appName.utils.Utils.logout
 import com.bos.payment.appName.utils.Utils.runIfConnected
@@ -50,11 +53,20 @@ import com.bos.payment.appName.utils.Utils.toast
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.storage
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDashboardBinding
@@ -80,13 +92,16 @@ class DashboardActivity : AppCompatActivity() {
         // Load and parse menu data
 //        parseMenuData(getMenuListData)
 //        displayParentMenus()
-        getfirebasetoken()
+
         getWalletBalance()
+        getfirebasetoken()
         btnListener()
     }
 
 
+
     fun getfirebasetoken(){
+        FirebaseFirestore.setLoggingEnabled(true)
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w(TAG, "Fetching FCM registration token failed", task.exception)
@@ -100,10 +115,10 @@ class DashboardActivity : AppCompatActivity() {
             // Send this token to your server if you need to send targeted notifications
             // sendRegistrationToServer(token)
         }
-
         val storage = FirebaseStorage.getInstance()
         storageRef = storage.reference
     }
+
 
     @SuppressLint("RestrictedApi")
     private fun initView() {
@@ -155,15 +170,13 @@ class DashboardActivity : AppCompatActivity() {
         }
 
 //        navController =
-//            (supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment).navController
+//        (supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment).navController
 //        NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
 
         try {
-            Picasso.get()
-                .load(Constants.uploadImage)
-                .error(R.drawable.ic_d_profile)
-                .into(binding.nav.ownerPhoto)
-        } catch (e: Exception) {
+            Picasso.get().load(Constants.uploadImage).error(R.drawable.ic_d_profile).into(binding.nav.ownerPhoto)
+        }
+        catch (e: Exception) {
             e.printStackTrace()
         }
 
@@ -192,6 +205,7 @@ class DashboardActivity : AppCompatActivity() {
         binding.nav.switchButton.isChecked = fingerPrint
 //        binding.nav.reportsLayout.visibility = View.GONE
     }
+
 
     private fun getAllMenuList() {
         val getAllMenuListReq = GetAllMenuListReq(
@@ -222,6 +236,8 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
     }
+
+
 //    @SuppressLint("NotifyDataSetChanged", "SuspiciousIndentation")
 //    private fun getAllMenuListRes(response: GetAllMenuListRes) {
 //        if (response.isSuccess == true){
@@ -234,6 +250,7 @@ class DashboardActivity : AppCompatActivity() {
 //            Toast.makeText(this, response.returnMessage.toString(), Toast.LENGTH_SHORT).show()
 //        }
 //    }
+
 
     @SuppressLint("NotifyDataSetChanged")
     private fun getAllMenuListRes(response: GetAllMenuListRes) {
@@ -286,6 +303,7 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
+
     private fun getWalletBalance() {
         this.runIfConnected {
             val walletBalanceReq = GetBalanceReq(
@@ -320,16 +338,30 @@ class DashboardActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n", "DefaultLocale")
     private fun getAllWalletBalanceRes(response: GetBalanceRes) {
-        val data = Gson().toJson(response).toByteArray(Charsets.UTF_8)
-        val fileRef = storageRef.child(Constants.FileName)
 
-        val uploadTask = fileRef.putBytes(data)
-        uploadTask.addOnSuccessListener {
-            Toast.makeText(this, "File uploaded successfully!", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener { e ->
-            Toast.makeText(this, "Upload failed: ${e.message}", Toast.LENGTH_SHORT).show()
+
+        /*
+        val cacheDir = this.cacheDir
+        val subdirectory = File(cacheDir, "my_cache_files")
+        if (!subdirectory.exists()) {
+            subdirectory.mkdirs()
         }
 
+        val fileName = "aopaytravel.txt"
+        val file = File(subdirectory, fileName)
+
+
+        try {
+            file.bufferedWriter().use { writer ->
+                writer.write(data)
+                writer.newLine() // Add a new line
+                //writer.append("More content can be appended here.")
+            }
+        } catch (e: IOException) {
+            e.printStackTrace() // Handle potential IO errors
+        }*/
+        val data = Gson().toJson(response)
+        uploadDataOnFirebaseConsole(data,"DashboardWalletBalance",this@DashboardActivity)
 
         if (response.isSuccess == true) {
             binding.nav.walletBalance.text = "₹" + response.data[0].result.toString()
@@ -337,6 +369,7 @@ class DashboardActivity : AppCompatActivity() {
         } else {
             toast(response.returnMessage.toString())
         }
+
 
     }
 
@@ -450,6 +483,7 @@ class DashboardActivity : AppCompatActivity() {
 //        }
     }
 
+
     private fun createMenu() {
         val popUp = PopupMenu(this, binding.toolbar.sideMoverBtn)
         popUp.menuInflater.inflate(R.menu.option_menu, popUp.menu)
@@ -469,6 +503,7 @@ class DashboardActivity : AppCompatActivity() {
         popUp.show()
     }
 
+
     fun restartApp(context: Context) {
         val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
         intent?.apply {
@@ -477,6 +512,7 @@ class DashboardActivity : AppCompatActivity() {
             Runtime.getRuntime().exit(0) // Optional: exit the process to avoid any lingering issues
         }
     }
+
 
     private fun changeAppIcon(newIcon: String) {
         val pm = applicationContext.packageManager
@@ -579,6 +615,7 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
+
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -590,5 +627,8 @@ class DashboardActivity : AppCompatActivity() {
         Toast.makeText(this, R.string.double_back_press_msg, Toast.LENGTH_SHORT).show()
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
+
+
+
 
 }

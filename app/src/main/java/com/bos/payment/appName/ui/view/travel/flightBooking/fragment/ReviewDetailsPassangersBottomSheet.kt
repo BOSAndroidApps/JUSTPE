@@ -601,6 +601,8 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
                             it.data?.let { users ->
                                 users.body()?.let { response ->
                                     pd.dismiss()
+                                    Constants.uploadDataOnFirebaseConsole(Gson().toJson(response),"ReviewDetailsBottomSheetRequeryRequest",requireContext())
+
                                     Log.d("ticketrequeryresp",Gson().toJson(requeryReq))
                                     startActivity(Intent(requireContext(),FlightBookedTicketActivity::class.java))
                                     Toast.makeText(context,"Reprint Success",Toast.LENGTH_SHORT).show()

@@ -24,6 +24,7 @@ import com.bos.payment.appName.ui.view.travel.adapter.BusTicketCancelledAdapter
 import com.bos.payment.appName.ui.view.travel.busactivity.BusTicketConsListClass
 import com.bos.payment.appName.ui.viewmodel.TravelViewModel
 import com.bos.payment.appName.utils.ApiStatus
+import com.bos.payment.appName.utils.Constants
 import com.bos.payment.appName.utils.MStash
 import com.bos.payment.appName.utils.Utils.PD
 import com.google.gson.Gson
@@ -93,6 +94,7 @@ class CancelledRefundBus : Fragment() {
                         it.data?.let { users ->
                             users.body()?.let { response ->
                                 if(response.isSuccess){
+                                    Constants.uploadDataOnFirebaseConsole(Gson().toJson(response),"CancelledRefundBusPassangerDetailsRequest",requireContext())
                                     Log.d("PaxDetailsResponse", Gson().toJson(response))
                                     var getdata = response.data!![0].apiData
                                     passangerList!!.clear()
@@ -148,6 +150,7 @@ class CancelledRefundBus : Fragment() {
                                 }
                                 else{
                                     Toast.makeText(context,response.returnMessage, Toast.LENGTH_SHORT).show()
+                                    Constants.uploadDataOnFirebaseConsole(response.returnMessage,"CancelledRefundBusPassangerDetailsRequest",requireContext())
                                 }
                             }
                         }

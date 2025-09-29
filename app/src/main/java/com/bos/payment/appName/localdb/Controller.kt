@@ -2,6 +2,7 @@ package com.bos.payment.appName.localdb
 
 import android.util.Log
 import com.bos.payment.appName.localdb.AppLog.initialize
+import com.google.firebase.FirebaseApp
 
 import org.apache.poi.sl.usermodel.ObjectMetaData.Application
 
@@ -23,6 +24,7 @@ class Controller : android.app.Application() {
         super.onCreate()
         // Initialize global resources here (e.g., logging, DI, shared prefs)
         Log.d("MyApplication", "App Started")
+        FirebaseApp.initializeApp(this)
 
         this.initialize()
 

@@ -12,15 +12,13 @@ object RetrofitClient {
 
      private const val BASE_URL: String = "https://payout.boscenter.in/" //  with UPI live url
 
-    // private const val BASE_URL: String = "https://api.boscenter.in/"  // login with Live Url
-
-    // private const val BASE_URLAPI: String = "https://api.boscenter.in/" // for recharge all functionality test & live url
-
-     /*Demo Api*/
-     private const val BASE_URLAPI: String = "https://api.boscenter.in/"
+    // private const val BASE_GETURL_RECHARGE: String = "https://api.boscenter.in/" // for recharge all functionality test & live url
 
     /*Live Api*/
     private const val BASE_GETURL_RECHARGE : String = "https://api.aopay.in/" // Annu just commented 7/08/2025 for guru demo
+
+     /*Demo Api*/
+     private const val BASE_URLAPI: String = "https://api.boscenter.in/"
 
     /* Live Api Fr Login*/
     private const val BASE_GETURL: String = "https://bosapi.bos.center/"

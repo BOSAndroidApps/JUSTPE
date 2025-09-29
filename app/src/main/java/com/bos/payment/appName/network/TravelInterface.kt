@@ -84,7 +84,7 @@ interface TravelInterface {
     suspend fun getBusTicketCancel(@Body req: BusTicketCancelReq): Response<BusTicketCancelRes>?
 
 
-    @POST("/api/V1/Air/Travel/AirSearch")
+    @POST("api/V1/Air/Travel/AirSearch")
     suspend fun getFlightSerahList(@Body req: FlightSearchReq): Response<FlightSearchResp>? // Annu
 
 

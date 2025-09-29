@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "112199508005",
+    "firebase_url": "https://aopay-aa4be-default-rtdb.firebaseio.com",
     "project_id": "aopay-aa4be",
     "storage_bucket": "aopay-aa4be.firebasestorage.app"
   },

@@ -106,6 +106,8 @@ class UpcomingBus : Fragment() {
                                if(response.isSuccess){
                                    Log.d("PaxDetailsResponse", Gson().toJson(response))
                                    AppLog.d("PaxDetailsResponse",response.toString())
+                                   Constants.uploadDataOnFirebaseConsole(Gson().toJson(response),"UpcomingBusPassangerDetailsRequest",requireContext())
+
                                    var getdata = response.data!![0].apiData
                                    if(getdata!=null){
                                        passangerList!!.clear()
@@ -143,6 +145,7 @@ class UpcomingBus : Fragment() {
                                }
                                 else{
                                     Toast.makeText(context,response.returnMessage,Toast.LENGTH_SHORT).show()
+                                    Constants.uploadDataOnFirebaseConsole(response.returnMessage,"UpcomingBusPassangerDetailsRequest",requireContext())
                                  }
                             }
                         }
@@ -190,9 +193,12 @@ class UpcomingBus : Fragment() {
                                 if(response.statuss.equals("218")){
                                     Toast.makeText(context,response.message.toString(),Toast.LENGTH_SHORT).show()
                                 }
+
                                 Log.d("ChargeKey",response.cancellationChargeKey.toString())
 
+                                Constants.uploadDataOnFirebaseConsole(Gson().toJson(response),"UpcomingBusTicketCancellationCharge", requireContext())
                                 AppLog.d("ChargeKey",Gson().toJson(response))
+
                                  if(!response.cancellable.equals("false")){
                                      var cancellationReq = BusTicketCancelReq(
                                          bookingRefNo = UpcomingTicketList.get(position).bookingRefNo,
@@ -293,6 +299,7 @@ class UpcomingBus : Fragment() {
                       it.data?.let { users ->
                           users.body()?.let { response ->
                               Log.d("CancelResponseResponse", Gson().toJson(response))
+                              Constants.uploadDataOnFirebaseConsole(Gson().toJson(response),"UpcomingBusTicketCancelResponseReq",requireContext())
                               if(response.isSuccess!!){
                                     if(!BusTicketConsListClass.startDate!!.isNullOrEmpty()&& !BusTicketConsListClass.endDate!!.isNullOrEmpty()) {
                                         // hit requery api for status update
@@ -402,6 +409,7 @@ class UpcomingBus : Fragment() {
                         it.data?.let { users ->
                             users.body()?.let { response ->
                                 Log.d("RequeryResponse", Gson().toJson(response))
+                                Constants.uploadDataOnFirebaseConsole(Gson().toJson(response),"UpcomingBusPassangerDetailsRequest",requireContext())
                                 (activity as? MyBookingBusActivity)?.hitApiForBookingList(BusTicketConsListClass.startDate, BusTicketConsListClass.endDate)
                                 (activity as? MyBookingBusActivity)?.hitApiForBusTicketCancelList(BusTicketConsListClass.startDate, BusTicketConsListClass.endDate)
                             }

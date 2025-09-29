@@ -1,15 +1,23 @@
 package com.bos.payment.appName.utils
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.bos.payment.appName.data.model.recharge.operator.Data
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import com.google.gson.internal.bind.ArrayTypeAdapter
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 object Constants {
 
     var agentTypeAdapter: ArrayTypeAdapter<String>? = null
 
-    val FileName="notes/aopaytravel.txt"
+    val FileName="dashboardlogs/aopaytravel.txt"
 
     var RegistrationId = "RegistrationId"
     var MerchantId = "MerchantId"
@@ -269,6 +277,35 @@ object Constants {
     var bankListNameMapForGettingbankListName: HashMap<Int, String>? = null
     var busListNameMapForGettingBusListName: HashMap<Int, String>? = null
     var toLocationNameMapForGettingToLocationName: HashMap<Int, String>? = null
+
+
+
+    fun uploadDataOnFirebaseConsole(data:String, collectionPath:String,context: Context){
+        val context = context
+        val db = Firebase.firestore
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.getDefault())
+        val currentDateTime = sdf.format(Date())
+
+
+        // Create a new user with a first and last name
+        val logData = hashMapOf(
+            "filename" to "aopaytravel.txt",
+            "content" to data,
+            "timestamp" to System.currentTimeMillis()
+        )
+
+        db.collection(collectionPath)
+            .document(currentDateTime)
+            .set(logData)
+            .addOnSuccessListener {
+                Toast.makeText(context, "Log saved in Firestore", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Log.d("Error", " $e.message")
+                Toast.makeText(context, "Failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
 
 
 

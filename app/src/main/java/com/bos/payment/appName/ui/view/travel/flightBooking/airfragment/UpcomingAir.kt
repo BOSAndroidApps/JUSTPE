@@ -187,7 +187,10 @@ class UpcomingAir : Fragment() {
                             it.data?.let { users ->
                                 users.body()?.let { response ->
                                     pd.dismiss()
-                                    Log.d("ticketrequeryresp",Gson().toJson(requeryReq))
+                                    Constants.uploadDataOnFirebaseConsole(Gson().toJson(response),"UpcomingAirRequeryRequest",requireContext())
+
+                                    Log.d("ticketrequeryresp",Gson().toJson(response))
+
                                     val mainActivity = requireActivity() as FlightBookingPage
                                     if(mainActivity !=null){
                                         mainActivity.hitApiForFlightTicketList()

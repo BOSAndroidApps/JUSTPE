@@ -405,6 +405,7 @@ class BusSeating : AppCompatActivity() {
                         pd.dismiss()
                         it.data?.let { users ->
                             users.body()?.let { response ->
+                                Constants.uploadDataOnFirebaseConsole(Gson().toJson(response),"BusSeatingPassangerDetailsRequest",this@BusSeating)
                                 Log.d("RequeryResponse", Gson().toJson(response))
                             }
                         }
@@ -714,7 +715,8 @@ class BusSeating : AppCompatActivity() {
                         pd.dismiss()
                         it.data?.let { users ->
                             users.body()?.let { response ->
-                               Log.d("TampBookReqResopnse",response.toString())
+                                Constants.uploadDataOnFirebaseConsole(Gson().toJson(response),"BusSeatingBusTampBookRequest",this@BusSeating)
+                                Log.d("TampBookReqResopnse",response.toString())
                             }
                         }
                     }
@@ -760,6 +762,7 @@ class BusSeating : AppCompatActivity() {
                         pd.dismiss()
                         it.data?.let { users ->
                             users.body()?.let { response ->
+                                Constants.uploadDataOnFirebaseConsole(Gson().toJson(response),"BusSeatingTampBusTicketResponse",this@BusSeating)
                                 Log.d("TampBookResponseRes",response.toString())
                             }
                         }
@@ -933,6 +936,7 @@ class BusSeating : AppCompatActivity() {
                 when (it.apiStatus) {
                     ApiStatus.SUCCESS -> {
                         pd.dismiss()
+                        Constants.uploadDataOnFirebaseConsole(Gson().toJson(resource.data),"BusSeatingAddBusTicketRequest",this@BusSeating)
                         Log.d("AddBusTicketRequest",resource.data.toString())
                     }
 
@@ -977,6 +981,7 @@ class BusSeating : AppCompatActivity() {
                     ApiStatus.SUCCESS -> {
                         pd.dismiss()
                         getTransferAmountToAgentWithCal()
+                        Constants.uploadDataOnFirebaseConsole(Gson().toJson(resource.data),"BusSeatingAddBusTicketResponse",this@BusSeating)
                         Log.d("AddBusTicketResponse",resource.data.toString())
                     }
 

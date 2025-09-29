@@ -91,6 +91,7 @@ import com.bos.payment.appName.ui.viewmodel.GetAllMobileRechargeViewModel
 import com.bos.payment.appName.ui.viewmodel.MoneyTransferViewModel
 import com.bos.payment.appName.utils.ApiStatus
 import com.bos.payment.appName.utils.Constants
+import com.bos.payment.appName.utils.Constants.uploadDataOnFirebaseConsole
 import com.bos.payment.appName.utils.MStash
 import com.bos.payment.appName.utils.Utils.PD
 import com.bos.payment.appName.utils.Utils.getCurrentDateTime
@@ -98,6 +99,8 @@ import com.bos.payment.appName.utils.Utils.runIfConnected
 import com.bos.payment.appName.utils.Utils.toast
 import com.example.example.FetchConsumerDetailsRes
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -107,6 +110,9 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class RechargeFragment : Fragment() {
     private lateinit var binding: FragmentRechargeBinding
@@ -2502,69 +2508,94 @@ class RechargeFragment : Fragment() {
 
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.isSuccessful) {
-                    pd.dismiss()
-                    val responseString = response.body()?.string()
-                    val rootObject = JSONObject(responseString)
+                try{
+                    if (response.isSuccessful) {
 
-                    if (rootObject.has("data") && !rootObject.isNull("data")) {
-                        val dataObject = rootObject.getJSONObject("data")
+                        pd.dismiss()
+                        val responseString = response.body()?.string()
+                        val rootObject = JSONObject(responseString)
 
-                        val keys = dataObject.keys()
+                        try {
+                            if (rootObject.has("statusCode")) {
+                                val errorCode = rootObject.getInt("statusCode")
+                                uploadDataOnFirebaseConsole("Error code $errorCode  $responseString", "RechargeFragmentRechargePlanReq",requireContext())
+                            } else {
+                                uploadDataOnFirebaseConsole("No statusCode found: $responseString", "RechargeFragmentRechargePlanReq",requireContext())
+                            }
+                        } catch (e: Exception) {
+                            uploadDataOnFirebaseConsole("Parsing Exception: ${e.message}", "RechargeFragmentRechargePlanReq",requireContext())
+                        }
 
-                        while (keys.hasNext()) {
-                            val key = keys.next()
-                            val value = dataObject.get(key)
 
-                            if (value is JSONArray) {
-                                Log.d("APIArrayName", "Array Name: $key")
+                        if (rootObject.has("data") && !rootObject.isNull("data")) {
+                            val dataObject = rootObject.getJSONObject("data")
 
-                                val mobilePlan = mutableListOf<Plan>()  // 👈 create new list for each array
-                                val array = value
+                            val keys = dataObject.keys()
 
-                                for (i in 0 until array.length()) {
-                                    val item = array.getJSONObject(i)
-                                    val rs = item.optInt("rs", 0)
-                                    val validity = item.optString("validity", "")
-                                    val desc = item.optString("desc", "")
+                            while (keys.hasNext()) {
+                                val key = keys.next()
+                                val value = dataObject.get(key)
 
-                                    mobilePlan.add(Plan(rs, validity, desc))
-                                    Log.d("API", " → Plan: Rs.$rs | Validity: $validity | Desc: $desc")
+                                if (value is JSONArray) {
+                                    Log.d("APIArrayName", "Array Name: $key")
+
+                                    val mobilePlan = mutableListOf<Plan>()  // 👈 create new list for each array
+                                    val array = value
+
+                                    for (i in 0 until array.length()) {
+                                        val item = array.getJSONObject(i)
+                                        val rs = item.optInt("rs", 0)
+                                        val validity = item.optString("validity", "")
+                                        val desc = item.optString("desc", "")
+
+                                        mobilePlan.add(Plan(rs, validity, desc))
+                                        Log.d("API", " → Plan: Rs.$rs | Validity: $validity | Desc: $desc")
+                                    }
+
+                                    mobileRechargePlanList.add(MobileRechargePlanModel(key, mobilePlan))
                                 }
 
-                                mobileRechargePlanList.add(MobileRechargePlanModel(key, mobilePlan))
+                            }
+
+                            if (mobileRechargePlanList.isNotEmpty()) {
+                                Log.d("PlanList", Gson().toJson(mobileRechargePlanList))
+                                binding.llViewPlan.visibility=View.VISIBLE
+                                RechargePlanNameAdapter = RechargePlanNameAdapter(
+                                    requireContext(),
+                                    mobileRechargePlanList,
+                                    clickListener = object : RechargePlanNameAdapter.ClickListener {
+                                        override fun itemClick(item: String) {
+                                            val mobilePlan = mobileRechargePlanList.find { it.arrayName == item }?.plans ?: emptyList()
+                                            getAllPlanListRes(mobilePlan)
+                                        }
+                                    }
+                                )
+
+                                binding.plannamerecyclerview.adapter = RechargePlanNameAdapter
+                                RechargePlanNameAdapter.notifyDataSetChanged()
                             }
 
                         }
 
-                        if (mobileRechargePlanList.isNotEmpty()) {
-                            Log.d("PlanList", Gson().toJson(mobileRechargePlanList))
-                            binding.llViewPlan.visibility=View.VISIBLE
-                            RechargePlanNameAdapter = RechargePlanNameAdapter(
-                                requireContext(),
-                                mobileRechargePlanList,
-                                clickListener = object : RechargePlanNameAdapter.ClickListener {
-                                    override fun itemClick(item: String) {
-                                        val mobilePlan = mobileRechargePlanList.find { it.arrayName == item }?.plans ?: emptyList()
-                                        getAllPlanListRes(mobilePlan)
-                                    }
-                                }
-                            )
-
-                            binding.plannamerecyclerview.adapter = RechargePlanNameAdapter
-                            RechargePlanNameAdapter.notifyDataSetChanged()
-                        }
-
+                        Log.d("SuccessApiRespo", "Success: $responseString")
                     }
-
-                    Log.d("SuccessApiRespo", "Success: $responseString")
-                } else {
-                    Log.e("ErrorApiRespo", "Error: ${response.code()} - ${response.errorBody()?.string()}")
-                    binding.llViewPlan.visibility=View.GONE
+                    else {
+                        pd.dismiss()
+                        Log.e("ErrorApiRespo", "Error: ${response.code()} - ${response.errorBody()?.string()}")
+                        binding.llViewPlan.visibility=View.GONE
+                        uploadDataOnFirebaseConsole("Error: ${response.code()} - ${response.errorBody()?.string()}", "RechargeFragmentRechargePlanReq",requireContext())
+                    }
+                }catch (e:Exception){
+                    pd.dismiss()
+                    val rechargeplanview ="TryException " .plus(e.printStackTrace().toString())
+                    uploadDataOnFirebaseConsole(rechargeplanview,"RechargeFragmentRechargePlanReq",requireContext())
                 }
+
+
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                pd.dismiss()
                 Log.e("API", "Failure: ${t.message}")
             }
 
@@ -3216,6 +3247,7 @@ class RechargeFragment : Fragment() {
                             it.data?.let { users ->
                                 users.body()?.let { response ->
                                     pd.dismiss()
+                                    uploadDataOnFirebaseConsole(Gson().toJson(response),"RechargeFragmentOperatorsRequest",requireContext())
                                     Log.d("operatorRespo", Gson().toJson(response))
                                     if (response.data!!.size > 0) {
                                         var getdata = response.data
@@ -3367,6 +3399,7 @@ class RechargeFragment : Fragment() {
                             it.data?.let { users ->
                                 users.body()?.let { response ->
                                     pd.dismiss()
+                                    uploadDataOnFirebaseConsole(Gson().toJson(response),"RechargeFragmentMobileWiseRequest",requireContext())
                                     Log.d("mobileNameRespo", Gson().toJson(response))
                                     if (response.statusCode == 200) {
                                         var operatorName = response.data!!.operator
@@ -3470,6 +3503,7 @@ class RechargeFragment : Fragment() {
                             pd.dismiss()
                             it.data?.let { users ->
                                 users.body()?.let { response ->
+                                    uploadDataOnFirebaseConsole(Gson().toJson(response),"RechargeFragmentRechargeRequest",requireContext())
                                     pd.dismiss()
                                     Log.d("rechargeResp", Gson().toJson(response))
                                     if (response.statusCode == 200) {
@@ -3510,6 +3544,7 @@ class RechargeFragment : Fragment() {
                     ApiStatus.SUCCESS -> {
                         it.data?.let { users ->
                             users.body()?.let { response ->
+                                uploadDataOnFirebaseConsole(Gson().toJson(response),"RechargeFragmentCategoryRequest",requireContext())
                                 if(response.status!!){
                                     Log.d("RechargeCategoryRespo",Gson().toJson(response))
                                     //Toast.makeText(context,response.message.toString(),Toast.LENGTH_SHORT).show()
@@ -3613,6 +3648,7 @@ class RechargeFragment : Fragment() {
                     ApiStatus.SUCCESS -> {
                         it.data?.let { users ->
                             users.body()?.let { response ->
+                                uploadDataOnFirebaseConsole(Gson().toJson(response),"RechargeFragmentDthInfoRequest",requireContext())
                                 if(response.status!!){
                                     Log.d("dthRespo",Gson().toJson(response))
                                     if(response.data!!.size>0){
@@ -3654,6 +3690,30 @@ class RechargeFragment : Fragment() {
 
 
     }
+
+    /*fun uploadRechargeOnFirebaseConsole(data:String, collectionPath:String){
+        val db = Firebase.firestore
+        val sdf = SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.getDefault())
+        val currentDateTime = sdf.format(Date())
+
+        // Create a new user with a first and last name
+        val logData = hashMapOf(
+            "filename" to "aopaytravel.txt",
+            "content" to data,
+            "timestamp" to System.currentTimeMillis()
+        )
+
+        db.collection(collectionPath)
+            .document(currentDateTime)
+            .set(logData)
+            .addOnSuccessListener {
+                //Toast.makeText(requireContext(), "Log saved in Firestore", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Log.d("Error", " $e.message")
+                Toast.makeText(requireContext(), "Failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }*/
 
 
 }

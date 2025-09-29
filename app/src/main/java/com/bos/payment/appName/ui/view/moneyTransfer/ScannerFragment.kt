@@ -19,7 +19,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.*
+import androidx.camera.core.Camera
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
+import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
@@ -51,6 +56,7 @@ class ScannerFragment : AppCompatActivity() {
     private lateinit var previewView: PreviewView
     private var mStash: MStash? = null
     private lateinit var viewModel: MoneyTransferViewModel
+    lateinit var context : Context
 
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -58,6 +64,13 @@ class ScannerFragment : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityScanAndPayBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        try {
+            context = this@ScannerFragment
+        } catch (e: Exception) {
+
+        }
+
         initView()
         btnListener()
 
@@ -139,7 +152,7 @@ class ScannerFragment : AppCompatActivity() {
 
 
     private fun startCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
 
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
@@ -245,6 +258,7 @@ class ScannerFragment : AppCompatActivity() {
         super.onDestroy()
         cameraExecutor.shutdown()
     }
+
 
     private class BarcodeAnalyzer(private val onQrCodeDetected: (qrData: String) -> Unit) :
         ImageAnalysis.Analyzer {

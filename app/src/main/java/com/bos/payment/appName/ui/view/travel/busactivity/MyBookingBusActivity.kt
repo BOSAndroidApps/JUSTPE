@@ -256,6 +256,7 @@ class MyBookingBusActivity : AppCompatActivity() {
                         it.data?.let { users ->
                             users.body()?.let { response ->
                                 Log.d("Response", response.toString())
+                                Constants.uploadDataOnFirebaseConsole(Gson().toJson(response),"MyBookingBusActivityBusBookListResponse",this@MyBookingBusActivity)
                                 AppLog.d("BookingListReqResponse", response.toString())
                                 BookingList.clear()
                                 BusTicketConsListClass.UpcomingTicketList.clear()
@@ -320,6 +321,7 @@ class MyBookingBusActivity : AppCompatActivity() {
                         it.data?.let { users ->
                             users.body()?.let { response ->
                                 Log.d("Response", response.toString())
+                                Constants.uploadDataOnFirebaseConsole(Gson().toJson(response),"MyBookingBusActivity",this@MyBookingBusActivity)
                                 AppLog.d("BookingListReqResponse", response.toString())
                                 BusCancelList.clear()
                                 BusTicketConsListClass.CancelTicketList.clear()

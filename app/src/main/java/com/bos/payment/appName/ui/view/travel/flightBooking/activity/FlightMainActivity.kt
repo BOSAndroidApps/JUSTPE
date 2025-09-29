@@ -20,6 +20,7 @@ import com.bos.payment.appName.data.model.travel.flight.DataItem
 import com.bos.payment.appName.data.model.travel.flight.FilterAirLine
 import com.bos.payment.appName.data.model.travel.flight.FlightSearchReq
 import com.bos.payment.appName.data.model.travel.flight.TripInfo
+import com.bos.payment.appName.data.model.walletBalance.walletBalanceCal.GetBalanceRes
 import com.bos.payment.appName.data.repository.TravelRepository
 import com.bos.payment.appName.data.viewModelFactory.TravelViewModelFactory
 import com.bos.payment.appName.databinding.ActivityFlightSearchBinding
@@ -73,13 +74,17 @@ import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.SelectTrave
 import com.bos.payment.appName.ui.viewmodel.TravelViewModel
 import com.bos.payment.appName.utils.ApiStatus
 import com.bos.payment.appName.utils.Constants
+import com.bos.payment.appName.utils.Constants.uploadDataOnFirebaseConsole
 import com.bos.payment.appName.utils.MStash
 import com.bos.payment.appName.utils.Utils.generateRandomNumber
 import com.bos.payment.appName.utils.Utils.toast
 import com.bumptech.glide.Glide
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import kotlin.math.log
 
@@ -612,6 +617,7 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
                         it.data?.let { users ->
                             users.body()?.let { response ->
                                 Log.d("AirPortListResponse", Gson().toJson(response))
+                                uploadDataOnFirebaseConsole(Gson().toJson(response),"FlightMainActivityAirportList",this@FlightMainActivity)
                                 var getdata = response.data
                                 if (!getdata.isNullOrEmpty()) {
                                     AirportDataList.clear()
@@ -620,14 +626,6 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
                                     AirportDataList.addAll(getdata)
 
                                     if (AirportDataList.size > 0) {
-
-                                       /* val geocoder = Geocoder(this@FlightMainActivity, Locale.getDefault())
-                                        val addresses = geocoder.getFromLocation(ConstantClass.latdouble, ConstantClass.longdouble, 1)
-                                        val currentCountry = addresses?.firstOrNull()?.countryName
-                                        val top10AirportsInCountry = AirportDataList
-                                            .filter { it.country.equals(currentCountry, ignoreCase = true) }
-                                            FlightList!!.addAll(top10AirportsInCountry)
-                                       */
 
                                         FlightList!!.addAll(AirportDataList)
 
@@ -688,6 +686,7 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
                     ApiStatus.SUCCESS -> {
                         it.data?.let { users ->
                             users.body()?.let { response ->
+                                uploadDataOnFirebaseConsole(Gson().toJson(response),"FlightMainActivitySearchRequest",this@FlightMainActivity)
                                 Log.d("AirPortListResponse", Gson().toJson(response))
                                 if (response.responseHeader.errorCode.equals("0000")) {
                                     adultList.clear()
@@ -779,6 +778,34 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
         )
         return airlinecodeList
     }
+
+
+    /*fun uploadAirportListOnFirebaseConsole(data:String, collectionPath:String){
+
+        val db = Firebase.firestore
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.getDefault())
+        val currentDateTime = sdf.format(Date())
+
+
+        // Create a new user with a first and last name
+        val logData = hashMapOf(
+            "filename" to "aopaytravel.txt",
+            "content" to data,
+            "timestamp" to System.currentTimeMillis()
+        )
+
+        db.collection(collectionPath)
+            .document(currentDateTime)
+            .set(logData)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Log saved in Firestore", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Log.d("Error", " $e.message")
+                Toast.makeText(this, "Failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }*/
 
 
 }

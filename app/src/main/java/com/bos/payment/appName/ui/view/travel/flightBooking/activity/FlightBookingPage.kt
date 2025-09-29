@@ -125,6 +125,7 @@ class FlightBookingPage : AppCompatActivity() {
                         ApiStatus.SUCCESS -> {
                             it.data?.let { users ->
                                 users.body()?.let { response ->
+                                    Constants.uploadDataOnFirebaseConsole(Gson().toJson(response),"FlightBookingPageAirTicketListRequest",this@FlightBookingPage)
                                     pd.dismiss()
                                     var  AirBookingTicketList= response.data!!
 
