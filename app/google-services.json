@@ -1,22 +1,21 @@
 {
   "project_info": {
-    "project_number": "112199508005",
-    "firebase_url": "https://aopay-aa4be-default-rtdb.firebaseio.com",
-    "project_id": "aopay-aa4be",
-    "storage_bucket": "aopay-aa4be.firebasestorage.app"
+    "project_number": "891814927365",
+    "project_id": "justpe-fb2fc",
+    "storage_bucket": "justpe-fb2fc.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:112199508005:android:d72132f4290cfd566c5fcc",
+        "mobilesdk_app_id": "1:891814927365:android:1c1dc1d1cf24fe6062d06c",
         "android_client_info": {
-          "package_name": "com.bos.payment.appName"
+          "package_name": "com.justpe.app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCOXOpec7fgTdbH1fpoGtEhVUAHa4bnxAM"
+          "current_key": "AIzaSyD5mv5dFpfzruUIsGRidHmvGaHr_TCDOPA"
         }
       ],
       "services": {
