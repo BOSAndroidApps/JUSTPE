@@ -1,0 +1,30 @@
+package com.bos.payment.appName.data.model.justpedashboard
+
+import com.google.gson.annotations.SerializedName
+
+data class RetailerWiseServicesResponse(
+
+	@field:SerializedName("returnCode")
+	val returnCode: String? = null,
+
+	@field:SerializedName("data")
+	val data: List<DataItem?>? = null,
+
+	@field:SerializedName("returnMessage")
+	val returnMessage: String? = null,
+
+	@field:SerializedName("isSuccess")
+	val isSuccess: Boolean? = null
+)
+
+data class DataItem(
+
+	@field:SerializedName("activeYN")
+	val activeYN: String? = null,
+
+	@field:SerializedName("featureCode")
+	val featureCode: String? = null,
+
+	@field:SerializedName("featureName")
+	val featureName: String? = null
+)
