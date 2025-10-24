@@ -1,9 +1,12 @@
 package com.bos.payment.appName.data.repository
 
+import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
+import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualAccountModel
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileWiseRechargeReq
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeCategoryReq
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeOperatorsReq
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargePlanReq
+import com.bos.payment.appName.data.model.recharge.qrCode.GenerateQRCodeReq
 import com.bos.payment.appName.data.model.recharge.recharge.DthInfoReq
 import com.bos.payment.appName.data.model.recharge.recharge.MobileRechargeReq
 import com.bos.payment.appName.data.model.travel.flight.FlightRequeryReq
@@ -23,5 +26,7 @@ class MobileRechargeRepository(private var apiInterface: ApiInterface) {
 
     suspend fun getMobileRechargeReq(req: com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileRechargeReq)= apiInterface.getMobileRechargeReq(req)
 
+    suspend fun createVirtualAccount(req: GenerateVirtualAccountModel)= apiInterface.createVirtualAccount(req)
 
+    suspend fun createQRCode(req: com.bos.payment.appName.data.model.justpaymodel.GenerateQRCodeReq)= apiInterface.createQRCode(req)
 }

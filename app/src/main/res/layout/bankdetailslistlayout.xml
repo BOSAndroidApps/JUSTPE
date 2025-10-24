@@ -1,6 +1,319 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/cross"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dimen_10dp"
+            android:src="@drawable/cross_icon"
+            app:tint="@color/edittext_color" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_10dp"
+            android:text="@string/bank_account"
+            android:textColor="@color/lightBlack"
+            android:textSize="@dimen/dimen_16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_2dp"
+        app:layout_constraintTop_toBottomOf="@+id/header"
+        android:background="@color/light_grey"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/dimen_10dp"
+        android:paddingBottom="@dimen/dimen_50dp"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="This will be used to receive money"
+            android:textColor="@color/edittext_color"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginTop="@dimen/dimen_30dp">
+
+            <TextView
+                android:layout_weight=".4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Bank Holder Name "
+                android:textStyle="bold"
+                android:textColor="@color/edittext_color"/>
+
+            <TextView
+                android:layout_weight=".1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text=":"/>
+
+            <TextView
+                android:layout_weight=".4"
+                android:id="@+id/holdername"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="_____"
+                android:textColor="@color/edittext_color"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginTop="@dimen/dimen_10dp">
+
+            <TextView
+                android:layout_weight=".4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Account Number  "
+                android:textStyle="bold"
+                android:textColor="@color/edittext_color"/>
+
+            <TextView
+                android:layout_weight=".1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text=":"/>
+
+            <TextView
+                android:layout_weight=".4"
+                android:id="@+id/accountnumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="_______"
+                android:textColor="@color/edittext_color"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginTop="@dimen/dimen_10dp">
+
+            <TextView
+                android:layout_weight=".4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="IFSC Code  "
+                android:textStyle="bold"
+                android:textColor="@color/edittext_color"/>
+
+            <TextView
+                android:layout_weight=".1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text=":"/>
+
+            <TextView
+                android:layout_weight=".4"
+                android:id="@+id/ifsccode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="______"
+                android:textColor="@color/edittext_color"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginTop="@dimen/dimen_10dp">
+
+            <TextView
+                android:layout_weight=".4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="QR Display Name"
+                android:textStyle="bold"
+                android:textColor="@color/edittext_color"/>
+
+            <TextView
+                android:layout_weight=".1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text=":"/>
+
+            <TextView
+                android:layout_weight=".4"
+                android:id="@+id/selleridentifier"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="______"
+                android:textColor="@color/edittext_color"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginTop="@dimen/dimen_10dp">
+
+            <TextView
+                android:layout_weight=".4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Mobile Number  "
+                android:textStyle="bold"
+                android:textColor="@color/edittext_color"/>
+
+            <TextView
+                android:layout_weight=".1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text=":"/>
+
+            <TextView
+                android:layout_weight=".4"
+                android:id="@+id/mobilenumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="_______"
+                android:textColor="@color/edittext_color"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginTop="@dimen/dimen_10dp">
+
+            <TextView
+                android:layout_weight=".4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Email ID  "
+                android:textStyle="bold"
+                android:textColor="@color/edittext_color"/>
+
+            <TextView
+                android:layout_weight=".1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text=":"/>
+
+            <TextView
+                android:layout_weight=".4"
+                android:id="@+id/emailid"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="_______"
+                android:textColor="@color/edittext_color"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginTop="@dimen/dimen_10dp">
+
+            <TextView
+                android:layout_weight=".4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Account Type  "
+                android:textStyle="bold"
+                android:textColor="@color/edittext_color"/>
+
+            <TextView
+                android:layout_weight=".1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text=":"/>
+
+            <TextView
+                android:layout_weight=".4"
+                android:id="@+id/accountType"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="_________"
+                android:textColor="@color/edittext_color"/>
+
+        </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/confirmbutton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_50dp"
+            android:background="@drawable/searchbutton"
+            android:backgroundTint="#007BFF"
+            app:layout_constraintTop_toBottomOf="@+id/extraofferList">
+
+            <TextView
+                android:text="@string/verify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_14sp"
+                android:textStyle="bold"
+                android:padding="@dimen/dimen_10dp"/>
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

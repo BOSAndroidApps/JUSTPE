@@ -2,6 +2,10 @@ package com.bos.payment.appName.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
+import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualAccountModel
+import com.bos.payment.appName.data.model.justpaymodel.UpdateBankDetailsReq
+import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesRequest
 import com.bos.payment.appName.data.model.menuList.GetAllMenuListReq
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.GetPayoutCommercialReq
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.mobileCharge.GetCommercialReq
@@ -123,11 +127,10 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
 
 
     // for air ticket request
-
     fun getAirTicketListRequest(req: GetAirTicketListReq) = liveData(Dispatchers.IO) {
         emit(ApiResponse.loading(data = null))
         try {
-            val response = withTimeout(10_0000) { // 10 seconds timeout
+            val response = withTimeout(10_000) { // 100 seconds (1 minute 40 seconds)
                 repository.getAirTicketListRequest(req)
             }
             emit(ApiResponse.success(response))
@@ -154,6 +157,102 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
     }
 
 
+    //dashboard banner
+    fun getDashboardBannerRequest(rid: Int, retailercode: String, task: String) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_000) {
+                repository.getDashboardBanner(rid, retailercode, task)
+            }
+
+            if (response.isSuccessful) {
+                emit(ApiResponse.success(response.body()))
+            } else {
+                emit(ApiResponse.error(data = null, message = "Server error: ${response.code()}"))
+            }
+
+        } catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        } catch (e: IOException) {
+            emit(ApiResponse.error(data = null, message = "No internet connection. Please check your network."))
+        } catch (e: Exception) {
+            emit(ApiResponse.error(data = null, message = "Something went wrong: ${e.localizedMessage}"))
+        }
+    }
+
+
+    // services request for retailerwise
+    fun getRetailerWiseServicesReq(req: RetailerWiseServicesRequest) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            emit(ApiResponse.success(data = repository.getRetailerWiseServicesRequest(req)))
+            }
+        catch (exception: Exception) {
+            emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))
+            }
+
+    }
+
+
+    fun getBankDetails(req: CheckBankDetailsModel) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.getBankDetails(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "Something went wrong: ${e.localizedMessage}"
+                )
+            )
+        }
+    }
+
+
+
+    fun updateBankDetails(req: UpdateBankDetailsReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.updateBankDetails(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "Something went wrong: ${e.localizedMessage}"
+                )
+            )
+        }
+    }
 
 
 

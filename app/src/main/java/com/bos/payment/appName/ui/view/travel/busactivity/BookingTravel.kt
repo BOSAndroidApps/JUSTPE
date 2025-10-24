@@ -81,7 +81,7 @@ class BookingTravel : AppCompatActivity() {
         getAllTravelBusList()
         setDropDown()
         btnListener()
-        mStash?.setStringValue(Constants.MerchantId, "AOP-554") // for testing purpose
+       // mStash?.setStringValue(Constants.MerchantId, "AOP-554") // for testing purpose
     }
 
     private fun setDropDown() {

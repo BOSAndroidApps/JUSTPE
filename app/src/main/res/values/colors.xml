@@ -44,6 +44,7 @@
     <color name="db_brown_light">#F4F1E6</color>
     <color name="light_blue">#cbd9e8</color>
     <color name="lightest_blue">#DBE7F4</color>
+    <color name="lightest_bluee">#EAEFF6</color>
     <color name="db_brown">#efe7cf</color>
     <color name="green">#268703</color>
 
@@ -52,6 +53,13 @@
     <color name="light_grey">#F5F5F5</color>
 
     <color name="blurlight">#D0E6F2</color>
+
+
+    <color name="justpecolortext">#1700AD</color>
+    <color name="dashboardiconbg">#E8E7EB</color>
+    <color name="cardbg">#E3E1F6</color>
+    <color name="dashboardtextcolor">#5C4BC9</color>
+    <color name="dashboardcardcolor">#D6CFFF</color>
 
 
 </resources>

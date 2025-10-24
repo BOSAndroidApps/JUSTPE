@@ -1,4 +1,4 @@
-package com.bos.payment.appName.ui.view.travel.flightBooking.fragment
+package com.bos.payment.appName.ui.view.fragment
 
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -13,14 +14,31 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import com.bos.payment.appName.R
+import com.bos.payment.appName.constant.ConstantClass
+import com.bos.payment.appName.constant.CustomFuseLocationActivity
+import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
+import com.bos.payment.appName.data.model.justpaymodel.GenerateQRCodeReq
+import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualAccountModel
+import com.bos.payment.appName.data.model.justpaymodel.UpdateBankDetailsReq
 import com.bos.payment.appName.data.model.travel.flight.FlightsItem
 import com.bos.payment.appName.data.model.travel.flight.SegmentsItem
+import com.bos.payment.appName.data.repository.GetAllAPIServiceRepository
+import com.bos.payment.appName.data.repository.MobileRechargeRepository
+import com.bos.payment.appName.data.viewModelFactory.GetAllApiServiceViewModelFactory
+import com.bos.payment.appName.data.viewModelFactory.MobileRechargeViewModelFactory
 import com.bos.payment.appName.databinding.AddtravellersitemlayoutBinding
+import com.bos.payment.appName.databinding.BankdetailslistlayoutBinding
 import com.bos.payment.appName.databinding.ContactmobileItemlayoutBinding
 import com.bos.payment.appName.databinding.FlightdetailsItemBottomsheetBinding
 import com.bos.payment.appName.databinding.GstDetailsLayoutBinding
 import com.bos.payment.appName.databinding.TravellersclassItemBottomsheetBinding
+import com.bos.payment.appName.network.RetrofitClient
+import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard
+import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard.Companion.QRBimap
+import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard.Companion.vpa
 import com.bos.payment.appName.ui.view.travel.adapter.FlightTicketDetailsAdapter
 import com.bos.payment.appName.ui.view.travel.adapter.PassangerDataList
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant
@@ -39,30 +57,106 @@ import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsP
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.infantList
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.segmentListPassangerDetail
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
+import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
+import com.bos.payment.appName.ui.viewmodel.GetAllMobileRechargeViewModel
+import com.bos.payment.appName.utils.ApiStatus
+import com.bos.payment.appName.utils.Constants
+import com.bos.payment.appName.utils.MStash
 import com.bos.payment.appName.utils.Utils
+import com.bos.payment.appName.utils.Utils.PD
+import com.bos.payment.appName.utils.Utils.generateQrBitmap
+import com.bos.payment.appName.utils.Utils.generateRandomNumber
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.Locale
 
-class AddContactAndMobileBottomSheet:BottomSheetDialogFragment() {
-    private lateinit var binding : ContactmobileItemlayoutBinding
+class SideNavigationBankDetailsSheet:BottomSheetDialogFragment() {
+    private lateinit var binding : BankdetailslistlayoutBinding
+    private var mStash: MStash? = null
+    var holdername:String ? = ""
+    var AccountNumber:String ? = ""
+    var IFSC:String ?= ""
+    var selleridentifier:String? = ""
+    var mobilenumber:String ?= ""
+    var emailid:String ? = ""
+    var accounttype:String ?= ""
+    var registrationID:String ?= ""
+    var merchantcode:String ?= ""
+    private lateinit var pd: AlertDialog
+    private lateinit var MobileRechargeViewModel: GetAllMobileRechargeViewModel
+    private lateinit var getAllApiServiceViewModel: GetAllApiServiceViewModel
+
+
+
 
     companion object {
-        const val TAG = "AddContactBottomSheet"
-        var contactNumber :String=""
-        var emailid : String=""
+        const val TAG = "AddBankAccountSheet"
+        var latt : Double = 0.0
+        var long : Double = 0.0
+        var cityName : String = ""
+        var district : String = ""
+        var pincode : String = ""
+        var Address : String = ""
+        var statecode : String = ""
+
+
 
     }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = ContactmobileItemlayoutBinding.inflate(inflater, container, false)
+        binding = BankdetailslistlayoutBinding.inflate(inflater, container, false)
+
+        mStash = MStash.getInstance(requireContext())
+        pd = PD(requireContext())
+
+        MobileRechargeViewModel = ViewModelProvider(this, MobileRechargeViewModelFactory (
+            MobileRechargeRepository(RetrofitClient.apiRechargeInterface)
+        )
+        )[GetAllMobileRechargeViewModel::class.java]
+
+        getAllApiServiceViewModel = ViewModelProvider(this, GetAllApiServiceViewModelFactory(GetAllAPIServiceRepository(RetrofitClient.apiAllInterface)))[GetAllApiServiceViewModel::class.java]
+
+
+        setinitData()
         setonclicklistner()
         return binding.root
+    }
+
+
+    fun setinitData(){
+        holdername =  mStash!!.getStringValue(Constants.SettlementAccountName,"")
+        AccountNumber =   mStash!!.getStringValue(Constants.SettlementAccountNumber,"")
+        IFSC =   mStash!!.getStringValue(Constants.SettlementAccountIfsc,"")
+        selleridentifier =   mStash!!.getStringValue(Constants.SellerIdentifier,"")
+        mobilenumber =   mStash!!.getStringValue(Constants.BankMobileNumber,"")
+        emailid =   mStash!!.getStringValue(Constants.EmailId,"")
+        accounttype =   mStash!!.getStringValue(Constants.BankAccountType,"")
+        merchantcode =   mStash!!.getStringValue(Constants.MerchantId,"")
+        registrationID =   mStash!!.getStringValue(Constants.RegistrationId,"")
+
+
+
+        binding.holdername.text= holdername
+        binding.accountnumber.text= AccountNumber
+        binding.ifsccode.text= IFSC
+        binding.selleridentifier.text= selleridentifier
+        binding.mobilenumber.text= mobilenumber
+        binding.emailid.text= emailid
+        binding.accountType.text= accounttype
+
+        if(mStash!!.getStringValue(Constants.ISQRCodeGenerated,"").equals("No", ignoreCase = true)||mStash!!.getStringValue(Constants.ISQRCodeGenerated,"")!!.isBlank()){
+            binding.confirmbutton.visibility= View.VISIBLE
+        }
+        else{
+            binding.confirmbutton.visibility= View.GONE
+        }
+
     }
 
 
@@ -72,24 +166,10 @@ class AddContactAndMobileBottomSheet:BottomSheetDialogFragment() {
             dialog!!.dismiss()
         }
 
-
         binding.confirmbutton.setOnClickListener {
-
-            if (binding.mobTxt.text.isEmpty() || binding.mobTxt.text.length != 10 || !binding.mobTxt.text.matches(Regex("[0-9]{10}"))) {
-                binding.mobTxt.error = "Enter a valid 10-digit mobile number"
-            }
-
-            if (binding.mailId.text.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(binding.mailId.text).matches()) {
-                binding.mailId.error = "Enter a valid email address"
-            }
-
-            contactNumber= binding.mobTxt.text.toString()
-            emailid= binding.mailId.text.toString()
-
-            (context as AddDetailsPassangerActivity ).setDataForContactDetails()
-            dismiss()
-
+            createVirtual()
         }
+
 
 
     }
@@ -117,13 +197,171 @@ class AddContactAndMobileBottomSheet:BottomSheetDialogFragment() {
 
 
 
-
-
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        (activity as? FlightMainActivity)?.setData()
+
     }
 
+
+
+    fun createVirtual(){
+        val requestId = generateRandomNumber()
+        val requestForCreateVirtualAccount = GenerateVirtualAccountModel(
+            apiId = "20261",
+            bankid = "2",
+            partnerReferenceNo = requestId,
+            p1businessName = holdername,
+            p2settlementAccountName = holdername,
+            p3sellerIdentifier = selleridentifier,
+            p4mobileNumber = mobilenumber,
+            p5emailId = emailid,
+            p6mcc = "6012",
+            p7turnoverType = "SMALL",
+            p8acceptanceType = "OFFLINE",
+            p9ownershipType = "PROPRIETARY",
+            p10city = cityName,
+            p11district = district,
+            p12stateCode = statecode,
+            p13pincode = pincode,
+            p14pan = "",
+            p15gstNumber = "",
+            p16settlementAccountNumber = AccountNumber,
+            p17settlementAccountIfsc = IFSC,
+            p18Latitude =  "$latt",
+            p19Longitude = "$long" ,
+            p20addressLine1 = Address,
+            p21addressLine2 = Address,
+            p22LLPINCIN = "",
+            p26DOB = "28/05/1987",
+            p27dOI = "01/02/2024",
+            p28websiteURLAppPackageName = "www.boscenter.in",
+            RegistrationID = merchantcode
+        )
+        Log.d("virtualaccountreq", Gson().toJson(requestForCreateVirtualAccount))
+        MobileRechargeViewModel.createVirtualAccount(requestForCreateVirtualAccount).observe(this) { resource ->
+            resource?.let {
+                when (it.apiStatus) {
+                    ApiStatus.SUCCESS -> {
+                        pd.dismiss()
+                        it.data?.let { users ->
+                            users.body()?.let { response ->
+                                pd.dismiss()
+                                if(response.status!!){
+                                    createQRCode()
+                                }
+                                else{
+                                  Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                                    createQRCode()
+                                }
+
+                            }
+                        }
+                    }
+
+                    ApiStatus.ERROR -> {
+                        pd.dismiss()
+                    }
+
+                    ApiStatus.LOADING -> {
+                        pd.show()
+                    }
+                }
+            }
+        }
+
+    }
+
+
+
+    fun createQRCode(){
+
+        val requestForCreateVirtualAccount = GenerateQRCodeReq(
+                RegistrationId = registrationID,
+                mobileNumber = mobilenumber,
+                merchantCode = merchantcode)
+
+        Log.d("qrcodereq", Gson().toJson(requestForCreateVirtualAccount))
+
+        MobileRechargeViewModel.createQRCode(requestForCreateVirtualAccount).observe(this) { resource ->
+            resource?.let {
+                when (it.apiStatus) {
+                    ApiStatus.SUCCESS -> {
+                        pd.dismiss()
+                        it.data?.let { users ->
+                            users.body()?.let { response ->
+                                pd.dismiss()
+                                Log.d("qrcoderesponse", Gson().toJson(response))
+                                if(response.status!!){
+                                    var url = response.details!!.qrCode
+                                    QRBimap = generateQrBitmap(url!!, 800)
+                                    vpa = response.details.vpa
+                                    hitapiForUpdateBankDetails(url,"Yes","Yes")
+                                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                                }
+                                else{
+                                    hitapiForUpdateBankDetails("","No","No")
+                                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                                }
+
+                            }
+                        }
+                    }
+
+                    ApiStatus.ERROR -> {
+                        pd.dismiss()
+                    }
+
+                    ApiStatus.LOADING -> {
+                        pd.show()
+                    }
+                }
+            }
+        }
+
+
+    }
+
+
+    fun hitapiForUpdateBankDetails(intent:String,isQRCodeActivate:String,isQRCodeGenerated:String){
+        val updateBankDetails = UpdateBankDetailsReq(
+            isQRCodeActivate =  isQRCodeActivate,
+            isQRCodeGenerated =  isQRCodeGenerated,
+            retailerCode =  registrationID,
+            staticQRCodeIntentUrl =  intent)
+
+        Log.d("bankdetailereq", Gson().toJson(updateBankDetails))
+
+        getAllApiServiceViewModel.updateBankDetails(updateBankDetails).observe(this) { resource ->
+            resource?.let {
+                when (it.apiStatus) {
+                    ApiStatus.SUCCESS -> {
+                        pd.dismiss()
+                        it.data?.let { users ->
+                            users.body()?.let { response ->
+                                Log.d("BankdetailsResponse",Gson().toJson(response))
+                                if(response.isSuccess!!){
+                                    (activity as JustPeDashboard)?.setQRCodeWithBankDetailsCodition()
+                                     dialog!!.dismiss()
+                                }
+                                else{
+
+                                }
+
+                            }
+                        }
+                    }
+
+                    ApiStatus.ERROR -> {
+                        pd.dismiss()
+                    }
+
+                    ApiStatus.LOADING -> {
+                        pd.dismiss()
+                    }
+                }
+            }
+        }
+    }
 
 
 }

@@ -1,3 +1,11 @@
 package com.bos.payment.appName.data.model.justpaymodel
 
-data class CheckBankDetailsModel()
+import com.google.gson.annotations.SerializedName
+
+data class CheckBankDetailsModel(
+
+    @SerializedName("retailerCode")
+    var reatilerCode : String
+
+)
+

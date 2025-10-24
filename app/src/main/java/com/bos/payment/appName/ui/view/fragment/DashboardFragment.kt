@@ -195,10 +195,7 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun getAllMerchantListRes(
-        response: GetApiListMarchentWiseRes,
-        merchantId: String
-    ) {
+    private fun getAllMerchantListRes(response: GetApiListMarchentWiseRes, merchantId: String) {
         if (response.isSuccess == true) {
             if (response.data.isEmpty()) {
                 Log.e("MerchantListError", "response.data is null or empty")
@@ -209,34 +206,23 @@ class DashboardFragment : Fragment() {
                 Constants.merchantIdList = mutableListOf()
             }
 
+            Log.d("MerchantList",Gson().toJson(response))
+
             response.data.forEach { item ->
                 val featureCode = item.featureCode?.trim() ?: ""
                 val featureName = item.featureName ?: ""
 
                 if (featureCode.isNotEmpty()) {
-//                    Constants.merchantIdList.clear()
                     Constants.merchantIdList?.add(featureCode)
                     mStash.setStringValue(Constants.APIName, featureName)
-                    mStash.setStringValue(
-                        Constants.MerchantList,
-                        Constants.merchantIdList.toString()
-                    )
-//                    Toast.makeText(requireContext(), response.returnMessage.toString(), Toast.LENGTH_SHORT).show()
+                    mStash.setStringValue(Constants.MerchantList, Constants.merchantIdList.toString())
 
-//                    Log.d("APINameList_Dash, ${Constants.merchantIdList?.add(featureCode)}")
-//                    Log.d(TAG, "getAllMerchantListRes: ${Constants.merchantIdList}")
-                    Log.d(
-                        "APINameList_Dash",
-                        mStash.getStringValue(Constants.MerchantList, "").toString()
-                    )
+                    Log.d("APINameList_Dash", mStash.getStringValue(Constants.MerchantList, "").toString())
                 } else {
                     Log.w("MerchantListWarning", "Empty or null featureCode at index ")
                 }
             }
 
-//            Toast.makeText(requireContext(), "Processed ${response.data.size} items", Toast.LENGTH_SHORT).show()
-//            Log.d("merchantList", mStash?.getStringValue(Constants.MerchantList, "").orEmpty())
-//            Log.d("merchantList11", Constants.merchantIdList.toString())
         } else {
             toast(response.returnMessage.orEmpty())
         }

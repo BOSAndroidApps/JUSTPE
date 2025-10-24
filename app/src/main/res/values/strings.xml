@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AO PAY</string>
+    <string name="app_name">JustPe</string>
     <string name="Pay_india">Pay India</string>
     <string name="Amazing_pay">Amazing Pay</string>
     <string name="Bos_Pay">BOS Pay</string>
@@ -598,6 +598,43 @@
     <string name="view_cancel">VIEW CANCEL</string>
     <string name="flight_details">Flight Details</string>
     <string name="travellers_information">Travellers Information</string>
+
+
+    <string name="screenlock">Screen Lock</string>
+    <string name="logoutt">Logout</string>
+    <string name="paytomob">To Mobile</string>
+    <string name="payupi">To UPI/Bank</string>
+    <string name="selftrans">To Self </string>
+    <string name="emi">EMI</string>
+    <string name="recharge">Recharge</string>
+    <string name="postpaid">Post Paid</string>
+
+
+    <string name="flight">Flight \n\n</string>
+    <string name="bus">Bus \n\n</string>
+    <string name="train">Train\n(coming soon)</string>
+
+
+    <string name="dth">DTH</string>
+    <string name="gas">Gas</string>
+    <string name="waterbill">Water Bill</string>
+    <string name="electricity">Electricity</string>
+    <string name="broadband">Broadband</string>
+    <string name="creditcard">Credit Card \n Payment</string>
+
+
+    <string name="cashwithdraw">Cash Withdrawal</string>
+    <string name="balanceenquiry">Balance Enquiry</string>
+    <string name="ministatement">Mini Statement</string>
+
+
+    <string name="muncipal">Muncipal \n Tax </string>
+    <string name="dmt">DMT</string>
+    <string name="scanpay">Scan &amp; Pay</string>
+    <string name="financial_services">Financial Services</string>
+    <string name="bills_amp_recharges"><![CDATA[Bills & Recharges]]></string>
+    <string name="bank_account">Bank Account</string>
+    <string name="verify">Verify</string>
 
 
 </resources>

@@ -158,6 +158,7 @@ class RechargeFragment : Fragment() {
     var DthInfoList : MutableList<com.bos.payment.appName.data.model.recharge.recharge.DataItem> = mutableListOf()
     private var lastTriggeredBy: String? = null
 
+
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

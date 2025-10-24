@@ -144,12 +144,11 @@ class DMTMobileActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         binding = ActivityDmtmobileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         initView()
-//        setDropDown()
         setAdapter()
         btnListener()
 
-        binding.toolbar.tvToolbarName.text = "Money Transfer"
 
     }
 
@@ -284,8 +283,8 @@ class DMTMobileActivity : AppCompatActivity() {
                     }
                 })
         }
-        binding.toolbar.dashboardImage.setOnClickListener {
-            startActivity(Intent(this@DMTMobileActivity, DashboardActivity::class.java))
+
+        binding.back.setOnClickListener {
             finish()
         }
 
@@ -353,10 +352,7 @@ class DMTMobileActivity : AppCompatActivity() {
         }
     }
 
-    private fun getAllApiPayoutCommercialChargeRes(
-        response: GetPayoutCommercialRes,
-        rechargeAmount: String
-    ) {
+    private fun getAllApiPayoutCommercialChargeRes(response: GetPayoutCommercialRes, rechargeAmount: String) {
         if (response.isSuccess == true) {
             binding.serviceChargeLayout.visibility = View.VISIBLE
             binding.commissionLayout.visibility = View.VISIBLE
@@ -1640,27 +1636,9 @@ class DMTMobileActivity : AppCompatActivity() {
         Constants.bankListName!!.add("Select your bank name")
         Constants.bankListNameMap = HashMap()
 
-        try {
-            val imageUrl = mStash!!.getStringValue(Constants.CompanyLogo, "")
+        viewModel = ViewModelProvider(this, MoneyTransferViewModelFactory(MoneyTransferRepository(RetrofitClient.apiAllAPIService)))[MoneyTransferViewModel::class.java]
 
-            Picasso.get().load(imageUrl)
-//            .placeholder(R.drawable.placeholder)  // Optional: placeholder while loading
-                .error(R.drawable.no_image)        // Optional: error image if load fails
-                .into(binding.toolbar.dashboardImage)
-        } catch (e: IllegalArgumentException) {
-            e.printStackTrace()
-        }
-
-        viewModel = ViewModelProvider(
-            this, MoneyTransferViewModelFactory(
-                MoneyTransferRepository(RetrofitClient.apiAllAPIService)
-            )
-        )[MoneyTransferViewModel::class.java]
-
-        getAllApiServiceViewModel = ViewModelProvider(
-            this,
-            GetAllApiServiceViewModelFactory(GetAllAPIServiceRepository(RetrofitClient.apiAllInterface))
-        )[GetAllApiServiceViewModel::class.java]
+        getAllApiServiceViewModel = ViewModelProvider(this, GetAllApiServiceViewModelFactory(GetAllAPIServiceRepository(RetrofitClient.apiAllInterface)))[GetAllApiServiceViewModel::class.java]
 
         viewModel1 = ViewModelProvider(
             this, PayoutViewModelFactory(PayoutRepository(RetrofitClient.apiInterface))
@@ -1671,31 +1649,7 @@ class DMTMobileActivity : AppCompatActivity() {
         binding.tvBtnAddRecipient.visibility = View.GONE
     }
 
-//    private fun setDropDown() {
-//        val paymentModeSp = resources.getStringArray(R.array.transactionDMT_array)
-//        val paymentModeAdapter = ArrayAdapter(this, R.layout.spinner_right_aligned, paymentModeSp)
-//        paymentModeAdapter.setDropDownViewResource(R.layout.spinner_right_aligned)
-//        binding.transferMode.adapter = paymentModeAdapter
-//        binding.transferMode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(
-//                parent: AdapterView<*>?, view: View?, position: Int, id: Long
-//            ) {
-//                if (position == 1) {
-////                    transferMode_txt = parent!!.getItemAtPosition(position).toString()
-//                    transferMode_txt = "IMPS"
-//                } else if (position == 2) {
-//                    transferMode_txt = "NEFT"
-//                } else {
-//                    transferMode_txt = ""
-//                }
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//            }
-//        }
-//        binding.transferMode.setSelection(0)
-//
-//    }
+
 
     private fun registerRemitters() {
         val fullName = binding.etRegisterCustomerName.text.toString().trim()
@@ -1724,6 +1678,7 @@ class DMTMobileActivity : AppCompatActivity() {
             getRegister()
         }
     }
+
 
     private fun registerBeneficiary() {
         if (binding.etAddReceiptBenficiaryName.text == null) {
@@ -2150,6 +2105,7 @@ class DMTMobileActivity : AppCompatActivity() {
         }
     }
 
+
     private fun getRegisterRemitters(response: RegisterRemitterRes) {
         if (response.status == true && response.Status != null) {
             binding.llRegister.visibility = View.GONE
@@ -2161,15 +2117,12 @@ class DMTMobileActivity : AppCompatActivity() {
         }
     }
 
+
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed()
-            return
-        }
-        this.doubleBackToExitPressedOnce = true
-        Toast.makeText(this, R.string.double_back_press_msg, Toast.LENGTH_SHORT).show()
-        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+        super.onBackPressed()
+
     }
+
 
 }

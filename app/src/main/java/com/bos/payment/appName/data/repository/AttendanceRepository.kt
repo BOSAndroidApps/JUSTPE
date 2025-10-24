@@ -18,7 +18,7 @@ import retrofit2.Response
 
 class AttendanceRepository {
     val userDataService = RetrofitClient.getService()
-//    val apiInterface = RetrofitClient.apiInterface
+//  val apiInterface = RetrofitClient.apiInterface
     val apiAllInterface = RetrofitClient.apiAllInterface
 
 //    fun getDMTDetailsByMobileNumber(StrMobileNumber: String?, StrAppType: String?): LiveData<DMTModel?> {
@@ -55,7 +55,8 @@ class AttendanceRepository {
 //                    mutableLiveData.value = LoginModel(ConstantClass.api_response_default_Message)
 //                }
 //            }
-//            override fun onFailure(call: Call<LoginModel?>, t: Throwable) {
+//            override fun onFailure(call: Cal
+//            l<LoginModel?>, t: Throwable) {
 //                t.printStackTrace()
 //                mutableLiveData.value = LoginModel(t.localizedMessage)
 //            }

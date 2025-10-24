@@ -47,7 +47,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.EncodeHintType
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
+import com.journeyapps.barcodescanner.BarcodeEncoder
 import java.io.ByteArrayOutputStream
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
@@ -568,6 +574,89 @@ object Utils {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
+
+
+
+    fun getStateCode(stateName: String): String {
+        return when (stateName.trim().lowercase()) {
+            "jammu and kashmir" -> "01"
+            "himachal pradesh" -> "02"
+            "punjab" -> "03"
+            "chandigarh" -> "04"
+            "uttarakhand" -> "05"
+            "haryana" -> "06"
+            "delhi" -> "08"
+            "rajasthan" -> "09"
+            "uttar pradesh" -> "10"
+            "bihar" -> "11"
+            "sikkim" -> "12"
+            "arunachal pradesh" -> "13"
+            "nagaland" -> "14"
+            "manipur" -> "15"
+            "mizoram" -> "16"
+            "tripura" -> "17"
+            "meghalaya" -> "18"
+            "assam" -> "19"
+            "west bengal" -> "20"
+            "jharkhand" -> "21"
+            "odisha" -> "22"
+            "chhattisgarh" -> "23"
+            "madhya pradesh" -> "24"
+            "gujarat" -> "25"
+            "daman and diu", "dadra and nagar haveli" -> "26"
+            "maharashtra" -> "27"
+            "andhra pradesh" -> "28"
+            "karnataka" -> "29"
+            "goa" -> "30"
+            "lakshadweep" -> "31"
+            "kerala" -> "32"
+            "tamil nadu" -> "33"
+            "puducherry" -> "34"
+            "andaman and nicobar islands" -> "35"
+            "telangana" -> "36"
+            "ladakh" -> "37"
+            else -> "00"
+        }
+    }
+
+    fun generateQrBitmap(content: String, sizePx: Int = 1024): Bitmap {
+        val hints = hashMapOf<EncodeHintType, Any>().apply {
+            put(EncodeHintType.CHARACTER_SET, "UTF-8")
+            put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H) // high error correction
+            put(EncodeHintType.MARGIN, 1) // minimal white border
+        }
+        val barcodeEncoder = BarcodeEncoder()
+        return barcodeEncoder.encodeBitmap(content, BarcodeFormat.QR_CODE, sizePx, sizePx, hints)
+    }
+
+
+
+
+    fun buildUpiUri(
+        pa: String,   // payee address (vpa)
+        pn: String,   // payee name
+        mc: String? = null,
+        tn: String? = null,
+        am: String? = null,
+        cu: String = "INR"
+    ): String {
+        fun enc(value: String) = URLEncoder.encode(value, StandardCharsets.UTF_8.toString())
+
+        val base = StringBuilder("upi://pay?")
+
+        if (!mc.isNullOrEmpty()) base.append("mc=").append(enc(mc)).append("&")
+        base.append("pa=").append(enc(pa)).append("&")
+        base.append("pn=").append(enc(pn)).append("&")
+        if (!tn.isNullOrEmpty()) base.append("tn=").append(enc(tn)).append("&")
+        if (!am.isNullOrEmpty()) base.append("am=").append(enc(am)).append("&")
+        base.append("cu=").append(enc(cu))
+
+        // remove trailing '&' if any (not needed but safe)
+        var uri = base.toString()
+        if (uri.endsWith("&")) uri = uri.dropLast(1)
+        return uri
+    }
+
 
 
 }

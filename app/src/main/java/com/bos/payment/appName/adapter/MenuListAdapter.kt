@@ -10,10 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bos.payment.appName.data.model.menuList.Data
 import com.bos.payment.appName.databinding.DrawerSliderItemLayoutBinding
 import com.bos.payment.appName.ui.view.CreditCardDetailsFragment
-import com.bos.payment.appName.ui.view.Dashboard.activity.DashboardActivity
 import com.bos.payment.appName.ui.view.Dashboard.activity.GenerateQRCodeActivity
 import com.bos.payment.appName.ui.view.Dashboard.activity.ServiceWiseTransaction
 import com.bos.payment.appName.ui.view.Dashboard.Wallet.Fragment.RechargeFragment
+import com.bos.payment.appName.ui.view.Dashboard.activity.DashboardActivity
+import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard
 import com.bos.payment.appName.ui.view.Dashboard.dmt.PayoutDMT
 import com.bos.payment.appName.ui.view.moneyTransfer.ScannerFragment
 
@@ -21,8 +22,7 @@ class MenuListAdapter(
     private val context: Context,
     private val menuList: MutableList<Data>,
     private val fragmentManager: FragmentManager,
-    private val containerId: Int
-) : RecyclerView.Adapter<MenuListAdapter.MenuListViewHolder>() {
+    private val containerId: Int) : RecyclerView.Adapter<MenuListAdapter.MenuListViewHolder>() {
 
     private var lastExpandedPosition: Int? = null // Track last expanded menu position
 
@@ -62,7 +62,8 @@ class MenuListAdapter(
                     collapsePreviousMenu() // Collapse only previously expanded menu
                     expandChildren(position, menuItem.childMenus)
                 }
-            } else {
+            }
+            else {
                 // Child menu clicked -> Navigate
                 when (menuItem.childMenuCode) {
                     "M00011" -> context.startActivity(Intent(context, PayoutDMT::class.java))
@@ -71,9 +72,9 @@ class MenuListAdapter(
                     "M00014" -> context.startActivity(Intent(context, GenerateQRCodeActivity::class.java))
                     "M00030" -> context.startActivity(Intent(context, ServiceWiseTransaction::class.java))
                     "M00031" -> context.startActivity(Intent(context, ServiceWiseTransaction::class.java))
-                    "M00008" -> context.startActivity(Intent(context, DashboardActivity::class.java))
-                    "M00042" -> context.startActivity(Intent(context, DashboardActivity::class.java))
-                    "M00009" -> context.startActivity(Intent(context, DashboardActivity::class.java))
+                    "M00008" -> context.startActivity(Intent(context, JustPeDashboard::class.java /*DashboardActivity::class.java*/))
+                    "M00042" -> context.startActivity(Intent(context,JustPeDashboard::class.java /*DashboardActivity::class.java*/))
+                    "M00009" -> context.startActivity(Intent(context,JustPeDashboard::class.java /*DashboardActivity::class.java*/))
                     "M00010" -> navigateToFragment(RechargeFragment(), "FastTag")
                     else -> { /* Handle other cases */ }
                 }
@@ -99,6 +100,7 @@ class MenuListAdapter(
         }
     }
 
+
     private fun collapseChildren(parentPosition: Int) {
         val parentMenu = menuList[parentPosition]
         if (!parentMenu.isExpanded) return
@@ -113,6 +115,7 @@ class MenuListAdapter(
         parentMenu.isExpanded = false
     }
 
+
     // Collapse only the last expanded menu before expanding a new one
     private fun collapsePreviousMenu() {
         lastExpandedPosition?.let {
@@ -122,4 +125,5 @@ class MenuListAdapter(
             }
         }
     }
+
 }

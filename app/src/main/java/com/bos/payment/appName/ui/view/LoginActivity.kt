@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -16,22 +17,33 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bos.bos.app.ui.view.DeviceInfoHelper
+import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
+import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesRequest
 import com.bos.payment.appName.data.model.loginSignUp.LoginRes
 import com.bos.payment.appName.data.model.merchant.activeInActiveStatus.GetAPIActiveInactiveStatusReq
 import com.bos.payment.appName.data.model.merchant.activeInActiveStatus.GetAPIActiveInactiveStatusRes
 import com.bos.payment.appName.data.model.merchant.merchantList.GetApiListMarchentWiseReq
 import com.bos.payment.appName.data.model.merchant.merchantList.GetApiListMarchentWiseRes
+import com.bos.payment.appName.data.repository.GetAllAPIServiceRepository
 import com.bos.payment.appName.data.repository.LoginSignUpRepository
 import com.bos.payment.appName.data.repository.MoneyTransferRepository
+import com.bos.payment.appName.data.viewModelFactory.GetAllApiServiceViewModelFactory
 import com.bos.payment.appName.data.viewModelFactory.LoginSignUpViewModelFactory
 import com.bos.payment.appName.data.viewModelFactory.MoneyTransferViewModelFactory
 import com.bos.payment.appName.databinding.ActivityLoginBinding
 import com.bos.payment.appName.network.RetrofitClient
 import com.bos.payment.appName.ui.view.Dashboard.activity.DashboardActivity
+import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard
+import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
 import com.bos.payment.appName.ui.viewmodel.LoginSignUpViewModel
 import com.bos.payment.appName.ui.viewmodel.MoneyTransferViewModel
 import com.bos.payment.appName.utils.ApiStatus
 import com.bos.payment.appName.utils.Constants
+import com.bos.payment.appName.utils.Constants.BillRechargeCard
+import com.bos.payment.appName.utils.Constants.FinanceCard
+import com.bos.payment.appName.utils.Constants.RETAILERALLSERVICES
+import com.bos.payment.appName.utils.Constants.TravelCard
+import com.bos.payment.appName.utils.Constants.getRetailerAllServices
 import com.bos.payment.appName.utils.MStash
 import com.example.example.LoginReq
 import com.bos.payment.appName.utils.Utils.PD
@@ -46,10 +58,13 @@ class LoginActivity : AppCompatActivity() {
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
     private lateinit var viewModel: LoginSignUpViewModel
     private lateinit var viewModel1: MoneyTransferViewModel
+    private lateinit var getAllApiServiceViewModel: GetAllApiServiceViewModel
     private lateinit var pd: AlertDialog
     private var loginText: String? = ""
     private var mStash: MStash? = null
     private var requestOption: RequestOptions? = null
+
+
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -197,15 +212,15 @@ class LoginActivity : AppCompatActivity() {
         requestOption = RequestOptions()
         Constants.merchantIdList = ArrayList()
 
-        viewModel = ViewModelProvider(
-            this,
-            LoginSignUpViewModelFactory(LoginSignUpRepository(RetrofitClient.apiAllInterface))
-        )[LoginSignUpViewModel::class.java]
+        getAllApiServiceViewModel = ViewModelProvider(this, GetAllApiServiceViewModelFactory(
+            GetAllAPIServiceRepository(RetrofitClient.apiAllInterface)
+        )
+        )[GetAllApiServiceViewModel::class.java]
 
-        viewModel1 = ViewModelProvider(this, MoneyTransferViewModelFactory(
-                MoneyTransferRepository(RetrofitClient.apiAllInterface)
-            )
-        )[MoneyTransferViewModel::class.java]
+
+        viewModel = ViewModelProvider(this, LoginSignUpViewModelFactory(LoginSignUpRepository(RetrofitClient.apiAllInterface)))[LoginSignUpViewModel::class.java]
+
+        viewModel1 = ViewModelProvider(this, MoneyTransferViewModelFactory(MoneyTransferRepository(RetrofitClient.apiAllInterface)))[MoneyTransferViewModel::class.java]
 
 //        try {
 //
@@ -295,8 +310,10 @@ class LoginActivity : AppCompatActivity() {
             }
        }
 
+
     private fun loginRes(res: LoginRes) {
         if (res.isSuccess == true) {
+            Log.d("LoginDataResponse",Gson().toJson(res))
             getAllMerchantList(res.data[0].merchantCode.toString())
             mStash!!.setStringValue(Constants.RegistrationId, res.data[0].userID.toString().uppercase())
             mStash!!.setStringValue(Constants.MobileNumber, res.data[0].mobileNo.toString())
@@ -308,12 +325,10 @@ class LoginActivity : AppCompatActivity() {
             mStash!!.setStringValue(Constants.Password, binding.loginLayout.tvPassword.text.toString().trim())
             mStash!!.setStringValue(Constants.MerchantId, res.data[0].merchantCode.toString())
             toast("Login Successful")
-            startActivity(Intent(context, DashboardActivity::class.java))
             Log.d("getAllMerchantList", res.data[0].merchantCode.toString())
             Log.d("loginId",res.data[0].userID.toString().uppercase())
             Log.d("mobileno",res.data[0].mobileNo.toString())
-            finish()
-
+            getIntentOnDashboard()
 
         }
         else {
@@ -321,7 +336,18 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun getAllMerchantList(merchantId: String) {
+
+
+    fun getIntentOnDashboard(){
+        startActivity(Intent(context, JustPeDashboard::class.java))
+        // startActivity(Intent(context, DashboardActivity::class.java))
+        finish()
+    }
+
+
+
+    private fun getAllMerchantList(merchantId: String)
+    {
         val getAllMerchantList = GetApiListMarchentWiseReq(MarchentID = merchantId)
         Log.d("getAllMerchantList", Gson().toJson(getAllMerchantList))
         viewModel1.getAllMerchantList(getAllMerchantList).observe(this) { resource ->
@@ -419,6 +445,9 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
+
+
+
     private fun getAllAPIRetailerWiseActiveInActiveStatusRes(response: GetAPIActiveInactiveStatusRes) {
         if (response.Status == true) {
             mStash!!.setStringValue(
@@ -487,11 +516,7 @@ class LoginActivity : AppCompatActivity() {
         return fineLocationPermission == PackageManager.PERMISSION_GRANTED && coarseLocationPermission == PackageManager.PERMISSION_GRANTED
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -501,4 +526,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }

@@ -14,6 +14,7 @@ import com.bos.payment.appName.data.model.dmt.transaction.TransactStatusReq
 import com.bos.payment.appName.data.model.dmt.transaction.TransactionReq
 import com.bos.payment.appName.data.model.dmt.transactionOtp.TransactionSendOtpReq
 import com.bos.payment.appName.data.model.fastTag.viewBillPayment.FetchBilPaymentDetailsReq
+import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
 import com.bos.payment.appName.data.model.makePayment.GetMakePaymentReq
 import com.bos.payment.appName.data.model.merchant.activeInActiveStatus.GetAPIActiveInactiveStatusReq
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.GetAPIServiceChargeReq
@@ -36,6 +37,9 @@ import com.bos.payment.appName.data.model.walletBalance.walletBalanceCal.WalletB
 import com.bos.payment.appName.data.repository.MoneyTransferRepository
 import com.bos.payment.appName.utils.ApiResponse
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.withTimeout
+import java.io.IOException
 
 class MoneyTransferViewModel (private val repository: MoneyTransferRepository) : ViewModel() {
 
@@ -343,4 +347,7 @@ class MoneyTransferViewModel (private val repository: MoneyTransferRepository) :
             emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))
         }
     }
+
+
+
 }

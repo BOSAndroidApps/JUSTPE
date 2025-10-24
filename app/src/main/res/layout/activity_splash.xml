@@ -88,7 +88,8 @@
 -->
 
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -154,12 +155,12 @@
                 <ImageView
                     android:id="@+id/textView1"
                     android:layout_width="200dp"
-                    android:layout_height="150dp"
+                    android:layout_height="200dp"
                     android:layout_marginTop="@dimen/dimen_44dp"
                     android:textAlignment="center"
                     android:textColor="#ffffff"
-                    android:src="@drawable/aops__logo"
-                    android:scaleType="fitCenter"
+                    android:src="@drawable/dashboardlogo"
+                    android:scaleType="centerCrop"
                     android:textSize="@dimen/dimen_20sp"
                     app:layout_constraintEnd_toEndOf="@id/textView2"
                     app:layout_constraintStart_toStartOf="@id/textView2"
@@ -224,5 +225,7 @@
                 android:text="SignUp" />
 
         </LinearLayout>
+
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

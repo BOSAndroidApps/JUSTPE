@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/passengerDetailsLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp"
-    >
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/seatTitle"
@@ -52,8 +50,8 @@
         android:layout_height="?attr/dropdownListPreferredItemHeight"
         android:layout_marginTop="@dimen/dimen_14dp"
         android:background="@drawable/bg_edittext"
-        android:entries="@array/gender_array"
         android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
+        android:entries="@array/gender_array"
         android:paddingStart="@dimen/dimen_10dp"
         android:paddingEnd="@dimen/dimen_10dp" />
 
@@ -63,11 +61,11 @@
         android:layout_height="50dp"
         android:layout_marginTop="@dimen/dimen_20dp"
         android:background="@drawable/bg_edittext"
+        android:clickable="true"
         android:drawableStart="@drawable/calendar_icon"
         android:drawablePadding="10dp"
-        android:focusable="false"
         android:fontFamily="@font/roboto_medium"
-        android:hint="Enter date"
+        android:hint="Enter date : dd/MM/yyyy"
         android:inputType="date"
         android:maxLines="1"
         android:paddingStart="@dimen/dimen_10dp"

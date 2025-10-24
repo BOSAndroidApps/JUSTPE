@@ -19,6 +19,7 @@ import com.bos.payment.appName.data.viewModelFactory.LoginSignUpViewModelFactory
 import com.bos.payment.appName.databinding.ActivitySplashBinding
 import com.bos.payment.appName.network.RetrofitClient
 import com.bos.payment.appName.ui.view.Dashboard.activity.DashboardActivity
+import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard
 import com.bos.payment.appName.ui.viewmodel.LoginSignUpViewModel
 import com.bos.payment.appName.utils.ApiStatus
 import com.bos.payment.appName.utils.Constants
@@ -49,6 +50,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun splashCall() {
         this.runIfConnected {
+
             val loginRequest = LoginReq(
                 userID = mStash.getStringValue(Constants.RegistrationId, ""),
                 agentPassword = mStash.getStringValue(Constants.Password, "")
@@ -68,22 +70,14 @@ class SplashActivity : AppCompatActivity() {
                             } else {
                                 // Regular flow: Check if user credentials are stored
                                 val isLoggedIn = mStash.getBoolanValue(Constants.IS_LOGIN, false)
-                                val useFingerprint =
-                                    mStash.getBoolanValue(
-                                        Constants.fingerPrintAction.toString(),
-                                        false
-                                    )
+                                val useFingerprint = mStash.getBoolanValue(Constants.fingerPrintAction.toString(), false)
 
-                                if (isLoggedIn || mStash.getBoolanValue(
-                                        Constants.isUpdate.toString(),
-                                        true
-                                    )
-                                ) {
+                                if (isLoggedIn || mStash.getBoolanValue(Constants.isUpdate.toString(), true)) {
                                     // User is logged in, proceed to the dashboard or fingerprint screen
-                                    val targetActivity = if (useFingerprint) {
-                                        FingerprintActivity::class.java
-                                    } else {
-                                        DashboardActivity::class.java
+                                    val targetActivity = if (useFingerprint) { FingerprintActivity::class.java }
+                                    else {
+                                        //DashboardActivity::class.java
+                                        JustPeDashboard::class.java
                                     }
                                     startActivity(Intent(this, targetActivity))
                                     finish()
@@ -158,13 +152,9 @@ class SplashActivity : AppCompatActivity() {
         binding.textView2.text = "Happy To See You "+ mStash.getStringValue(Constants.CompanyName, "")
 
         // Initialize ViewModel
-        viewModel = ViewModelProvider(
-            this,
-            LoginSignUpViewModelFactory(LoginSignUpRepository(RetrofitClient.apiAllInterface))
-        )[LoginSignUpViewModel::class.java]
+        viewModel = ViewModelProvider(this, LoginSignUpViewModelFactory(LoginSignUpRepository(RetrofitClient.apiAllInterface)))[LoginSignUpViewModel::class.java]
 
         try {
-
             val imageUrl = mStash.getStringValue(Constants.CompanyLogo, "")
 
             Picasso.get().load(imageUrl)

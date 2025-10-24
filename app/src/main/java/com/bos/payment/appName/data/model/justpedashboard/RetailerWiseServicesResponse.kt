@@ -8,7 +8,7 @@ data class RetailerWiseServicesResponse(
 	val returnCode: String? = null,
 
 	@field:SerializedName("data")
-	val data: List<DataItem?>? = null,
+	val data: List<RetailerWiseServicesDataItem?>? = null,
 
 	@field:SerializedName("returnMessage")
 	val returnMessage: String? = null,
@@ -17,7 +17,8 @@ data class RetailerWiseServicesResponse(
 	val isSuccess: Boolean? = null
 )
 
-data class DataItem(
+
+data class RetailerWiseServicesDataItem(
 
 	@field:SerializedName("activeYN")
 	val activeYN: String? = null,

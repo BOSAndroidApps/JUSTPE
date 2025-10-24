@@ -13,6 +13,7 @@ import com.bos.payment.appName.databinding.ShowingDetailsDthinfoBinding
 
 class DTHViewInfoAdapter(var context: android.content.Context, var planName:MutableList<com.bos.payment.appName.data.model.recharge.recharge.DataItem>, private val clickListener: ClickListener) : RecyclerView.Adapter<DTHViewInfoAdapter.ViewHolder>() {
 
+
     class ViewHolder (var bin: ShowingDetailsDthinfoBinding) : RecyclerView.ViewHolder(bin.root)
 
 
@@ -21,9 +22,11 @@ class DTHViewInfoAdapter(var context: android.content.Context, var planName:Muta
         return ViewHolder(bin)
     }
 
+
     override fun getItemCount(): Int {
         return planName!!.size
     }
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

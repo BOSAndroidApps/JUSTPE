@@ -34,6 +34,7 @@ object RetrofitClient {
     private var retrofit: Retrofit? = null
     private var retrofit2: Retrofit? = null
 
+
     fun getService(): ApiInterface? {
         if (retrofit == null) {
             retrofit = Retrofit.Builder()

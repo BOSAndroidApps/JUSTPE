@@ -94,9 +94,11 @@ class ScannerFragment : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun btnListener() {
+
         binding.crossBtn.setOnClickListener {
             onBackPressed()
         }
+
         binding.torchBtn.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 1)

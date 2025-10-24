@@ -36,6 +36,16 @@ import com.bos.payment.appName.data.model.forgotPassWord.ForgotReq
 import com.bos.payment.appName.data.model.forgotPassWord.ForgotRes
 import com.bos.payment.appName.data.model.idfcPayout.AOPPayOutReq
 import com.bos.payment.appName.data.model.idfcPayout.AOPPayOutRes
+import com.bos.payment.appName.data.model.justpaymodel.BankDetailsResponseModel
+import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
+import com.bos.payment.appName.data.model.justpaymodel.GenerateQRCodeResponse
+import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualAccountModel
+import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualBankDetailsResponseModel
+import com.bos.payment.appName.data.model.justpaymodel.UpdateBankDetailsReq
+import com.bos.payment.appName.data.model.justpaymodel.UpdateBankDetailsResponse
+import com.bos.payment.appName.data.model.justpedashboard.DashboardBannerListModel
+import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesRequest
+import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesResponse
 import com.bos.payment.appName.data.model.kyc.ReteriveAgentKYCReq
 import com.bos.payment.appName.data.model.kyc.ReteriveAgentKYCRes
 import com.bos.payment.appName.data.model.kyc.UpdateKYCReq
@@ -147,12 +157,41 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface ApiInterface {
 
 /*   BASE URL =  https://bosapi.bos.center*/
+
+     @FormUrlEncoded
+     @POST("api/Banner/BannerDetail")
+      suspend fun getdashboardbanner(@Field("RID") rid:Int, @Field("RetailerCode") retailercode : String, @Field("Task") task : String):Response<DashboardBannerListModel>
+
+
+    @POST("api/Feature/GetRetailerServices")
+    suspend fun getRetailerWiseServices(@Body req: RetailerWiseServicesRequest): Response<RetailerWiseServicesResponse>?
+
+    // check qrcode status......................................................
+
+    @POST("api/Retailer/GetRetailerBankDetails")
+    suspend fun getBankDetails(@Body req: CheckBankDetailsModel): Response<BankDetailsResponseModel>?
+
+    // update  BankDetails
+    @POST("api/Retailer/UpdateQRCodeStatus")
+    suspend fun updateBankDetails(@Body req: UpdateBankDetailsReq): Response<UpdateBankDetailsResponse>?
+
+
+    // Generate virtual account
+    @POST("api/AOP/SNBOSCreateVPA")
+    suspend fun createVirtualAccount(@Body req: GenerateVirtualAccountModel): Response<GenerateVirtualBankDetailsResponseModel>?
+
+    // Generate staticQR Code
+    @POST("api/AOP/BOSVPAStaticQR")
+    suspend fun createQRCode(@Body req: com.bos.payment.appName.data.model.justpaymodel.GenerateQRCodeReq): Response<GenerateQRCodeResponse>?
+
 
     @POST("/api/Login/UserLogin")
     suspend fun login(@Body req: LoginReq): Response<LoginRes>?
@@ -245,8 +284,10 @@ interface ApiInterface {
      @POST("api/AOP/App/BrowsPlan")
     suspend fun getAllPlanList(@Body model: MobileBrowserPlanReq): Response<MobileBrowserPlanRes?>?
 
+
     @POST("api/BOS/App/DoRecharge")
     suspend fun doRecharge(@Body req: MobileRechargeReq?): Response<MobileRechargeRes>?
+
 
     @POST("api/BOS/App/FetchConsumerDetails")
     fun getFastTagDetails(@Body req: FetchConsumerDetailsReq?): Call<FetchConsumerDetailsRes?>?
@@ -307,7 +348,7 @@ interface ApiInterface {
     @POST("api/BOS/RedirectUrlVerify")
     suspend fun getReDirectUrl(@Body req: RedirectUrlVerifyReq?): Response<RedirectUrlVerifyRes>?
 
-//    @POST("api/BOS/GetApiListMarchentWise")
+
     @POST("api/MerchantApi/ActiveServices")
     suspend fun getAllMerchantList(@Body req: GetApiListMarchentWiseReq): Response<GetApiListMarchentWiseRes>?
 
@@ -437,13 +478,20 @@ interface ApiInterface {
     @POST("api/AOP/V2/RechargehlrCheck")
     suspend fun getMobileWiseRechargeReq(@Body req: MobileWiseRechargeReq): Response<MobileWiseRechargeResp>? // Annu
 
+
     @POST("api/AOP/V2/GetRechargeBrowsePlan")
     fun getRechargePlanReq(@Body body: RequestBody): Call<ResponseBody>
+
 
     @POST("api/AOP/V2/MobileRecharge")
     suspend fun getMobileRechargeReq(@Body req: com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileRechargeReq): Response<MobileRechargeRespo>? // Annu
 
+
     @POST("api/AOP/V2/GetDthInfo")
-    suspend fun getDthInfoPlanReq(@Body req: DthInfoReq): Response<DthInfoPlanResp>? // Annu
+    suspend fun getDthInfoPlanReq(@Body req: DthInfoReq): Response<DthInfoPlanResp>?
+
+
+
+
 
 }

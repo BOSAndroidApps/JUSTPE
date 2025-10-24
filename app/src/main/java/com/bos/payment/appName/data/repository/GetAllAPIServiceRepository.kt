@@ -1,5 +1,10 @@
 package com.bos.payment.appName.data.repository
 
+import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
+import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualAccountModel
+import com.bos.payment.appName.data.model.justpaymodel.UpdateBankDetailsReq
+import com.bos.payment.appName.data.model.justpedashboard.DashboardBannerListModel
+import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesRequest
 import com.bos.payment.appName.data.model.menuList.GetAllMenuListReq
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.GetPayoutCommercialReq
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.mobileCharge.GetCommercialReq
@@ -15,6 +20,8 @@ import com.bos.payment.appName.data.model.travel.flight.GetAirTicketListReq
 import com.bos.payment.appName.data.model.walletBalance.merchantBal.GetMerchantBalanceReq
 import com.bos.payment.appName.data.model.walletBalance.walletBalanceCal.GetBalanceReq
 import com.bos.payment.appName.network.ApiInterface
+import com.bos.payment.appName.network.RetrofitClient
+import com.google.android.gms.common.api.Response
 import okhttp3.RequestBody
 
 class GetAllAPIServiceRepository(private val apiInterface: ApiInterface) {
@@ -28,12 +35,17 @@ class GetAllAPIServiceRepository(private val apiInterface: ApiInterface) {
     suspend fun getAllTransactionReport(req: TransactionReportReq) = apiInterface.getAllTransactionReport(req)
 
     // air requery request ..........................
+    suspend fun getAirRequeryRequest(req: FlightRequeryReq) = apiInterface.getAirTicketRequeryReq(req)
 
-    suspend fun getAirRequeryRequest(req: FlightRequeryReq)= apiInterface.getAirTicketRequeryReq(req)
+    suspend fun getAirTicketListRequest(req: GetAirTicketListReq) = apiInterface.getAirTicketListReq(req)
 
-    suspend fun getAirTicketListRequest(req: GetAirTicketListReq)= apiInterface.getAirTicketListReq(req)
+    suspend fun getDashboardBanner(rid: Int,retailercode: String, task: String) = apiInterface.getdashboardbanner(rid,retailercode, task)
 
+    suspend fun getRetailerWiseServicesRequest(req: RetailerWiseServicesRequest) = apiInterface.getRetailerWiseServices(req)
 
+    suspend fun getBankDetails(req: CheckBankDetailsModel)= apiInterface.getBankDetails(req)
+
+    suspend fun updateBankDetails(req: UpdateBankDetailsReq)= apiInterface.updateBankDetails(req)
 
 
 }

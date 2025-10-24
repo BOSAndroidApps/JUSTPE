@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesDataItem
 import com.bos.payment.appName.data.model.recharge.operator.Data
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -18,6 +19,10 @@ object Constants {
     var agentTypeAdapter: ArrayTypeAdapter<String>? = null
 
     val FileName="dashboardlogs/aopaytravel.txt"
+
+    var FINANCESERVICES = "FinanceServices"
+    var BILLRECHARGE = "BillRecharge"
+    var TRAVEL = "Travel"
 
     var RegistrationId = "RegistrationId"
     var MerchantId = "MerchantId"
@@ -182,11 +187,29 @@ object Constants {
     var AirTotalTicketPrice = "flight_ticket_price"
     var BookingRefNo = "bookingRefNo"
 
+    //.................... Bank deatils data for side navigation QR Process .....................................................
+    var SettlementAccountName = "settlementAccountName"
+    var SettlementAccountNumber = "settlementAccountNumber"
+    var SettlementAccountIfsc = "settlementAccountIfsc"
+    var SellerIdentifier = "sellerIdentifier"
+    var BankMobileNumber = "mobileNumber"
+    var EmailId = "emailId"
+    var BankAccountType = "accountType"
+    var CreatedBy = "createdBy"
+    var ISQRCodeGenerated = "is_QRCodeGenerated"
+    var ISQRCodeActivate = "is_QRCodeActivate"
+    var StaticQR = "staticQR"
+
+
     val KEY_192 = "your-24-byte-key-here!".toByteArray(Charsets.UTF_8) // 24 bytes
     val IV_192 = "8-byte-iv".toByteArray(Charsets.UTF_8) // 8 bytes
 
     var posPaidAcceptPayment: Boolean = false
     var posPaidAcceptPartPay: Boolean = false
+
+    var FinanceCard: Boolean = false
+    var BillRechargeCard: Boolean = false
+    var TravelCard: Boolean = false
 
     var TYPE = "RTE"
 
@@ -230,7 +253,6 @@ object Constants {
     var municipalityName: ArrayList<String>? = null
     var fastTagName: ArrayList<String>? = null
     var stateName: ArrayList<String>? = null
-//    var merchantIdList: ArrayList<String>? = null
     var bankListName: ArrayList<String>? = null
     var bankListId: ArrayList<String>? = null
     var busListName: ArrayList<String>? = null
@@ -279,6 +301,8 @@ object Constants {
     var toLocationNameMapForGettingToLocationName: HashMap<Int, String>? = null
 
 
+    var RETAILERALLSERVICES: List<RetailerWiseServicesDataItem?>? = listOf()
+
 
     fun uploadDataOnFirebaseConsole(data:String, collectionPath:String,context: Context){
         val context = context
@@ -306,6 +330,52 @@ object Constants {
                 Toast.makeText(context, "Failed: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
+
+
+
+    fun getRetailerAllServices():List<RetailerWiseServicesDataItem>{
+        var servicesList : MutableList<RetailerWiseServicesDataItem> = mutableListOf()
+        servicesList.add(RetailerWiseServicesDataItem("y","F0115","DMT"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0116","Bill Payment")) // emi,munsipal
+        servicesList.add(RetailerWiseServicesDataItem("y","F0118","FastTag Recharge"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0119","Pan Card"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0120","Aadhar"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0121","PG2"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0122","PG3"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0124","PaymentLink"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0125","Credit Card"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0126","StandardPaymentLink"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0127","UPIPaymentLink"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0128","DMTV1"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0129","DMTV2"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0130","WalletMoney"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0131","YesBankVPA"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0111","Payin"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0112","Payout"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0113","CIBIL"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0114","PG"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0132","PayinV1"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0133","BusApi"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0134","AirApi"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0135","CreditAlalytics"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0136","BasicPanDetailsApi"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0137","PanApi"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0138","DGLockerAadhaarValidationApi"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0139","BasicUpiValidation"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0140","RechargeV2"))
+        servicesList.add(RetailerWiseServicesDataItem("y","F0141","AEPSV1Api")) // cashwithdraw,ministatmnt,balanaceenquiery
+
+        return servicesList
+    }
+
+
+
+    fun maskWithEllipsis(account: String ?, visibleDigits: Int = 4): String {
+        val digits = account!!.filter { it.isDigit() }
+        if (digits.length <= visibleDigits) return digits
+        return "xxxxxx " + digits.takeLast(visibleDigits) // or "…${digits.takeLast(visibleDigits)}"
+    }
+
 
 
 

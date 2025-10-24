@@ -2,9 +2,12 @@ package com.bos.payment.appName.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
+import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualAccountModel
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileWiseRechargeReq
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeCategoryReq
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeOperatorsReq
+import com.bos.payment.appName.data.model.recharge.qrCode.GenerateQRCodeReq
 import com.bos.payment.appName.data.model.recharge.recharge.DthInfoReq
 import com.bos.payment.appName.data.model.recharge.recharge.MobileRechargeReq
 import com.bos.payment.appName.data.repository.GetAllAPIServiceRepository
@@ -140,6 +143,7 @@ class GetAllMobileRechargeViewModel(private val repository: MobileRechargeReposi
     }
 
 
+
     fun getMobileRechargeRequest(req: com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileRechargeReq) = liveData(Dispatchers.IO) {
         emit(ApiResponse.loading(data = null))
         try {
@@ -168,6 +172,68 @@ class GetAllMobileRechargeViewModel(private val repository: MobileRechargeReposi
             )
         }
     }
+
+
+    fun createVirtualAccount(req: GenerateVirtualAccountModel) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.createVirtualAccount(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "Something went wrong: ${e.localizedMessage}"
+                )
+            )
+        }
+    }
+
+
+    fun createQRCode(req: com.bos.payment.appName.data.model.justpaymodel.GenerateQRCodeReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.createQRCode(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "Something went wrong: ${e.localizedMessage}"
+                )
+            )
+        }
+    }
+
+
 
 
 }

@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.bos.payment.appName.R
 import com.bos.payment.appName.ui.view.Dashboard.activity.DashboardActivity
+import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard
 import com.bos.payment.appName.utils.Utils.toast
 import java.util.concurrent.Executor
 
@@ -125,7 +126,8 @@ class FingerprintActivity : FragmentActivity() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
                 toast("Authentication Successful")
-                startActivity(Intent(this@FingerprintActivity, DashboardActivity::class.java))
+                //startActivity(Intent(this@FingerprintActivity, DashboardActivity::class.java))
+                startActivity(Intent(this@FingerprintActivity, JustPeDashboard::class.java))
                 finish()
             }
 
@@ -148,10 +150,12 @@ class FingerprintActivity : FragmentActivity() {
     private fun showBiometricPrompt() {
         biometricPrompt.authenticate(promptInfo)
     }
+
     private fun restartSplashScreen() {
         val intent = Intent(this, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
         finish()
     }
+
 }

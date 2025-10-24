@@ -10,7 +10,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.bos.payment.appName"
+        applicationId "com.justpe.app"
         minSdk 23
         //noinspection OldTargetApi
         targetSdk 34

@@ -48,17 +48,26 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/aops__logo"
+        android:icon="@drawable/companylogo"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="@drawable/aops__logo"
+        android:roundIcon="@drawable/companylogo"
         android:supportsRtl="true"
         android:theme="@style/Theme.BOS_App"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
+            android:name=".ui.view.Dashboard.activity.AllServicesSelectionActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.view.Dashboard.activity.JustPeDashboard"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".ui.view.travel.flightBooking.activity.FlightBookingPage"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.view.travel.flightBooking.activity.FlightBookedTicketActivity"
             android:exported="false"
@@ -87,8 +96,8 @@
         <activity
             android:name=".ui.view.travel.busactivity.MyBookingBusActivity"
             android:exported="false"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.view.idfcPayout.Payout"
             android:exported="false"
@@ -112,12 +121,13 @@
         <activity
             android:name=".ui.view.Dashboard.dmt.FingerCaptureActivity"
             android:exported="false"
-            tools:ignore="Instantiatable" />
+            tools:ignore="Instantiatable"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.mantra.mfs100.LIBRARY"
-            android:value="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:value="true" />
 
         <activity
             android:name=".ui.view.Dashboard.dmt.PayoutDMT"
@@ -190,7 +200,7 @@
         <activity
             android:name=".ui.view.Dashboard.Wallet.Recharge.ViewRechargePlanActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.Dashboard.dmt.DMTReciepintDetailsActivity"
             android:exported="false"
@@ -202,15 +212,15 @@
         <activity
             android:name=".ui.view.Dashboard.dmt.DMTCustomerDetailsActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.Dashboard.dmt.DMTMobileActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.Dashboard.Wallet.RechargeDetailsActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity"
             android:exported="true"
@@ -222,23 +232,23 @@
         <activity
             android:name=".ui.view.Dashboard.Wallet.MyWalletActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.Dashboard.Wallet.AddAmountActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.Dashboard.Wallet.LoadWalletActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.Dashboard.Wallet.WalletPayActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.Dashboard.activity.DashboardActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.SignUpActivity"
             android:exported="false"
@@ -250,7 +260,7 @@
         <activity
             android:name=".ui.view.ForgotPasswordActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.LoginActivity"
             android:exported="false"
@@ -276,7 +286,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- Alias for User Type 1 -->
-
         <activity-alias
             android:name=".ui.view.UserType1Alias"
             android:enabled="false"
@@ -290,7 +299,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias> <!-- Alias for User Type 1 -->
-
         <!-- Alias for User Type 2 -->
         <activity-alias
             android:name=".ui.view.UserType2Alias"
