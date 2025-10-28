@@ -4,34 +4,31 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.location.Geocoder
-import android.os.Build
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bos.payment.appName.R
 import com.bos.payment.appName.adapter.MenuListAdapter
-import com.bos.payment.appName.constant.ConstantClass
 import com.bos.payment.appName.constant.CustomFuseLocationActivity
 import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
 import com.bos.payment.appName.data.model.justpaymodel.MoneyTransferServicesModel
@@ -42,7 +39,6 @@ import com.bos.payment.appName.data.model.menuList.GetAllMenuListReq
 import com.bos.payment.appName.data.model.menuList.GetAllMenuListRes
 import com.bos.payment.appName.data.model.merchant.merchantList.GetApiListMarchentWiseReq
 import com.bos.payment.appName.data.model.merchant.merchantList.GetApiListMarchentWiseRes
-import com.bos.payment.appName.data.model.travel.flight.GetAirTicketListReq
 import com.bos.payment.appName.data.model.walletBalance.walletBalanceCal.GetBalanceReq
 import com.bos.payment.appName.data.model.walletBalance.walletBalanceCal.GetBalanceRes
 import com.bos.payment.appName.data.repository.GetAllAPIServiceRepository
@@ -53,11 +49,10 @@ import com.bos.payment.appName.databinding.ActivityJustPeDashboardBinding
 import com.bos.payment.appName.network.RetrofitClient
 import com.bos.payment.appName.ui.adapter.DashboardServicesAdapter
 import com.bos.payment.appName.ui.adapter.ImageSliderAdapter
-import com.bos.payment.appName.ui.adapter.MoneyTransferServicesAdapter
-import com.bos.payment.appName.ui.view.CreditCardDetailsFragment
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Fragment.RechargeFragment
+import com.bos.payment.appName.ui.view.Dashboard.ToSelf.ToSelfMoneyTransferPage
 import com.bos.payment.appName.ui.view.Dashboard.activity.AllServicesSelectionActivity.Companion.checkType
 import com.bos.payment.appName.ui.view.Dashboard.dmt.DMTMobileActivity
+import com.bos.payment.appName.ui.view.Dashboard.tomobile.ToMobileSendMoneyActivity
 import com.bos.payment.appName.ui.view.LoginActivity
 import com.bos.payment.appName.ui.view.fragment.SideNavigationBankDetailsSheet
 import com.bos.payment.appName.ui.view.fragment.SideNavigationBankDetailsSheet.Companion.Address
@@ -68,13 +63,7 @@ import com.bos.payment.appName.ui.view.fragment.SideNavigationBankDetailsSheet.C
 import com.bos.payment.appName.ui.view.fragment.SideNavigationBankDetailsSheet.Companion.pincode
 import com.bos.payment.appName.ui.view.fragment.SideNavigationBankDetailsSheet.Companion.statecode
 import com.bos.payment.appName.ui.view.moneyTransfer.ScannerFragment
-import com.bos.payment.appName.ui.view.travel.airfragment.CancelledRefundFlight.Companion.AirCancelTicketList
-import com.bos.payment.appName.ui.view.travel.airfragment.CompletedAir.Companion.AirCompleteTicketList
-import com.bos.payment.appName.ui.view.travel.airfragment.UpcomingAir.Companion.AirUpcomingTicketList
-import com.bos.payment.appName.ui.view.travel.busactivity.BookingTravel
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightFilterActivity.Companion.TAG
-import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
-import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.AddContactAndMobileBottomSheet
 import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
 import com.bos.payment.appName.ui.viewmodel.MoneyTransferViewModel
 import com.bos.payment.appName.utils.ApiStatus
@@ -92,8 +81,8 @@ import com.bos.payment.appName.utils.Constants.uploadDataOnFirebaseConsole
 import com.bos.payment.appName.utils.MStash
 import com.bos.payment.appName.utils.Utils.PD
 import com.bos.payment.appName.utils.Utils.generateQrBitmap
+import com.bos.payment.appName.utils.Utils.getScreenshotFromView
 import com.bos.payment.appName.utils.Utils.getStateCode
-import com.bos.payment.appName.utils.Utils.logout
 import com.bos.payment.appName.utils.Utils.runIfConnected
 import com.bos.payment.appName.utils.Utils.toast
 import com.google.firebase.firestore.FirebaseFirestore
@@ -114,8 +103,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Calendar
+import java.io.File
+import java.io.FileOutputStream
 import java.util.Locale
 
 
@@ -171,14 +160,13 @@ class JustPeDashboard : AppCompatActivity() {
         }
 
         init()
-        getWalletBalance()
         getfirebasetoken()
+        hitApiForBanner()
         startMerchantListPolling(mStash!!.getStringValue(Constants.MerchantId, "").toString())
         getBankDetails(mStash!!.getStringValue(Constants.RegistrationId, "").toString())
         setMoneyTransferServices()
         setclickListner()
     }
-
 
 
     private fun startMerchantListPolling(merchantId: String) {
@@ -291,6 +279,8 @@ class JustPeDashboard : AppCompatActivity() {
         moneyTransferServicesadapter = DashboardServicesAdapter(displayedServiceList, this@JustPeDashboard,
             onServiceClick = { item ->
                 if (item.name == getString(R.string.dmt)) startActivity(Intent(this, DMTMobileActivity::class.java))
+                if(item.name== getString(R.string.paytomob)) startActivity(Intent(this, ToMobileSendMoneyActivity::class.java))
+                if(item.name== getString(R.string.selftrans)) startActivity(Intent(this, ToSelfMoneyTransferPage::class.java))
             },
             onSeeMoreClick = {
                 //toggleSeeMore()
@@ -343,6 +333,7 @@ class JustPeDashboard : AppCompatActivity() {
     }
 
 
+
     fun setQRCodeWithBankDetailsCodition(){
         if(mStash!!.getStringValue(Constants.ISQRCodeGenerated,"No").equals("No",ignoreCase = true)){
             binding.nav.qrcodetxt.text= "Generate QR Code"
@@ -352,7 +343,7 @@ class JustPeDashboard : AppCompatActivity() {
             binding.nav.lockiconlayout.visibility= View.GONE
             binding.nav.qrcodetxt.text= "View Bank Details"
             binding.nav.vpaid.text=vpa
-            var accountnumber =   maskWithEllipsis(mStash!!.getStringValue(Constants.SettlementAccountNumber,""))
+            var accountnumber =  maskWithEllipsis(mStash!!.getStringValue(Constants.SettlementAccountNumber,""))
             binding.nav.accountnumber.text= "Account No : ${accountnumber}"
             binding.nav.QRCode.setImageBitmap(QRBimap)
 
@@ -369,13 +360,30 @@ class JustPeDashboard : AppCompatActivity() {
 
     fun setclickListner(){
 
+        binding.nav.shareqrcode.setOnClickListener {
+            if(QRBimap!=null)
+            shareBitmap(QRBimap!!,this)
+        }
+
+        binding.nav.saveqrcode.setOnClickListener {
+            if(QRBimap!=null){
+              var qrbitmap =  getScreenshotFromView(binding.nav.qrlayout)
+                val imageUri =  saveBitmapToGallery(this, qrbitmap!!,"QR Code")
+                if (imageUri != null) {
+                    Toast.makeText(this, "Image saved to gallery!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Failed to save image!", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }
+
         binding.nav.bankbottomsheetcall.setOnClickListener {
             val bottomfrag = SideNavigationBankDetailsSheet()
             supportFragmentManager.let {
                 bottomfrag.show(it, SideNavigationBankDetailsSheet.TAG)
             }
         }
-
 
         binding.nav.llLogout.setOnClickListener {
             binding.drawer.closeDrawer(GravityCompat.START)
@@ -632,10 +640,11 @@ class JustPeDashboard : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        getWalletBalance()
         getFuseLocation()
         startAutoSlide()
         hitApiForServicesRequest()
-        hitApiForBanner()
+
         getBankDetails(mStash!!.getStringValue(Constants.RegistrationId, "").toString())
 
     }
@@ -863,7 +872,9 @@ class JustPeDashboard : AppCompatActivity() {
                                         mStash!!.setStringValue(Constants.CreatedBy, getdata[0]!!.createdBy)
                                         mStash!!.setStringValue(Constants.ISQRCodeActivate, getdata[0]!!.isQRCodeActivate)
                                         mStash!!.setStringValue(Constants.ISQRCodeGenerated, getdata[0]!!.isQRCodeGenerated)
+                                        mStash!!.setStringValue(Constants.VPAid, getdata[0]!!.vpaid)
                                         QRBimap = generateQrBitmap(getdata[0]!!.staticQR!!, 800)
+                                        vpa =  getdata[0]!!.vpaid
                                         setQRCodeWithBankDetailsCodition()
                                     }
 
@@ -901,7 +912,6 @@ class JustPeDashboard : AppCompatActivity() {
     }
 
 
-
     fun getAddressFromLatLng(context: Context, latitude: Double, longitude: Double): String {
         return try {
             val geocoder = Geocoder(context, Locale.getDefault())
@@ -930,9 +940,55 @@ class JustPeDashboard : AppCompatActivity() {
     }
 
 
+    private fun shareBitmap(bitmap: Bitmap, context: Context) {
+        // Save bitmap to cache directory
+        val cachePath = File(context.cacheDir, "shared_images")
+        cachePath.mkdirs()
+        val file = File(cachePath, "shared_image.png")
+        val fileOutputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+        fileOutputStream.close()
+
+        // Get content URI using FileProvider
+        val imageUri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+
+        // Create share intent
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "image/png"
+            putExtra(Intent.EXTRA_STREAM, imageUri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        // Start chooser
+        context.startActivity(Intent.createChooser(shareIntent, "Share Image Via"))
+    }
 
 
+    @SuppressLint("Recycle")
+    fun saveBitmapToGallery(context: Context, bitmap: Bitmap, fileName: String): Uri? {
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "$fileName.jpg")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Images.Media.WIDTH, bitmap.width)
+            put(MediaStore.Images.Media.HEIGHT, bitmap.height)
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/MyAppImages") // Folder name in gallery
+            put(MediaStore.Images.Media.IS_PENDING, 1)
+        }
 
+        val contentResolver = context.contentResolver
+        val imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+        imageUri?.let { uri ->
+            contentResolver.openOutputStream(uri)?.use { outputStream ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            }
+            contentValues.clear()
+            contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
+            contentResolver.update(uri, contentValues, null, null)
+        }
+
+        return imageUri
+    }
 
 
 }

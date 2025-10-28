@@ -109,10 +109,10 @@
                     android:layout_height="0dp"
                     android:gravity="center"
                     android:elevation="1dp"
-                    android:layout_alignLeft="@+id/qrlayout"
-                    android:layout_alignRight="@+id/qrlayout"
-                    android:layout_alignTop="@+id/qrlayout"
-                    android:layout_alignBottom="@+id/qrlayout">
+                    android:layout_alignLeft="@+id/qrcontainerlayout"
+                    android:layout_alignRight="@+id/qrcontainerlayout"
+                    android:layout_alignTop="@+id/qrcontainerlayout"
+                    android:layout_alignBottom="@+id/qrcontainerlayout">
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -131,66 +131,91 @@
                 </RelativeLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/qrlayout"
+                    android:id="@+id/qrcontainerlayout"
                     android:layout_width="280dp"
-                    android:layout_height="280dp"
-                    android:background="@drawable/qrborder"
-                    android:layout_marginRight="@dimen/dimen_20dp">
+                    android:layout_height="280dp">
 
-                    <TextView
-                        android:id="@+id/accountnumber"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/qrlayout"
+                        android:layout_width="280dp"
+                        android:layout_height="280dp"
+                        android:background="@drawable/qrborder"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:text="Account No : xxxxxxx"
-                        android:gravity="center"
-                        android:padding="@dimen/dimen_10dp"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:layout_marginTop="@dimen/dimen_10dp"
-                        android:textSize="@dimen/dimen_14sp"/>
-
-                    <ImageView
-                        android:id="@+id/QRCode"
-                        android:layout_width="195dp"
-                        android:layout_height="195dp"
-                        android:src="@drawable/qricon"
-                        app:layout_constraintTop_toBottomOf="@id/accountnumber"
-                        app:layout_constraintBottom_toTopOf="@+id/vpaid"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        android:layout_below="@id/accountnumber"
-                        android:layout_centerHorizontal="true" />
+                        app:layout_constraintRight_toRightOf="parent">
 
-                    <TextView
-                        android:id="@+id/vpaid"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:text="xxxxx@bankname"
-                        android:gravity="center"
-                        android:padding="@dimen/dimen_10dp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:layout_marginTop="@dimen/dimen_10dp"
-                        android:textSize="@dimen/dimen_14sp"/>
+                        <TextView
+                            android:id="@+id/accountnumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:text="Account No : xxxxxxx"
+                            android:gravity="center"
+                            android:padding="@dimen/dimen_10dp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:layout_marginTop="@dimen/dimen_10dp"
+                            android:textSize="@dimen/dimen_14sp"/>
 
+                        <ImageView
+                            android:id="@+id/QRCode"
+                            android:layout_width="195dp"
+                            android:layout_height="195dp"
+                            android:src="@drawable/qricon"
+                            app:layout_constraintTop_toBottomOf="@id/accountnumber"
+                            app:layout_constraintBottom_toTopOf="@+id/vpaidlayout"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            android:layout_below="@id/accountnumber"
+                            android:layout_centerHorizontal="true" />
+
+                        <LinearLayout
+                            android:id="@+id/vpaidlayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/dimen_10dp"
+                            android:gravity="center"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent">
+
+                            <TextView
+                                android:id="@+id/vpaid"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:text="xxxxx@bankname"
+                                android:gravity="center"
+                                android:padding="@dimen/dimen_10dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/dimen_12sp"/>
+
+
+                        </LinearLayout>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <ImageView
                         android:id="@+id/copytext"
-                        android:layout_width="@dimen/dimen_40dp"
-                        android:layout_height="@dimen/dimen_30dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:src="@drawable/copy"
                         android:padding="@dimen/dimen_2dp"
                         app:tint="@color/blue"
-                        app:layout_constraintTop_toTopOf="@id/vpaid"
-                        app:layout_constraintBottom_toBottomOf="@id/vpaid"
-                        app:layout_constraintLeft_toRightOf="@id/vpaid"/>
+                        android:layout_margin="6dp"
+                        android:elevation="@dimen/dimen_2dp"
+                        app:layout_constraintBottom_toBottomOf="@id/qrlayout"
+                        app:layout_constraintRight_toRightOf="@id/qrlayout"
+                        android:layout_gravity="center"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/bankbottomsheetcall"
@@ -199,10 +224,10 @@
                     android:layout_marginTop="@dimen/dimen_10dp"
                     android:layout_marginBottom="@dimen/dimen_10dp"
                     app:cardCornerRadius="@dimen/dimen_4dp"
-                    android:layout_below="@+id/qrlayout"
+                    android:layout_below="@+id/qrcontainerlayout"
                     app:cardBackgroundColor="#007BFF"
-                    android:layout_alignLeft="@+id/qrlayout"
-                    android:layout_alignRight="@+id/qrlayout">
+                    android:layout_alignLeft="@+id/qrcontainerlayout"
+                    android:layout_alignRight="@+id/qrcontainerlayout">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -222,6 +247,77 @@
 
 
                 </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/sharelayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/bankbottomsheetcall"
+                    android:layout_alignStart="@+id/bankbottomsheetcall"
+                    android:layout_alignEnd="@+id/bankbottomsheetcall">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/shareqrcode"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="7dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="@dimen/dimen_30dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/share"
+                                android:padding="5dp"
+                                android:layout_margin="@dimen/dimen_4dp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Share QR"
+                                android:textColor="@color/black"/>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/saveqrcode"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        app:cardCornerRadius="7dp"
+                        android:layout_height="wrap_content"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="@dimen/dimen_30dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/save"
+                                android:padding="5dp"
+                                android:layout_margin="@dimen/dimen_4dp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Save QR"
+                                android:textColor="@color/black"/>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
 
 
             </RelativeLayout>

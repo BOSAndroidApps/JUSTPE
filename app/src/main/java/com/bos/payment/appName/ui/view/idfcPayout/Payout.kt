@@ -127,6 +127,7 @@ class Payout : AppCompatActivity() {
             getAllApiPayoutCommercialCharge(transferAmountText)
         }
     }
+
     private fun getAllApiPayoutCommercialCharge(rechargeAmount: String) {
         val getPayoutCommercialReq = GetPayoutCommercialReq(
             merchant = mStash!!.getStringValue(Constants.RegistrationId, ""),
@@ -159,10 +160,8 @@ class Payout : AppCompatActivity() {
             }
     }
 
-    private fun getAllApiPayoutCommercialChargeRes(
-        response: GetPayoutCommercialRes,
-        rechargeAmount: String
-    ) {
+    private fun getAllApiPayoutCommercialChargeRes(response: GetPayoutCommercialRes, rechargeAmount: String) {
+
         if (response.isSuccess == true) {
             bin.serviceChargeLayout.visibility = View.VISIBLE
             bin.proceedBtnLayout.visibility = View.GONE
@@ -182,7 +181,7 @@ class Payout : AppCompatActivity() {
                         ?.toDoubleOrNull()     // Convert to Double
                         ?: 0.0
 
-// Extract the maximum value
+                    // Extract the maximum value
                     val max = response.data[i].slabName
                         ?.substringAfter("-")  // Get the part after "-"
                         ?.replace(",", "")     // Remove commas
@@ -198,6 +197,7 @@ class Payout : AppCompatActivity() {
                         serviceChargeCalculation(serviceCharge, gst, rechargeAmount, response, min, max)
                         break
                     }
+
                 }
                 //if no matching slab was found, show an error message
                 if (!isSlabMatched) {
@@ -218,6 +218,7 @@ class Payout : AppCompatActivity() {
             Toast.makeText(this, response.returnMessage.toString(), Toast.LENGTH_SHORT).show()
         }
     }
+
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun serviceChargeCalculation(
@@ -249,7 +250,6 @@ class Payout : AppCompatActivity() {
         }
 
         for (i in response.data.indices) {
-//            if (response.data[i].slabName?.contains(slabLimit.toString()) == true) {
             if (slabLimit != null) {
                 Log.d("ServiceType", "${response.data[i].serviceType} - Index $i")
                 serviceChargeWithGst = when (response.data[i].serviceType) {
@@ -269,7 +269,6 @@ class Payout : AppCompatActivity() {
                     else -> 0.0
                 }
                 break
-//                totalServiceChargeWithGst += serviceChargeWithGst
             }
         }
 
@@ -397,8 +396,8 @@ class Payout : AppCompatActivity() {
     private fun getAllWalletBalance() {
         val walletBalanceReq = GetBalanceReq(
             parmUser = mStash!!.getStringValue(Constants.RegistrationId, ""),
-            flag = "CreditBalance"
-        )
+            flag = "CreditBalance")
+
         Log.d("getAllGsonFromAPI", Gson().toJson(walletBalanceReq))
 
         getAllApiServiceViewModel.getWalletBalance(walletBalanceReq).observe(this) { resource ->
@@ -441,6 +440,7 @@ class Payout : AppCompatActivity() {
         }
     }
 
+
     private fun getMerchantBalance(mainBalance: Double) {
         val getMerchantBalanceReq = GetMerchantBalanceReq(
             parmUser = mStash!!.getStringValue(Constants.MerchantId, ""),
@@ -479,26 +479,20 @@ class Payout : AppCompatActivity() {
             Log.d(TAG, "getAllMerchantBalanceRes: ${response.data[0].debitBalance}")
             mStash!!.setStringValue(Constants.merchantBalance, response.data[0].debitBalance)
 
-            val totalAmount =
-                mStash!!.getStringValue(Constants.totalTransaction, "")?.toDoubleOrNull() ?: 0.0
+            val totalAmount = mStash!!.getStringValue(Constants.totalTransaction, "")?.toDoubleOrNull() ?: 0.0
             val merchantBalance = response.data[0].debitBalance?.toDoubleOrNull() ?: 0.0
 
-            Log.d(
-                "balanceCheck",
-                "MainBal = $mainBalance, merchantBal = $merchantBalance,totalAmount = $totalAmount, Status = ${totalAmount <= mainBalance && totalAmount <= merchantBalance}"
-            )
+            Log.d("balanceCheck", "MainBal = $mainBalance, merchantBal = $merchantBalance,totalAmount = $totalAmount, Status = ${totalAmount <= mainBalance && totalAmount <= merchantBalance}")
 
             if (totalAmount <= mainBalance && totalAmount <= merchantBalance) {
                 getTransferAmountToAgentWithCal(bin.amount.text.toString())
-            } else {
-                pd.dismiss()
-                Toast.makeText(
-                    this,
-                    "Wallet balance is low. VBal = $mainBalance, MBal = $merchantBalance, totalAmt = $totalAmount",
-                    Toast.LENGTH_LONG
-                ).show()
             }
-        } else {
+            else {
+                pd.dismiss()
+                Toast.makeText(this, "Wallet balance is low. VBal = $mainBalance, MBal = $merchantBalance, totalAmt = $totalAmount", Toast.LENGTH_LONG).show()
+            }
+        }
+        else {
             pd.dismiss()
             Toast.makeText(this, response.returnMessage.toString(), Toast.LENGTH_SHORT).show()
         }

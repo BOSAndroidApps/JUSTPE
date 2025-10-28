@@ -41,6 +41,10 @@ import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
 import com.bos.payment.appName.data.model.justpaymodel.GenerateQRCodeResponse
 import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualAccountModel
 import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualBankDetailsResponseModel
+import com.bos.payment.appName.data.model.justpaymodel.RetailerContactListRequestModel
+import com.bos.payment.appName.data.model.justpaymodel.RetailerContactListResponseModel
+import com.bos.payment.appName.data.model.justpaymodel.SendMoneyToMobileReqModel
+import com.bos.payment.appName.data.model.justpaymodel.SendMoneyToMobileResponseModel
 import com.bos.payment.appName.data.model.justpaymodel.UpdateBankDetailsReq
 import com.bos.payment.appName.data.model.justpaymodel.UpdateBankDetailsResponse
 import com.bos.payment.appName.data.model.justpedashboard.DashboardBannerListModel
@@ -222,6 +226,14 @@ interface ApiInterface {
 
     @POST("api/BOS/ReteriveAgentKycDetails")
     suspend fun reterieveKYCDetails(@Body req: ReteriveAgentKYCReq): Response<List<ReteriveAgentKYCRes>>?
+
+
+    @POST("api/Wallet/GetBankingAgentsByAdminCode")
+    suspend fun gettingAllRetailerContactList(@Body req: RetailerContactListRequestModel): Response<RetailerContactListResponseModel>?
+
+
+    @POST("api/Wallet/WalletTransfer")
+    suspend fun sendToMobileMoney(@Body req: SendMoneyToMobileReqModel): Response<SendMoneyToMobileResponseModel>?
 
     @POST("api/BOS/ChangeOperatorPassword")
     suspend fun changePassword(@Body req: ChangePasswordReq): Response<ChangePasswordRes>?
@@ -439,7 +451,6 @@ interface ApiInterface {
 
     @POST("api/BusApi/BusTempBookingResponse")
     suspend fun getBusTempBookingRequest(@Body req: BusTampBookTicketResponseRequest): Response<BusTampBookingResp>? // Annu
-
 
 
     @POST("api/BusApi/requerylist")

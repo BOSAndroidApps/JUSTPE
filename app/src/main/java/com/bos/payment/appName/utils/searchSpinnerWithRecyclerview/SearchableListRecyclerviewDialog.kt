@@ -11,12 +11,14 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bos.payment.appName.R
 import com.bos.payment.appName.data.model.travel.flight.DataItem
 import com.bos.payment.appName.ui.view.travel.adapter.AirPortListAdapter
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
+import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.FlightMainFragment
 
 
 @SuppressLint("ValidFragment")
@@ -55,7 +57,23 @@ class SearchableListFlightSpinnerDialog  (var dialogContext : Context, private v
         })
 
          canceltext.setOnClickListener {
-             ( dialogContext as FlightMainActivity).setData()
+//             ( dialogContext as FlightMainActivity).setData()
+
+             when (dialogContext) {
+                 is FlightMainActivity -> (dialogContext as FlightMainActivity).setData()
+                 is FragmentActivity -> {
+                     val fragment = (dialogContext as FragmentActivity)
+                         .supportFragmentManager
+                         .findFragmentByTag("FlightMainFragment") as? FlightMainFragment
+                     fragment?.setData()
+                 }
+             }
+
+
+
+
+
+
              dismiss() // Dismiss the dialog
          }
 

@@ -44,6 +44,7 @@ class DashboardServicesAdapter(
     }
 
 
+
     // --- Bind Data ---
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val model = servicesList[position]
@@ -54,20 +55,25 @@ class DashboardServicesAdapter(
             holder.itemView.setOnClickListener {
                 onServiceClick(model)
             }
-        } else if (holder is SeeMoreViewHolder) {
+        }
+        else if (holder is SeeMoreViewHolder) {
             holder.binding.tvSeeMore.text= model.name
             holder.binding.root.setOnClickListener {
                 onSeeMoreClick()
 
             }
         }
+
     }
 
+
     override fun getItemCount(): Int = servicesList.size
+
 
     override fun getItemViewType(position: Int): Int {
         return if (servicesList[position].featurecode == "SEE_MORE") TYPE_SEE_MORE else TYPE_ITEM
     }
+
 
     // --- Update list safely ---
     fun updateList(newList: List<MoneyTransferServicesModel>) {
@@ -75,4 +81,5 @@ class DashboardServicesAdapter(
         servicesList.addAll(newList) // always replaces old list
         notifyDataSetChanged()
     }
+
 }

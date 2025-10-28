@@ -317,6 +317,7 @@ class LoginActivity : AppCompatActivity() {
             getAllMerchantList(res.data[0].merchantCode.toString())
             mStash!!.setStringValue(Constants.RegistrationId, res.data[0].userID.toString().uppercase())
             mStash!!.setStringValue(Constants.MobileNumber, res.data[0].mobileNo.toString())
+            mStash!!.setStringValue(Constants.AdminCode, res.data[0].adminCode.toString())
             mStash!!.setBooleanValue(Constants.IS_LOGIN, true)
             mStash!!.setStringValue(Constants.AgentName, res.data[0].agencyname.toString())
             mStash!!.setStringValue(Constants.AgentType, res.data[0].agentType.toString())
@@ -329,7 +330,6 @@ class LoginActivity : AppCompatActivity() {
             Log.d("loginId",res.data[0].userID.toString().uppercase())
             Log.d("mobileno",res.data[0].mobileNo.toString())
             getIntentOnDashboard()
-
         }
         else {
             toast("Please correct login detail")

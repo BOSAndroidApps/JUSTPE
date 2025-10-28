@@ -106,15 +106,18 @@ class ScannerFragment : AppCompatActivity() {
                 flashLight()
             }
         }
+
         binding.barCodeBtn.setOnClickListener {
             startActivity(Intent(this, GenerateQRCodeActivity::class.java))
             finish()
         }
+
         binding.uploadImage.setOnClickListener {
             openGallery()
 //            flag = Constants.UPLOAD_PHOTO
 //            show_image_upload_option()
         }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -241,15 +244,6 @@ class ScannerFragment : AppCompatActivity() {
             }
             startActivity(intent)
             finish()
-
-            // Show a Toast with the extracted details for testing
-//            Toast.makeText(
-//                this,
-//                "UPI ID: $upiId\nPayee Name: $payeeName\nMerchant Code: $merchantCode\nTransaction ID:" +
-//                        " $transactionId\nReference ID: $referenceId\nTransaction Note: $transactionNote\nAmount: " +
-//                        "$amount\nCurrency Code: $currencyCode",
-//                Toast.LENGTH_LONG
-//            ).show()
 
         } catch (e: JSONException) {
             Toast.makeText(this, "Invalid QR code data", Toast.LENGTH_SHORT).show()

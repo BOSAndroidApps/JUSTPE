@@ -25,6 +25,7 @@
             android:layout_marginTop="@dimen/dimen_6sp"
             android:layout_weight=".5"
             android:src="@drawable/cross_icon"/>
+
         <ImageView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -83,7 +84,6 @@
         android:textStyle="bold"
         android:textSize="@dimen/dimen_12dp" />
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/scanLayout"
         android:layout_width="match_parent"
@@ -105,5 +105,8 @@
         android:textColor="@color/grey"
         android:textStyle="bold"
         android:textSize="@dimen/dimen_14sp" />
+
     </androidx.cardview.widget.CardView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

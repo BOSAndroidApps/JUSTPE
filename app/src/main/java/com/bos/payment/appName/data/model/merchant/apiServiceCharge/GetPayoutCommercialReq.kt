@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 
 data class GetPayoutCommercialReq (
-
   @SerializedName("merchant"      ) var merchant      : String? = null,
   @SerializedName("productId"     ) var productId     : String? = null,
   @SerializedName("modeofPayment" ) var modeofPayment : String? = null

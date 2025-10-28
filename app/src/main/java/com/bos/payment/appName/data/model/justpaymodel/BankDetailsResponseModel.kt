@@ -55,6 +55,10 @@ data class DataItem(
 	@field:SerializedName("staticQR")
 	val staticQR: String? = null,
 
+
+	@field:SerializedName("vpaid")
+	val vpaid: String? = null,
+
 	@field:SerializedName("sellerIdentifier")
 	val sellerIdentifier: String? = null
 )

@@ -33,6 +33,7 @@ import com.bos.payment.appName.data.viewModelFactory.PayoutViewModelFactory
 import com.bos.payment.appName.databinding.ActivityDisplayDetailsBinding
 import com.bos.payment.appName.network.RetrofitClient
 import com.bos.payment.appName.ui.view.Dashboard.activity.DashboardActivity
+import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard
 import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
 import com.bos.payment.appName.ui.viewmodel.MoneyTransferViewModel
 import com.bos.payment.appName.ui.viewmodel.PayoutViewModel
@@ -79,10 +80,7 @@ class DisplayDetailsActivity : AppCompatActivity() {
         pd = PD(this)
         mStash = MStash.getInstance(this)
         binding.amount.requestFocus()
-        viewModel = ViewModelProvider(
-            this,
-            PayoutViewModelFactory(PayoutRepository(RetrofitClient.apiInterface))
-        )[PayoutViewModel::class.java]
+        viewModel = ViewModelProvider(this, PayoutViewModelFactory(PayoutRepository(RetrofitClient.apiInterface)))[PayoutViewModel::class.java]
 
         getAllApiServiceViewModel = ViewModelProvider(
             this,
@@ -120,33 +118,21 @@ class DisplayDetailsActivity : AppCompatActivity() {
         }
         binding.paymentBtn.text = "₹" + binding.amount.text.toString()
 
-//        binding.merchantCodeTextView.text = "Merchant Code: $merchantCode"
-//        binding.transactionIdTextView.text = "Transaction ID: $transactionId"
-//        binding.referenceIdTextView.text = "Reference ID: $referenceId"
-//        binding.transactionNoteTextView.text = "Transaction Note: $transactionNote"
-//        binding.currencyCodeTextView.text = "Amount: $currencyCode"
 
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun btnListener() {
         binding.crossBtn.setOnClickListener {
-            startActivity(Intent(this, DashboardActivity::class.java))
+           // startActivity(Intent(this, DashboardActivity::class.java))
+            startActivity(Intent(this, JustPeDashboard::class.java))
         }
         binding.amount.setOnClickListener {
             binding.enterBtn.visibility = View.VISIBLE
             binding.paymentBtn.visibility = View.GONE
 
         }
-//        binding.enterBtn.setOnClickListener{
-//            if (binding.amount.text.toString().isNotEmpty()){
-//                toast()
-//            }
-//            binding.paymentBtn.visibility = View.VISIBLE
-//            val transferAmountText = binding.amount.text.toString().trim()
-//            getAllServiceCharge(transferAmountText)
-//            Log.d("getAllServiceCharge", transferAmountText)
-//        }
+
 
         binding.enterBtn.setOnClickListener {
             if (binding.amount.text!!.toString() < "1") {
@@ -214,13 +200,10 @@ class DisplayDetailsActivity : AppCompatActivity() {
 
             if (totalAmount <= mainBalance && totalAmount <= merchantBalance) {
                 getTransferAmountToAgentWithCal(binding.amount.text.toString())
-            } else {
+            }
+            else {
                 pd.dismiss()
-                Toast.makeText(
-                    this,
-                    "Wallet balance is low. VBal = $mainBalance, MBal = $merchantBalance, totalAmt = $totalAmount",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(this, "Wallet balance is low. VBal = $mainBalance, MBal = $merchantBalance, totalAmt = $totalAmount", Toast.LENGTH_LONG).show()
             }
         } else {
             pd.dismiss()
@@ -294,7 +277,6 @@ class DisplayDetailsActivity : AppCompatActivity() {
                     )
                 }.",
                 amountType = "Payout",
-//                actualTransactionAmount = Integer.valueOf(rechargeAmount),
                 actualTransactionAmount = rechargeAmount,
                 transIpAddress = mStash!!.getStringValue(Constants.deviceIPAddress, ""),
                 parmUserName = mStash!!.getStringValue(Constants.RegistrationId, ""),

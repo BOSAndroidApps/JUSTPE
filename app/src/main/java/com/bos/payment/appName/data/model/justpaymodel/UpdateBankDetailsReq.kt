@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class UpdateBankDetailsReq(
 
+	@field:SerializedName("vpaid")
+	val vpaid: String? = null,
+
 	@field:SerializedName("is_QRCodeActivate")
 	val isQRCodeActivate: String? = null,
 

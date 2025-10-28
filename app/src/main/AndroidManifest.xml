@@ -57,17 +57,31 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
-            android:name=".ui.view.Dashboard.activity.AllServicesSelectionActivity"
+            android:name=".ui.view.Dashboard.ToSelf.ToSelfMoneyTransferPage"
             android:exported="false"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.view.Dashboard.tomobile.SendWalletAmountPage"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".ui.view.Dashboard.tomobile.ToMobileSendMoneyActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.view.Dashboard.activity.AllServicesSelectionActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.Dashboard.activity.JustPeDashboard"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.travel.flightBooking.activity.FlightBookingPage"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.travel.flightBooking.activity.FlightBookedTicketActivity"
             android:exported="false"
@@ -121,8 +135,8 @@
         <activity
             android:name=".ui.view.Dashboard.dmt.FingerCaptureActivity"
             android:exported="false"
-            tools:ignore="Instantiatable"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            tools:ignore="Instantiatable" />
 
         <meta-data
             android:name="com.mantra.mfs100.LIBRARY"
@@ -285,13 +299,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Alias for User Type 1 -->
+        </activity>
+
         <activity-alias
-            android:name=".ui.view.UserType1Alias"
+            android:name=".ui.view.UserType3Alias"
             android:enabled="false"
             android:exported="true"
-            android:icon="@drawable/pay_indialogo"
-            android:label="@string/Pay_india"
+            android:icon="@drawable/pic"
+            android:label="@string/Bos_Pay"
             android:targetActivity=".ui.view.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -312,13 +327,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity-alias>
+        </activity-alias> <!-- Alias for User Type 1 -->
         <activity-alias
-            android:name=".ui.view.UserType3Alias"
+            android:name=".ui.view.UserType1Alias"
             android:enabled="false"
             android:exported="true"
-            android:icon="@drawable/pic"
-            android:label="@string/Bos_Pay"
+            android:icon="@drawable/pay_indialogo"
+            android:label="@string/Pay_india"
             android:targetActivity=".ui.view.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

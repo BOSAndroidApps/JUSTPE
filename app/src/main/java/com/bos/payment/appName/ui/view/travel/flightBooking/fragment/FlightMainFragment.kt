@@ -1,4 +1,4 @@
-package com.bos.payment.appName.ui.view.travel.flightBooking.activity
+package com.bos.payment.appName.ui.view.travel.flightBooking.fragment
 
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
@@ -6,56 +6,37 @@ import android.content.Intent
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bos.payment.appName.R
 import com.bos.payment.appName.constant.ConstantClass
 import com.bos.payment.appName.constant.CustomFuseLocationActivity
-import com.bos.payment.appName.data.model.travel.flight.AirportListReq
-import com.bos.payment.appName.data.model.travel.flight.DataItem
-import com.bos.payment.appName.data.model.travel.flight.FilterAirLine
-import com.bos.payment.appName.data.model.travel.flight.FlightSearchReq
-import com.bos.payment.appName.data.model.travel.flight.TripInfo
-import com.bos.payment.appName.data.model.walletBalance.walletBalanceCal.GetBalanceRes
+import com.bos.payment.appName.data.model.travel.flight.*
 import com.bos.payment.appName.data.repository.TravelRepository
 import com.bos.payment.appName.data.viewModelFactory.TravelViewModelFactory
 import com.bos.payment.appName.databinding.ActivityFlightSearchBinding
 import com.bos.payment.appName.network.RetrofitClient
-import com.bos.payment.appName.ui.view.travel.adapter.AirPortListAdapter
 import com.bos.payment.appName.ui.view.travel.adapter.FlightSpecialOfferAdapter
-import com.bos.payment.appName.ui.view.travel.busactivity.MyBookingBusActivity
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant
-import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.AllAirNameList
-import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.AllFlightList
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.DepartureDateAndTime
-import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.FlightHint
-import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.FlightList
-import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.FlightListForFilter
-import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.TripDetailsList
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.adultCount
-import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.after12pmlayout
-import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.after6amlayout
-import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.after6pmlayout
-import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.airportNameList
-import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.before6layout
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.bookingType
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.checkFrom
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.checkTo
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.childCount
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.className
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.classNumber
-import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.defenceFare
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.fromAirportCode
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.fromAirportName
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.fromCityName
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.fromCountryName
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.infantCount
-import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.srCitizen
-import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.studentFare
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.toAirportCode
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.toAirportName
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.toCityName
@@ -63,14 +44,8 @@ import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Compa
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.totalCount
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.travelDate
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.travelType
-import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.adultList
-import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.childList
-import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.infantList
-import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.AddGSTInformationBottomSheet.Companion.CheckBox
-import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.AddGSTInformationBottomSheet.Companion.companyName
-import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.AddGSTInformationBottomSheet.Companion.registrationNo
-import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.ReviewDetailsPassangersBottomSheet.Companion.passangerDetailsList
-import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.SelectTravellersClassBottomSheet
+import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightBookingPage
+import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightDetailListActivity
 import com.bos.payment.appName.ui.viewmodel.TravelViewModel
 import com.bos.payment.appName.utils.ApiStatus
 import com.bos.payment.appName.utils.Constants
@@ -78,95 +53,99 @@ import com.bos.payment.appName.utils.Constants.uploadDataOnFirebaseConsole
 import com.bos.payment.appName.utils.MStash
 import com.bos.payment.appName.utils.Utils.generateRandomNumber
 import com.bos.payment.appName.utils.Utils.toast
-import com.bumptech.glide.Glide
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
-import kotlin.math.log
 
-class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setClickListner {
+class FlightMainFragment : Fragment(), FlightSpecialOfferAdapter.setClickListner {
+
+    private var _binding: ActivityFlightSearchBinding? = null
+    private val binding get() = _binding!!
 
     private var firstDateCalendar: Calendar? = null
-
-    lateinit var binding: ActivityFlightSearchBinding
-
-    var specialFareList: MutableList<Pair<String, Boolean>> = mutableListOf()
-
-    var checkReverse: Boolean = false
-    lateinit var viewModel: TravelViewModel
-    lateinit var pd: ProgressDialog
-    var AirportDataList: MutableList<DataItem> = mutableListOf()
+    private lateinit var viewModel: TravelViewModel
+    private lateinit var pd: ProgressDialog
     private lateinit var mStash: MStash
     private var customFuseLocation: CustomFuseLocationActivity? = null
 
+    private var AirportDataList: MutableList<DataItem> = mutableListOf()
+    private var specialFareList: MutableList<Pair<String, Boolean>> = mutableListOf()
+    private var checkReverse = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        binding = ActivityFlightSearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        mStash = MStash(this)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?, ): View {
+        _binding = ActivityFlightSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        pd = ProgressDialog(this)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mStash = MStash(requireContext())
+
+        pd = ProgressDialog(requireContext())
         pd.setCanceledOnTouchOutside(false)
 
         viewModel = ViewModelProvider(this, TravelViewModelFactory(TravelRepository(RetrofitClient.apiAllTravelAPI, RetrofitClient.apiBusAddRequestlAPI)))[TravelViewModel::class.java]
 
+        setupUI()
+        getFuseLocation()
+        hitApiForGetAirportList("")
+    }
 
+
+    private fun setupUI() {
         selectionHoverColor()
-        bookingType = 0
-        binding.onewaytxt.setTextColor(resources.getColor(R.color.blue))
-        binding.onewaytxt.background = resources.getDrawable(R.drawable.selectedbutton)
+        FlightConstant.bookingType = 0
+        binding.onewaytxt.apply {
+            setTextColor(resources.getColor(R.color.blue))
+            background = resources.getDrawable(R.drawable.selectedbutton)
+        }
 
+        _binding!!.header.visibility=View.GONE
         setclickListner()
         setCurrentDate()
         addDataInList()
-        getFuseLocation()
-        hitApiForGetAirportList("")
-
-
     }
-
 
     private fun getFuseLocation() {
-        customFuseLocation = CustomFuseLocationActivity(this
-                , this) {
-                    mCurrentLocation ->
-                ConstantClass.latdouble = mCurrentLocation.getLatitude()
-                ConstantClass.longdouble = mCurrentLocation.getLongitude()
-            }
+        customFuseLocation = CustomFuseLocationActivity(requireActivity(), requireContext()) { location ->
+            ConstantClass.latdouble = location.latitude
+            ConstantClass.longdouble = location.longitude
+        }
     }
 
+    private fun setSpinnerData() {
+        FlightConstant.FlightHint!!.clear()
+        FlightConstant.FlightHint!!.add(DataItem("", "Select City", "", ""))
 
-    fun setSpinnerData() {
-        FlightHint!!.clear()
-        FlightHint!!.add(DataItem("", "Select City", "", ""))
-        FlightConstant.getAllFlightListAdapter = ArrayAdapter<DataItem>(this, R.layout.flightsearchspinnerlayout, FlightHint!!)
+        FlightConstant.getAllFlightListAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.flightsearchspinnerlayout,
+            FlightConstant.FlightHint!!
+        )
         FlightConstant.getAllFlightListAdapter!!.setDropDownViewResource(R.layout.spinner_right_aligned)
 
         binding.searchableSp.adapter = FlightConstant.getAllFlightListAdapter
         binding.searchableSpto.adapter = FlightConstant.getAllFlightListAdapter
-
     }
-
 
     override fun onResume() {
         super.onResume()
         setData()
     }
 
+    private fun addDataInList() {
+        specialFareList.apply {
+            clear()
+            add(Pair("Defence Forces", false))
+            add(Pair("Students", false))
+            add(Pair("Senior Citizens", false))
+            add(Pair("Others", false))
+        }
 
-    fun addDataInList() {
-        specialFareList.clear()
-        specialFareList.add(Pair("Defence Forces", false))
-        specialFareList.add(Pair("Students", false))
-        specialFareList.add(Pair("Senior Citizens", false))
-        specialFareList.add(Pair("Others", false))
-        var adapter = FlightSpecialOfferAdapter(this, specialFareList, this)
+        val adapter = FlightSpecialOfferAdapter(requireContext(), specialFareList, this)
         binding.extraofferList.adapter = adapter
         adapter.notifyDataSetChanged()
     }
@@ -185,9 +164,13 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
         binding.classname.text = className
 
         if (childCount == 0 && infantCount == 0) {
-            FlightConstant.datepassangerandclassstring = binding.datemonthdeparture.text.toString().plus("|").plus(adultCount).plus("Adult").plus("|").plus(className)
+            FlightConstant.datepassangerandclassstring = binding.datemonthdeparture.text.toString().plus("|").plus(adultCount).plus("Adult").plus("|").plus(
+                className
+            )
         } else {
-            FlightConstant.datepassangerandclassstring = binding.datemonthdeparture.text.toString().plus("|").plus(totalCount).plus("Travellers").plus("|").plus(className)
+            FlightConstant.datepassangerandclassstring = binding.datemonthdeparture.text.toString().plus("|").plus(totalCount).plus("Travellers").plus("|").plus(
+                className
+            )
         }
 
         if (checkFrom) {
@@ -206,32 +189,20 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
 
 
     private fun setCurrentDate() {
-        // Get current date for initializing DatePicker
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
-        val currentHour = c.get(Calendar.HOUR_OF_DAY)
-        val currentMinute = c.get(Calendar.MINUTE)
-
-
         val formattedDate = String.format("%02d/%02d/%04d", day, month + 1, year)
+
         binding.datemonthdeparture.text = formatDate1(formattedDate)
         binding.dayyear.text = formatDate2(formattedDate)
-        travelDate = String.format("%02d/%02d/%04d", month + 1, day, year)
-
-        val time = String.format("%02d:%02d", currentHour, currentMinute)
-
-        DepartureDateAndTime = "$travelDate"
-
+        FlightConstant.travelDate = String.format("%02d/%02d/%04d", month + 1, day, year)
+        FlightConstant.DepartureDateAndTime = FlightConstant.travelDate
     }
 
 
     private fun setclickListner() {
-
-        binding.back.setOnClickListener {
-            finish()
-        }
 
         binding.fromcityLayout.setOnClickListener {
             checkFrom = true
@@ -287,7 +258,7 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
 
 
             val dpd = DatePickerDialog(
-                this,
+                requireContext(),
                 R.style.MyDatePickerDialogTheme,
                 DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDay ->
                     firstDateCalendar = c
@@ -322,9 +293,9 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
 
             dpd!!.setOnShowListener {
                 dpd!!.getButton(DatePickerDialog.BUTTON_POSITIVE)
-                    ?.setTextColor(ContextCompat.getColor(this, R.color.green))
+                    ?.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
                 dpd!!.getButton(DatePickerDialog.BUTTON_NEGATIVE)
-                    ?.setTextColor(ContextCompat.getColor(this, R.color.red))
+                    ?.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
             }
             dpd!!.datePicker.minDate = c.timeInMillis
 
@@ -352,7 +323,7 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
             val day2 = calendar.get(Calendar.DAY_OF_MONTH)
 
             val secondDatePicker = DatePickerDialog(
-                this, R.style.MyDatePickerDialogTheme, { _, y, m, d ->
+                requireContext(), R.style.MyDatePickerDialogTheme, { _, y, m, d ->
                     val formattedDate = String.format("%02d/%02d/%04d", d, m + 1, y)
                     binding.addreturnlayout.visibility = View.GONE
                     binding.returndatelayout.visibility = View.VISIBLE
@@ -371,9 +342,9 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
 
             secondDatePicker!!.setOnShowListener {
                 secondDatePicker!!.getButton(DatePickerDialog.BUTTON_POSITIVE)
-                    ?.setTextColor(ContextCompat.getColor(this, R.color.green))
+                    ?.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
                 secondDatePicker!!.getButton(DatePickerDialog.BUTTON_NEGATIVE)
-                    ?.setTextColor(ContextCompat.getColor(this, R.color.red))
+                    ?.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
             }
             secondDatePicker!!.datePicker.minDate = calendar.timeInMillis
 
@@ -398,8 +369,11 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
 
 
         binding.travellersandclasslayout.setOnClickListener {
-            val bottomfrag = SelectTravellersClassBottomSheet()
-            supportFragmentManager.let { bottomfrag.show(it, SelectTravellersClassBottomSheet.TAG) }
+          /*  val bottomfrag = SelectTravellersClassBottomSheet()
+            supportFragmentManager.let { bottomfrag.show(it, SelectTravellersClassBottomSheet.TAG) }*/
+
+            val bottomSheet = SelectTravellersClassBottomSheet()
+            bottomSheet.show(childFragmentManager, SelectTravellersClassBottomSheet.TAG)
         }
 
 
@@ -517,7 +491,7 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
 //                }
 
                 R.id.bookingBtn -> {
-                    startActivity(Intent(this, FlightBookingPage::class.java))
+                    startActivity(Intent(requireContext(), FlightBookingPage::class.java))
                 }
 
             }
@@ -528,6 +502,28 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
     }
 
 
+    private fun showDatePicker() {
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+        val dpd = DatePickerDialog(
+            requireContext(),
+            R.style.MyDatePickerDialogTheme,
+            { _, y, m, d ->
+                val formattedDate = String.format("%02d/%02d/%04d", d, m + 1, y)
+                binding.datemonthdeparture.text = formatDate1(formattedDate)
+                binding.dayyear.text = formatDate2(formattedDate)
+                FlightConstant.travelDate = String.format("%02d/%02d/%04d", m + 1, d, y)
+            },
+            year, month, day
+        )
+
+        dpd.datePicker.minDate = c.timeInMillis
+        dpd.show()
+    }
+
     private fun selectionHoverColor() {
         binding.onewaytxt.setTextColor(resources.getColor(R.color.text_color))
         binding.roundtriptxt.setTextColor(resources.getColor(R.color.text_color))
@@ -537,12 +533,10 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
         binding.multicitytxt.background = null
     }
 
-
-    fun formatDate1(inputDate: String): String {
-        val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("dd MMMM ", Locale.getDefault())
-
+    private fun formatDate1(inputDate: String): String {
         return try {
+            val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("dd MMMM ", Locale.getDefault())
             val date = inputFormat.parse(inputDate)
             outputFormat.format(date!!)
         } catch (e: Exception) {
@@ -550,214 +544,130 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
         }
     }
 
-
-    fun formatDate2(inputDate: String): String {
-        val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val outputFormat = SimpleDateFormat(" EEE, yyyy", Locale.getDefault())
-
+    private fun formatDate2(inputDate: String): String {
         return try {
+            val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("EEE, yyyy", Locale.getDefault())
             val date = inputFormat.parse(inputDate)
             outputFormat.format(date!!)
         } catch (e: Exception) {
             "Invalid Date"
         }
     }
-
 
     override fun itemclickListner(position: Int) {
-
-        if (specialFareList.get(position).first.equals("Senior Citizens")) {
-            srCitizen = true
-            studentFare = false
-            defenceFare = false
-        }
-
-
-        if (specialFareList.get(position).first.equals("Students")) {
-            srCitizen = false
-            studentFare = true
-            defenceFare = false
-
-        }
-
-        if (specialFareList.get(position).first.equals("Defence Forces")) {
-            srCitizen = false
-            studentFare = false
-            defenceFare = true
-        }
-
-
-        if (specialFareList.get(position).first.equals("Others")) {
-            srCitizen = false
-            studentFare = false
-            defenceFare = false
-        }
-
-
-    }
-
-
-    fun hitApiForGetAirportList(airportfilterString: String) {
-        var airportListReq = AirportListReq(searchTerm = airportfilterString)
-
-        Log.d("AirPortListRequest", Gson().toJson(airportListReq))
-
-        viewModel.getAirportListRequet(airportListReq).observe(this) { resource ->
-            resource?.let {
-                when (it.apiStatus) {
-                    ApiStatus.SUCCESS -> {
-                        pd.dismiss()
-                        it.data?.let { users ->
-                            users.body()?.let { response ->
-                                Log.d("AirPortListResponse", Gson().toJson(response))
-                                uploadDataOnFirebaseConsole(Gson().toJson(response),"FlightMainActivityAirportList",this@FlightMainActivity)
-                                var getdata = response.data
-                                if (!getdata.isNullOrEmpty()) {
-                                    AirportDataList.clear()
-                                    FlightConstant.FlightList!!.clear()
-
-                                    AirportDataList.addAll(getdata)
-
-                                    if (AirportDataList.size > 0) {
-
-                                        FlightList!!.addAll(AirportDataList)
-
-                                    }
-
-                                    setSpinnerData()
-
-                                }
-
-                            }
-                        }
-                    }
-
-                    ApiStatus.ERROR -> {
-                        pd.dismiss()
-                    }
-
-                    ApiStatus.LOADING -> {
-                        pd.show()
-                    }
-                }
+        when (specialFareList[position].first) {
+            "Senior Citizens" -> {
+                FlightConstant.srCitizen = true
+                FlightConstant.studentFare = false
+                FlightConstant.defenceFare = false
+            }
+            "Students" -> {
+                FlightConstant.srCitizen = false
+                FlightConstant.studentFare = true
+                FlightConstant.defenceFare = false
+            }
+            "Defence Forces" -> {
+                FlightConstant.srCitizen = false
+                FlightConstant.studentFare = false
+                FlightConstant.defenceFare = true
+            }
+            else -> {
+                FlightConstant.srCitizen = false
+                FlightConstant.studentFare = false
+                FlightConstant.defenceFare = false
             }
         }
-
-
     }
 
+    private fun hitApiForGetAirportList(airportFilterString: String) {
+        val airportListReq = AirportListReq(searchTerm = airportFilterString)
 
-    fun hitApiForSearchFlight() {
+        Log.d("AirportListRequest", Gson().toJson(airportListReq))
+        viewModel.getAirportListRequet(airportListReq).observe(viewLifecycleOwner) { resource ->
+            when (resource.apiStatus) {
+                ApiStatus.SUCCESS -> {
+                    pd.dismiss()
+                    val response = resource.data?.body()
+                    Log.d("AirportListResponse", Gson().toJson(response))
+                    uploadDataOnFirebaseConsole(Gson().toJson(response),
+                        "FlightMainFragmentAirportList",
+                        requireContext())
 
+                    response?.data?.let { list ->
+                        AirportDataList.clear()
+                        FlightConstant.FlightList!!.clear()
+                        AirportDataList.addAll(list)
+                        FlightConstant.FlightList!!.addAll(AirportDataList)
+                        setSpinnerData()
+                    }
+                }
+                ApiStatus.ERROR -> pd.dismiss()
+                ApiStatus.LOADING -> pd.show()
+            }
+        }
+    }
+
+    private fun hitApiForSearchFlight() {
         val requestId = generateRandomNumber()
-        mStash?.setStringValue(Constants.requestId, requestId)
-        var airportListReq = FlightSearchReq(
-            requestId =  requestId,
+        mStash.setStringValue(Constants.requestId, requestId)
+
+        val req = FlightSearchReq(
+            requestId = requestId,
             imeInumber = "0054748569",
-            travelType = travelType, // depend of from and to trip from city
-            bookingType = bookingType, //0 – One Way, 1 – Round Trip, 2 – Special Round Trip
-            adultCount = adultCount.toString(),
-            childCount = childCount.toString(),
-            infantCount = infantCount.toString(),
-            classOfTravel = classNumber,// Possible values: 0- ECONOMY/ 1- BUSINESS/ 2- FIRST/ 3- PREMIUM_ECONOMY
-            inventoryType = 0,//0–RetailFare (public) fixed
-            sourceType = 0,//0 – All Fares, 1 – Series Fare (Own + 3rd Party), 2 – Non-Series Fare Only fixed
-            srCitizenSearch = srCitizen,
-            studentFareSearch = studentFare,
-            defenceFareSearch = defenceFare,
-            registartionId = mStash?.getStringValue(Constants.MerchantId, ""),
-            ipAddress = mStash?.getStringValue(Constants.deviceIPAddress, ""),
-            filterAirlineList = getFilterAirLineList(),
-            tripeInfoList = getTripInfoList()
+            travelType = FlightConstant.travelType,
+            bookingType = FlightConstant.bookingType,
+            adultCount = FlightConstant.adultCount.toString(),
+            childCount = FlightConstant.childCount.toString(),
+            infantCount = FlightConstant.infantCount.toString(),
+            classOfTravel = FlightConstant.classNumber,
+            inventoryType = 0,
+            sourceType = 0,
+            srCitizenSearch = FlightConstant.srCitizen,
+            studentFareSearch = FlightConstant.studentFare,
+            defenceFareSearch = FlightConstant.defenceFare,
+            registartionId = mStash.getStringValue(Constants.MerchantId, ""),
+            ipAddress = mStash.getStringValue(Constants.deviceIPAddress, ""),
+            filterAirlineList = listOf(FilterAirLine("")),
+            tripeInfoList = listOf(
+                TripInfo(
+                    origin = binding.fromairportcode.text.toString(),
+                    destination = binding.toairportcode.text.toString(),
+                    traveldate = FlightConstant.travelDate,
+                    tripId = 0
+                )
+            )
         )
 
-        Log.d("AirPortListRequest", Gson().toJson(airportListReq))
+        Log.d("FlightSearchRequest", Gson().toJson(req))
 
-        viewModel.getFlightSearchRequest(airportListReq).observe(this) { resource ->
-            resource?.let {
-                when (it.apiStatus) {
-                    ApiStatus.SUCCESS -> {
-                        it.data?.let { users ->
-                            users.body()?.let { response ->
-                                uploadDataOnFirebaseConsole(Gson().toJson(response),"FlightMainActivitySearchRequest",this@FlightMainActivity)
-                                Log.d("AirPortListResponse", Gson().toJson(response))
-                                if (response.responseHeader.errorCode.equals("0000")) {
-                                    adultList.clear()
-                                    childList.clear()
-                                    infantList.clear()
-                                    passangerDetailsList.clear()
-                                    companyName = ""
-                                    registrationNo = ""
-                                    CheckBox = false
-                                    before6layout = false
-                                    after6amlayout = false
-                                    after12pmlayout = false
-                                    after6pmlayout = false
-                                    if (childCount == 0 && infantCount == 0) {
-                                        FlightConstant.datepassangerandclassstring =
-                                            binding.datemonthdeparture.text.toString().plus("|").plus(adultCount).plus("Adult")
-                                                .plus("|").plus(className)
-                                    } else {
-                                        FlightConstant.datepassangerandclassstring =
-                                            binding.datemonthdeparture.text.toString().plus("|").plus(totalCount)
-                                                .plus("Travellers").plus("|").plus(className)
-                                    }
-
-                                    mStash.setStringValue(Constants.FlightSearchKey, response.searchKey)
-                                    Log.d("SearchKey", response.searchKey)
-                                    var getData = response.tripDetails
-                                    mStash.setFlightSearchData("flightsearchdata", getData, this)
-
-                                    TripDetailsList.clear()
-                                    getData?.let { it1 -> TripDetailsList.addAll(it1) }
-
-                                    airportNameList.clear()
-
-                                    airportNameList = TripDetailsList[0]?.flights
-                                        ?.mapNotNull { it.segments?.getOrNull(0)?.airlineName }
-                                        ?.distinct()
-                                        ?.map { it to false }
-                                        ?.toMutableList() ?: mutableListOf()
-
-                                    AllFlightList.clear()
-
-                                    TripDetailsList[0]!!.flights?.let { AllFlightList.addAll(it) }
-
-                                    fromCityName = binding.fromcityname.text.toString()
-                                    toCityName = binding.tocityname.text.toString()
-                                    startActivity(Intent(this, FlightDetailListActivity::class.java)
-                                    )
-                                    pd.dismiss()
-                                } else {
-                                    toast(response.responseHeader.errorInnerException)
-                                    pd.dismiss()
-                                }
-
-                            }
-                        }
+        viewModel.getFlightSearchRequest(req).observe(viewLifecycleOwner) { resource ->
+            when (resource.apiStatus) {
+                ApiStatus.SUCCESS -> {
+                    val response = resource.data?.body()
+                    Log.d("FlightSearchResponse", Gson().toJson(response))
+                    if (response?.responseHeader?.errorCode == "0000") {
+                        FlightConstant.TripDetailsList.clear()
+                        response.tripDetails?.let { FlightConstant.TripDetailsList.addAll(it) }
+                        startActivity(Intent(requireContext(), FlightDetailListActivity::class.java))
+                    } else {
+                        toast(response?.responseHeader?.errorInnerException ?: "Error")
                     }
-
-                    ApiStatus.ERROR -> {
-                        pd.dismiss()
-                        Toast.makeText(this@FlightMainActivity,"Server busy",Toast.LENGTH_SHORT)
-                    }
-
-                    ApiStatus.LOADING -> {
-                        pd.show()
-                    }
-
+                    pd.dismiss()
                 }
+                ApiStatus.ERROR -> {
+                    pd.dismiss()
+                    Toast.makeText(requireContext(), "Server busy", Toast.LENGTH_SHORT).show()
+                }
+                ApiStatus.LOADING -> pd.show()
             }
         }
     }
 
-
-    fun getFilterAirLineList(): List<FilterAirLine> {
-        var airlinecodeList: MutableList<FilterAirLine> = mutableListOf()
-        airlinecodeList.add(FilterAirLine(airlineCode = ""))
-        return airlinecodeList
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
-
 
     fun getTripInfoList(): List<TripInfo> {
         var airlinecodeList: MutableList<TripInfo> = mutableListOf()
@@ -771,34 +681,5 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
         )
         return airlinecodeList
     }
-
-
-    /*fun uploadAirportListOnFirebaseConsole(data:String, collectionPath:String){
-
-        val db = Firebase.firestore
-
-        val sdf = SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.getDefault())
-        val currentDateTime = sdf.format(Date())
-
-
-        // Create a new user with a first and last name
-        val logData = hashMapOf(
-            "filename" to "aopaytravel.txt",
-            "content" to data,
-            "timestamp" to System.currentTimeMillis()
-        )
-
-        db.collection(collectionPath)
-            .document(currentDateTime)
-            .set(logData)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Log saved in Firestore", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { e ->
-                Log.d("Error", " $e.message")
-                Toast.makeText(this, "Failed: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-    }*/
-
 
 }

@@ -1,10 +1,12 @@
 package com.bos.payment.appName.utils
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesDataItem
 import com.bos.payment.appName.data.model.recharge.operator.Data
 import com.google.firebase.Firebase
@@ -25,6 +27,7 @@ object Constants {
     var TRAVEL = "Travel"
 
     var RegistrationId = "RegistrationId"
+    var AdminCode = "AdminCode"
     var MerchantId = "MerchantId"
     var MerchantList = "MerchantList"
     var Merchant = "Merchant"
@@ -197,6 +200,7 @@ object Constants {
     var BankAccountType = "accountType"
     var CreatedBy = "createdBy"
     var ISQRCodeGenerated = "is_QRCodeGenerated"
+    var VPAid = "vpaid"
     var ISQRCodeActivate = "is_QRCodeActivate"
     var StaticQR = "staticQR"
 
@@ -374,6 +378,17 @@ object Constants {
         val digits = account!!.filter { it.isDigit() }
         if (digits.length <= visibleDigits) return digits
         return "xxxxxx " + digits.takeLast(visibleDigits) // or "…${digits.takeLast(visibleDigits)}"
+    }
+
+
+
+    fun scanForActivity(cont: Context?): FragmentActivity? {
+        return when (cont) {
+            null -> null
+            is FragmentActivity -> cont
+            is ContextWrapper -> scanForActivity(cont.baseContext)
+            else -> null
+        }
     }
 
 

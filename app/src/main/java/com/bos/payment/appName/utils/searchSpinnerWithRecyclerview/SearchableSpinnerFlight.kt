@@ -15,6 +15,7 @@ import com.bos.payment.appName.data.model.travel.flight.DataItem
 import com.bos.payment.appName.ui.view.travel.adapter.AirPortListAdapter
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
+import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.FlightMainFragment
 
 class SearchableSpinnerFlight @JvmOverloads constructor(
     context: Context,
@@ -102,9 +103,15 @@ class SearchableSpinnerFlight @JvmOverloads constructor(
                             FlightConstant.toAirportName = item.airportDescription
                             FlightConstant.toCountryName = item.country
                         }
-                        (context as? FlightMainActivity)?.setData()
+                        if(context is FlightMainActivity){
+                            (context as? FlightMainActivity)?.setData()
+                        }
+                        else {
+                            (scanForActivity(_context)?.supportFragmentManager?.findFragmentByTag("FlightMainFragment") as? FlightMainFragment)?.setData()
+                        }
                     }
                 }
+
             )
 
             scanForActivity(_context)?.fragmentManager?.let {

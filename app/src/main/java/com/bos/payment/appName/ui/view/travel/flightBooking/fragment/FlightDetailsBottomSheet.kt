@@ -43,6 +43,7 @@ import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainA
 import com.bos.payment.appName.ui.viewmodel.TravelViewModel
 import com.bos.payment.appName.utils.ApiStatus
 import com.bos.payment.appName.utils.Constants
+import com.bos.payment.appName.utils.Constants.scanForActivity
 import com.bos.payment.appName.utils.MStash
 import com.bos.payment.appName.utils.Utils.generateRandomNumber
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -223,7 +224,15 @@ class FlightDetailsBottomSheet:BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        (activity as? FlightMainActivity)?.setData()
+       // (activity as? FlightMainActivity)?.setData()
+
+        if(context is FlightMainActivity){
+            (context as? FlightMainActivity)?.setData()
+        }
+        else {
+            (scanForActivity(context)?.supportFragmentManager?.findFragmentByTag("FlightMainFragment") as? FlightMainFragment)?.setData()
+        }
+
     }
 
 

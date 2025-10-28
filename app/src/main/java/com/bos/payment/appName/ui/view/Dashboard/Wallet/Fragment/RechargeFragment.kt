@@ -2977,7 +2977,6 @@ class RechargeFragment : Fragment() {
         serviceCharge: Double,
         gstRate: Double,
         rechargeAmount: String,
-//        response: List<GetAPIServiceChargeRes>
         response: GetCommercialRes
     ): Double {
         val rechargeAmountValue = rechargeAmount.toDoubleOrNull() ?: 0.0

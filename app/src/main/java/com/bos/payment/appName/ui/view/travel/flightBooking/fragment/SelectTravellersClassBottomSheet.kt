@@ -1,6 +1,8 @@
 package com.bos.payment.appName.ui.view.travel.flightBooking.fragment
 
 import android.app.Dialog
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.DialogInterface
 import android.content.res.Resources
 import android.os.Bundle
@@ -8,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import com.bos.payment.appName.R
 import com.bos.payment.appName.databinding.TravellersclassItemBottomsheetBinding
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant
@@ -229,7 +232,25 @@ class SelectTravellersClassBottomSheet:BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        (activity as? FlightMainActivity)?.setData()
+
+       // (activity as? FlightMainActivity)?. setData()
+
+        if(context is FlightMainActivity){
+            (context as? FlightMainActivity)?.setData()
+        }
+        else {
+            (scanForActivity(context)?.supportFragmentManager?.findFragmentByTag("FlightMainFragment") as? FlightMainFragment)?.setData()
+        }
+    }
+
+
+    private fun scanForActivity(cont: Context?): FragmentActivity? {
+        return when (cont) {
+            null -> null
+            is FragmentActivity -> cont
+            is ContextWrapper -> scanForActivity(cont.baseContext)
+            else -> null
+        }
     }
 
 

@@ -39,6 +39,7 @@ import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsP
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.infantList
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.segmentListPassangerDetail
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
+import com.bos.payment.appName.utils.Constants.scanForActivity
 import com.bos.payment.appName.utils.Utils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -121,7 +122,15 @@ class AddContactAndMobileBottomSheet:BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        (activity as? FlightMainActivity)?.setData()
+        //(activity as? FlightMainActivity)?.setData()
+
+        if(context is FlightMainActivity){
+            (context as? FlightMainActivity)?.setData()
+        }
+        else {
+            (scanForActivity(context)?.supportFragmentManager?.findFragmentByTag("FlightMainFragment") as? FlightMainFragment)?.setData()
+        }
+
     }
 
 

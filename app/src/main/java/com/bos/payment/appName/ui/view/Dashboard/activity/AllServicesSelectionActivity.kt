@@ -68,16 +68,12 @@ class AllServicesSelectionActivity : AppCompatActivity() {
 
 
     fun addIfActive(icon: Int, name: String, featureCode: String, extra: String = "") {
-      var  activeFeatureCodes = RETAILERALLSERVICES
-            ?.filter { it!!.activeYN.equals("Y", ignoreCase = true) }
-            ?.mapNotNull { it!!.featureCode }
-            ?: emptyList()
+      var  activeFeatureCodes = RETAILERALLSERVICES?.filter { it!!.activeYN.equals("Y", ignoreCase = true) }
+            ?.mapNotNull { it!!.featureCode } ?: emptyList()
 
         if (activeFeatureCodes.contains(featureCode)) {
             serviceslist.add(MoneyTransferServicesModel(icon, name, featureCode, extra))
         }
-
-
     }
 
 
@@ -93,8 +89,7 @@ class AllServicesSelectionActivity : AppCompatActivity() {
         addIfActive(R.drawable.ministatement, getString(R.string.ministatement), "F0141")
 
 
-
-       /* serviceslist.add(MoneyTransferServicesModel(R.drawable.eminew,getString(R.string.emi),"F0116",""))
+       /*serviceslist.add(MoneyTransferServicesModel(R.drawable.eminew,getString(R.string.emi),"F0116",""))
         serviceslist.add(MoneyTransferServicesModel(R.drawable.creditcardpayment,getString(R.string.creditcard),"F0125",""))
         serviceslist.add(MoneyTransferServicesModel(R.drawable.tax,getString(R.string.muncipal),"F0116",""))
         serviceslist.add(MoneyTransferServicesModel(R.drawable.cashwithdraw,getString(R.string.cashwithdraw),"F0141",""))
@@ -102,7 +97,8 @@ class AllServicesSelectionActivity : AppCompatActivity() {
         serviceslist.add(MoneyTransferServicesModel(R.drawable.ministatement,getString(R.string.ministatement),"","F0141"))*/
 
 
-        binding.financialserviceslist.layoutManager = GridLayoutManager(this, 3)
+       // binding.financialserviceslist.layoutManager = GridLayoutManager(this, 3)
+        moneyTransferServicesadapter= MoneyTransferServicesAdapter(serviceslist,this@AllServicesSelectionActivity,this@AllServicesSelectionActivity)
         moneyTransferServicesadapter= MoneyTransferServicesAdapter(serviceslist,this@AllServicesSelectionActivity,this@AllServicesSelectionActivity)
         binding.financialserviceslist.adapter = moneyTransferServicesadapter
         moneyTransferServicesadapter.notifyDataSetChanged()
@@ -122,7 +118,7 @@ class AllServicesSelectionActivity : AppCompatActivity() {
         addIfActive(R.drawable.internet,getString(R.string.broadband),"F0116")
 
 
-       /* serviceslist.add(MoneyTransferServicesModel(R.drawable.rechargenew,getString(R.string.recharge),"F0140",""))
+       /*serviceslist.add(MoneyTransferServicesModel(R.drawable.rechargenew,getString(R.string.recharge),"F0140",""))
         serviceslist.add(MoneyTransferServicesModel(R.drawable.postpaidnew,getString(R.string.postpaid),"F0116",""))
         serviceslist.add(MoneyTransferServicesModel(R.drawable.dthnew,getString(R.string.dth),"F0140",""))
         serviceslist.add(MoneyTransferServicesModel(R.drawable.electricitynew,getString(R.string.electricity),"F0116",""))
@@ -130,12 +126,15 @@ class AllServicesSelectionActivity : AppCompatActivity() {
         serviceslist.add(MoneyTransferServicesModel(R.drawable.waterbill,getString(R.string.waterbill),"F0116",""))
         serviceslist.add(MoneyTransferServicesModel(R.drawable.internet,getString(R.string.broadband),"F0116",""))*/
 
-        binding.financialserviceslist.layoutManager = GridLayoutManager(this, 3)
+       // binding.financialserviceslist.layoutManager = GridLayoutManager(this, 3)
+        moneyTransferServicesadapter= MoneyTransferServicesAdapter(serviceslist,this@AllServicesSelectionActivity,this@AllServicesSelectionActivity)
+
         moneyTransferServicesadapter= MoneyTransferServicesAdapter(serviceslist,this@AllServicesSelectionActivity,this@AllServicesSelectionActivity)
         binding.financialserviceslist.adapter = moneyTransferServicesadapter
         moneyTransferServicesadapter.notifyDataSetChanged()
 
     }
+
 
 
     fun  setTravel(){
@@ -145,11 +144,11 @@ class AllServicesSelectionActivity : AppCompatActivity() {
         addIfActive(R.drawable.busnew,getString(R.string.bus),"F0133")
         addIfActive(R.drawable.trainnew,getString(R.string.train),"F0140")
 
-     /* serviceslist.add(MoneyTransferServicesModel(R.drawable.planenew,getString(R.string.flight),"F0134",""))
+       /* serviceslist.add(MoneyTransferServicesModel(R.drawable.planenew,getString(R.string.flight),"F0134",""))
         serviceslist.add(MoneyTransferServicesModel(R.drawable.busnew,getString(R.string.bus),"F0133",""))
         serviceslist.add(MoneyTransferServicesModel(R.drawable.trainnew,getString(R.string.train),"",""))*/
+       // binding.financialserviceslist.layoutManager = GridLayoutManager(this, 3)
 
-        binding.financialserviceslist.layoutManager = GridLayoutManager(this, 3)
         moneyTransferServicesadapter= MoneyTransferServicesAdapter(serviceslist,this@AllServicesSelectionActivity,this@AllServicesSelectionActivity)
         binding.financialserviceslist.adapter = moneyTransferServicesadapter
         moneyTransferServicesadapter.notifyDataSetChanged()
@@ -158,23 +157,26 @@ class AllServicesSelectionActivity : AppCompatActivity() {
 
 
 
-     fun callFragment(fragment: Fragment, rechargeType: String) {
+     fun callFragment(fragment: Fragment, rechargeType: String,tag: String) {
         val bundle = Bundle()
         bundle.putString("RechargeType", rechargeType)
         fragment.arguments = bundle
 
         val fragmentManager: FragmentManager = supportFragmentManager
         val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment, fragment)
-        transaction.addToBackStack(null)
+        transaction.replace(R.id.fragment, fragment,tag)
+        transaction.addToBackStack(tag)
         transaction.commit()
-        binding.financialserviceslist.visibility= View.GONE
+       // binding.financialserviceslist.visibility= View.GONE
         binding.fragment.visibility=View.VISIBLE
     }
 
 
     override fun onBackPressed() {
-        val fragmentManager = supportFragmentManager
+        finish()
+        super.onBackPressed()
+
+     /*   val fragmentManager = supportFragmentManager
         // Check if any fragment is in the back stack
         if (fragmentManager.backStackEntryCount > 0) {
             fragmentManager.popBackStack() // Go back to the previous fragment
@@ -189,7 +191,7 @@ class AllServicesSelectionActivity : AppCompatActivity() {
                 binding.financialserviceslist.visibility = View.VISIBLE
                 binding.fragment.visibility = View.GONE
             }
-        }
+        }*/
 
 
     }

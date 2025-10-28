@@ -84,7 +84,6 @@ import java.util.Hashtable
 import java.util.Locale
 
 class BusSeating : AppCompatActivity() {
-
     private lateinit var mStash: MStash
     private lateinit var pd: ProgressDialog
     private lateinit var viewModel: TravelViewModel
@@ -138,25 +137,6 @@ class BusSeating : AppCompatActivity() {
             }
         }
     }
-
-//    @SuppressLint("DefaultLocale")
-//    val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, day ->
-//        val selectedDate = String.format("%02d/%02d/%04d", day, month + 1, year)
-//        bin.passengerDob.setText(selectedDate)
-//    }
-
-//    private val date = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-//        myCalender.set(Calendar.YEAR, year)
-//        myCalender.set(Calendar.MONTH, monthOfYear)
-//        myCalender.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-//
-//        val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()) // you can format it as needed
-//        val selectedDate = sdf.format(myCalender.time)
-//
-//        bin.passengerDob.setText(selectedDate) // set selected date in EditText
-//        mStash?.setStringValue(Constants.dateAndTime, selectedDate) // save date in shared prefs
-//        Log.d("SelectedDate", selectedDate) // for debug
-//    }
 
 
     @RequiresApi(Build.VERSION_CODES.O)

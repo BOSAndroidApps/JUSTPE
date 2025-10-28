@@ -251,7 +251,6 @@ class SideNavigationBankDetailsSheet:BottomSheetDialogFragment() {
                                 }
                                 else{
                                   Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
-                                    createQRCode()
                                 }
 
                             }
@@ -295,11 +294,11 @@ class SideNavigationBankDetailsSheet:BottomSheetDialogFragment() {
                                     var url = response.details!!.qrCode
                                     QRBimap = generateQrBitmap(url!!, 800)
                                     vpa = response.details.vpa
-                                    hitapiForUpdateBankDetails(url,"Yes","Yes")
+                                    hitapiForUpdateBankDetails(url,vpa!!,"Yes","Yes")
                                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                                 }
                                 else{
-                                    hitapiForUpdateBankDetails("","No","No")
+                                    hitapiForUpdateBankDetails("","","No","No")
                                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                                 }
 
@@ -322,8 +321,9 @@ class SideNavigationBankDetailsSheet:BottomSheetDialogFragment() {
     }
 
 
-    fun hitapiForUpdateBankDetails(intent:String,isQRCodeActivate:String,isQRCodeGenerated:String){
+    fun hitapiForUpdateBankDetails(intent:String, vpa:String,isQRCodeActivate:String,isQRCodeGenerated:String){
         val updateBankDetails = UpdateBankDetailsReq(
+            vpaid = vpa,
             isQRCodeActivate =  isQRCodeActivate,
             isQRCodeGenerated =  isQRCodeGenerated,
             retailerCode =  registrationID,

@@ -22,11 +22,14 @@ import com.bos.payment.appName.ui.view.Dashboard.Wallet.Fragment.RechargeFragmen
 import com.bos.payment.appName.ui.view.Dashboard.activity.AllServicesSelectionActivity
 import com.bos.payment.appName.ui.view.Dashboard.dmt.DMTMobileActivity
 import com.bos.payment.appName.ui.view.travel.busactivity.BookingTravel
+import com.bos.payment.appName.ui.view.travel.busfragment.BusBookingMainFragment
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
+import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.FlightMainFragment
 
 class MoneyTransferServicesAdapter( var servicesList:List<MoneyTransferServicesModel>, var context: Context,
                                    private val activity: AppCompatActivity) : RecyclerView.Adapter<MoneyTransferServicesAdapter.ViewHolder>(){
 
+    var selectionPosition = -1
     class ViewHolder (var binding : MoneytransferServicesLayoutBinding) : RecyclerView.ViewHolder(binding.root)
 
 
@@ -35,80 +38,107 @@ class MoneyTransferServicesAdapter( var servicesList:List<MoneyTransferServicesM
         return ViewHolder(bin)
     }
 
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
        holder.binding.servicesName.text= servicesList[position].name
        holder.binding.servicesImage.setImageResource(servicesList[position].image)
 
-       holder.itemView.setOnClickListener {
+        if (servicesList[position].name.equals(context.getString(R.string.flight))) {
+            if (activity is AllServicesSelectionActivity) {
+                activity.callFragment(FlightMainFragment(), "flight", "FlightMainFragment")
+            }
+        }
+
+        if(servicesList[position].name.equals(context.getString(R.string.emi))){
+            if (activity is AllServicesSelectionActivity) {
+                activity.callFragment(RechargeFragment(), "EMI","")
+            }
+        }
+
+        if(servicesList[position].name.equals(context.getString(R.string.recharge))){
+            if (activity is AllServicesSelectionActivity) {
+                activity.callFragment(RechargeFragment(), "mobile","")
+            }
+        }
+
+        holder.itemView.setOnClickListener {
+
            if(servicesList[position].name.equals(context.getString(R.string.flight)))
            {
-             context.startActivity(Intent(context, FlightMainActivity::class.java))
+             // context.startActivity(Intent(context, FlightMainActivity::class.java))
+               if (activity is AllServicesSelectionActivity) {
+                   activity.callFragment(FlightMainFragment(), "fight","FlightMainFragment")
+               }
            }
 
+
            if(servicesList[position].name.equals(context.getString(R.string.bus))){
-               context.startActivity(Intent(context, BookingTravel::class.java))
+               //context.startActivity(Intent(context, BookingTravel::class.java))
+
+               if (activity is AllServicesSelectionActivity) {
+                   activity.callFragment(BusBookingMainFragment(), "bus","BusMainFragment")
+               }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.recharge))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "mobile")
+                   activity.callFragment(RechargeFragment(), "mobile","")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.postpaid))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "postpaid")
+                   activity.callFragment(RechargeFragment(), "postpaid","")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.dth))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "dth")
+                   activity.callFragment(RechargeFragment(), "dth","")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.electricity))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "Electricity")
+                   activity.callFragment(RechargeFragment(), "Electricity","")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.gas))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "Gas")
+                   activity.callFragment(RechargeFragment(), "Gas","")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.waterbill))){
                if (activity is AllServicesSelectionActivity) {
-                   activity. callFragment(RechargeFragment(), "Water")
+                   activity. callFragment(RechargeFragment(), "Water","")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.broadband))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "Broadband")
+                   activity.callFragment(RechargeFragment(), "Broadband","")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.emi))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "EMI")
+                   activity.callFragment(RechargeFragment(), "EMI","")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.creditcard))){
                if (activity is AllServicesSelectionActivity) {
-                   activity. callFragment(CreditCardDetailsFragment(), "CreditCard")
+                   activity. callFragment(CreditCardDetailsFragment(), "CreditCard","")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.muncipal))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "Municipality")
+                   activity.callFragment(RechargeFragment(), "Municipality","")
                }
            }
-
 
 
            val position = holder.adapterPosition
@@ -124,9 +154,14 @@ class MoneyTransferServicesAdapter( var servicesList:List<MoneyTransferServicesM
                }
            }
 
+            selectionPosition= position
+            notifyDataSetChanged()
+
        }
 
     }
+
+
 
     override fun getItemCount(): Int {
       return  servicesList.size

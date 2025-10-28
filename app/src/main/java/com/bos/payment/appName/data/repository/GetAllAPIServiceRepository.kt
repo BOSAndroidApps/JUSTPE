@@ -2,6 +2,8 @@ package com.bos.payment.appName.data.repository
 
 import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
 import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualAccountModel
+import com.bos.payment.appName.data.model.justpaymodel.RetailerContactListRequestModel
+import com.bos.payment.appName.data.model.justpaymodel.SendMoneyToMobileReqModel
 import com.bos.payment.appName.data.model.justpaymodel.UpdateBankDetailsReq
 import com.bos.payment.appName.data.model.justpedashboard.DashboardBannerListModel
 import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesRequest
@@ -29,6 +31,7 @@ class GetAllAPIServiceRepository(private val apiInterface: ApiInterface) {
     suspend fun getAllRechargeAndBillServiceCharge(req: GetCommercialReq) = apiInterface.getAllRechargeAndBillServiceCharge(req)
     suspend fun getWalletBalance(req: GetBalanceReq) = apiInterface.getWalletBalance(req)
     suspend fun getAllMerchantBalance(req: GetMerchantBalanceReq) = apiInterface.getAllMerchantBalance(req)
+
     suspend fun getTransferAmountToAgents(req: TransferAmountToAgentsReq) = apiInterface.getTransferAmountToAgents(req)
     suspend fun getAllApiPayoutCommercialCharge(req: GetPayoutCommercialReq) = apiInterface.getAllApiPayoutCommercialCharge(req)
     suspend fun getAllMenuList(req: GetAllMenuListReq) = apiInterface.getAllMenuList(req)
@@ -46,6 +49,10 @@ class GetAllAPIServiceRepository(private val apiInterface: ApiInterface) {
     suspend fun getBankDetails(req: CheckBankDetailsModel)= apiInterface.getBankDetails(req)
 
     suspend fun updateBankDetails(req: UpdateBankDetailsReq)= apiInterface.updateBankDetails(req)
+
+    suspend fun getRetailerContactList(req: RetailerContactListRequestModel)= apiInterface.gettingAllRetailerContactList(req)
+
+    suspend fun sendMoneyToMobileReqModel(req: SendMoneyToMobileReqModel)= apiInterface.sendToMobileMoney(req)
 
 
 }

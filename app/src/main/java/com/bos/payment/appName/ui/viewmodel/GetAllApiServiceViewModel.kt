@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
 import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualAccountModel
+import com.bos.payment.appName.data.model.justpaymodel.RetailerContactListRequestModel
+import com.bos.payment.appName.data.model.justpaymodel.SendMoneyToMobileReqModel
 import com.bos.payment.appName.data.model.justpaymodel.UpdateBankDetailsReq
 import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesRequest
 import com.bos.payment.appName.data.model.menuList.GetAllMenuListReq
@@ -39,6 +41,7 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
             emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))
         }
     }
+
     fun getAllMerchantBalance(req: GetMerchantBalanceReq) = liveData(Dispatchers.IO) {
         emit(ApiResponse.loading(data = null))
         try {
@@ -47,6 +50,7 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
             emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))
         }
     }
+
     fun getWalletBalance(req: GetBalanceReq) = liveData(Dispatchers.IO) {
         emit(ApiResponse.loading(data = null))
         try {
@@ -255,6 +259,61 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
     }
 
 
+
+    fun getRetailerContactList(req: RetailerContactListRequestModel) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.getRetailerContactList(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "Something went wrong: ${e.localizedMessage}"
+                )
+            )
+        }
+    }
+
+
+
+    fun sendMoneyToMobileReqModel(req: SendMoneyToMobileReqModel) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.sendMoneyToMobileReqModel(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(ApiResponse.error(data = null, message = "Something went wrong: ${e.localizedMessage}"))
+        }
+    }
 
 
 }
