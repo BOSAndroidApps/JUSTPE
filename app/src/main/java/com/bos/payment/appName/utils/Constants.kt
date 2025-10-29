@@ -136,6 +136,8 @@ object Constants {
     var tds = "tds"
     var totalTransaction = "totalTransaction"
     var serviceCharge = "serviceCharge"
+    var serviceChargeGST = "serviceChargeGst"
+    var toBeCreditedAmt = "tobecreditedamt"
     var serviceChargeWithGST = "serviceChargeWithGST"
     var actualAmountServiceChargeWithGST = "actualAmountServiceChargeWithGST"
     var finalCommission = "finalCommission"

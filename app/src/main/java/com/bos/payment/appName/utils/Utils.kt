@@ -1,6 +1,7 @@
 package com.bos.payment.appName.utils
 
 import android.Manifest
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
@@ -26,9 +27,11 @@ import android.os.Looper
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
@@ -665,6 +668,32 @@ object Utils {
         view.draw(canvas)
         return bitmap
     }
+
+
+     fun animateTextSize(textView: TextView, newSizeSp: Float) {
+        val currentSize = textView.textSize / textView.resources.displayMetrics.scaledDensity
+        if (currentSize == newSizeSp) return  // no need to animate if size is same
+
+        ValueAnimator.ofFloat(currentSize, newSizeSp).apply {
+            duration = 180 // smooth & quick
+            interpolator = AccelerateDecelerateInterpolator()
+            addUpdateListener {
+                val animatedValue = it.animatedValue as Float
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, animatedValue)
+            }
+            start()
+        }
+
+        // subtle zoom pop
+        textView.animate()
+            .scaleX(1.05f)
+            .scaleY(1.05f)
+            .setDuration(90)
+            .withEndAction {
+                textView.animate().scaleX(1f).scaleY(1f).setDuration(90).start()
+            }.start()
+    }
+
 
 
 

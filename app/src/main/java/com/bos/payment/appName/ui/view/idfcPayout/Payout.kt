@@ -278,6 +278,7 @@ class Payout : AppCompatActivity() {
         }
 
         val actualAmount = serviceChargeWithGst + rechargeAmountValue
+
         mStash?.apply {
             setStringValue(Constants.actualAmountServiceChargeWithGST, String.format("%.2f", actualAmount))
             setStringValue(Constants.serviceChargeWithGST, String.format("%.2f", serviceChargeWithGst))
@@ -536,7 +537,6 @@ class Payout : AppCompatActivity() {
                     resource?.let {
                         when (it.apiStatus) {
                             ApiStatus.SUCCESS -> {
-//                                 pd.dismiss()
                                 it.data?.let { users ->
                                     users.body()?.let { response ->
                                         getTransferAmountToAgentWithCalRes(response)
@@ -569,10 +569,9 @@ class Payout : AppCompatActivity() {
 
     private fun getTransferAmountToAgentWithCalRes(response: TransferAmountToAgentsRes) {
         if (response.isSuccess == true) {
-//            pd.dismiss()
             sendAllPayoutAmount()
-        //            toast(response.message.toString())
-        } else {
+        }
+        else {
             pd.dismiss()
             toast(response.returnMessage.toString())
         }
