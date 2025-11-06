@@ -205,6 +205,7 @@ object Constants {
     var VPAid = "vpaid"
     var ISQRCodeActivate = "is_QRCodeActivate"
     var StaticQR = "staticQR"
+   var TicketStatus =  "Ticket Status"
 
 
     val KEY_192 = "your-24-byte-key-here!".toByteArray(Charsets.UTF_8) // 24 bytes

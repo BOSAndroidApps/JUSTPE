@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 
 class LoginSignUpViewModel (private val repository: LoginSignUpRepository): ViewModel() {
 
-
     fun login(req: LoginReq) = liveData(Dispatchers.IO) {
         emit(ApiResponse.loading(data = null))
         try {

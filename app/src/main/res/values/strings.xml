@@ -603,7 +603,7 @@
     <string name="screenlock">Screen Lock</string>
     <string name="logoutt">Logout</string>
     <string name="paytomob">To Mobile</string>
-    <string name="payupi">To UPI/Bank</string>
+    <string name="payupi">Bank Transfer</string>
     <string name="selftrans">To Self </string>
     <string name="emi">EMI</string>
     <string name="recharge">Recharge</string>
@@ -635,6 +635,7 @@
     <string name="bills_amp_recharges"><![CDATA[Bills & Recharges]]></string>
     <string name="bank_account">Bank Account</string>
     <string name="verify">Verify</string>
+    <string name="enter_subject">Enter subject</string>
 
 
 </resources>

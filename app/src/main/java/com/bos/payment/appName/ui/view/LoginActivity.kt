@@ -314,22 +314,28 @@ class LoginActivity : AppCompatActivity() {
     private fun loginRes(res: LoginRes) {
         if (res.isSuccess == true) {
             Log.d("LoginDataResponse",Gson().toJson(res))
-            getAllMerchantList(res.data[0].merchantCode.toString())
-            mStash!!.setStringValue(Constants.RegistrationId, res.data[0].userID.toString().uppercase())
-            mStash!!.setStringValue(Constants.MobileNumber, res.data[0].mobileNo.toString())
-            mStash!!.setStringValue(Constants.AdminCode, res.data[0].adminCode.toString())
-            mStash!!.setBooleanValue(Constants.IS_LOGIN, true)
-            mStash!!.setStringValue(Constants.AgentName, res.data[0].agencyname.toString())
-            mStash!!.setStringValue(Constants.AgentType, res.data[0].agentType.toString())
-            mStash!!.setBooleanValue(Constants.IS_FIRST_LAUNCH.toString(), false)
-            mStash!!.setBooleanValue(Constants.Status, res.isSuccess!!)
-            mStash!!.setStringValue(Constants.Password, binding.loginLayout.tvPassword.text.toString().trim())
-            mStash!!.setStringValue(Constants.MerchantId, res.data[0].merchantCode.toString())
-            toast("Login Successful")
-            Log.d("getAllMerchantList", res.data[0].merchantCode.toString())
-            Log.d("loginId",res.data[0].userID.toString().uppercase())
-            Log.d("mobileno",res.data[0].mobileNo.toString())
-            getIntentOnDashboard()
+            if(res.data[0].agentType.equals("Admin")){
+                Toast.makeText(this@LoginActivity,"Invalid login or password",Toast.LENGTH_SHORT).show()
+            }
+            else{
+                getAllMerchantList(res.data[0].merchantCode.toString())
+                mStash!!.setStringValue(Constants.RegistrationId, res.data[0].userID.toString().uppercase())
+                mStash!!.setStringValue(Constants.MobileNumber, res.data[0].mobileNo.toString())
+                mStash!!.setStringValue(Constants.AdminCode, res.data[0].adminCode.toString())
+                mStash!!.setBooleanValue(Constants.IS_LOGIN, true)
+                mStash!!.setStringValue(Constants.AgentName, res.data[0].agencyname.toString())
+                mStash!!.setStringValue(Constants.AgentType, res.data[0].agentType.toString())
+                mStash!!.setBooleanValue(Constants.IS_FIRST_LAUNCH.toString(), false)
+                mStash!!.setBooleanValue(Constants.Status, res.isSuccess!!)
+                mStash!!.setStringValue(Constants.Password, binding.loginLayout.tvPassword.text.toString().trim())
+                mStash!!.setStringValue(Constants.MerchantId, res.data[0].merchantCode.toString())
+                toast("Login Successful")
+                Log.d("getAllMerchantList", res.data[0].merchantCode.toString())
+                Log.d("loginId",res.data[0].userID.toString().uppercase())
+                Log.d("mobileno",res.data[0].mobileNo.toString())
+                getIntentOnDashboard()
+            }
+
         }
         else {
             toast("Please correct login detail")

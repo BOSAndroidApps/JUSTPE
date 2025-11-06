@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.graphics.Rect
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputFilter
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -28,6 +31,7 @@ import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
 import com.bos.payment.appName.utils.ApiStatus
 import com.bos.payment.appName.utils.Constants
 import com.bos.payment.appName.utils.MStash
+import com.bos.payment.appName.utils.Utils.animateTextSize
 import com.bos.payment.appName.utils.Utils.runIfConnected
 import com.bos.payment.appName.utils.Utils.toast
 import com.google.gson.Gson
@@ -40,7 +44,7 @@ class SendWalletAmountPage : AppCompatActivity() {
     private lateinit var getAllApiServiceViewModel: GetAllApiServiceViewModel
     lateinit var pd : ProgressDialog
     var totalamoutForWithdraw: Double = 0.0
-    var mainBalance: Double = 0.0
+    var walletamount: Double = 0.0
 
     companion object{
         var name : String ? = ""
@@ -89,6 +93,81 @@ class SendWalletAmountPage : AppCompatActivity() {
             finish()
         }
 
+
+        binding.etAmount.filters= arrayOf(InputFilter { source, start, end, dest, dstart, dend ->
+            val newInput = dest.toString().substring(0, dstart) +
+                    source.subSequence(start, end) +
+                    dest.toString().substring(dend)
+
+            val regex = Regex("^\\d{0,7}(\\.\\d{0,2})?$") // up to 7 digits before decimal, 2 after
+            if (newInput.matches(regex)) {
+                null // accept input
+            } else {
+                ""   // reject invalid characters
+            }
+        })
+
+
+        var lastValidAmount = ""
+        binding.etAmount.addTextChangedListener(object : TextWatcher {
+            private var editing = false
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (editing) return
+                editing = true
+
+                val text = s?.toString()?.trim() ?: ""
+
+                // 🧠 Handle empty or just "." input safely
+                if (text.isEmpty() || text == ".") {
+                    lastValidAmount = ""
+                    editing = false
+                    return
+                }
+
+                val enteredPrice = text.toDoubleOrNull()
+
+                // 🧱 If invalid number typed
+                if (enteredPrice == null) {
+                    binding.etAmount.setText(lastValidAmount)
+                    binding.etAmount.setSelection(binding.etAmount.text.length)
+                    editing = false
+                    return
+                }
+
+                // 🚫 If exceeds wallet amount → revert and show error
+                if (enteredPrice > walletamount) {
+                    binding.etAmount.error = "Enter amount ≤ ₹$walletamount"
+                    binding.etAmount.setText(lastValidAmount)
+                    binding.etAmount.setSelection(binding.etAmount.text.length)
+                    editing = false
+                    return
+                }
+
+                // ✅ Valid input → save, show button, and animate
+                lastValidAmount = text
+
+                // 💫 Animate text size like Paytm
+                val length = text.length
+                val targetSize = when {
+                    length <= 3 -> 60f
+                    length <= 5 -> 45f
+                    length <= 7 -> 35f
+                    else -> 28f
+                }
+                animateTextSize(binding.etAmount, targetSize)
+
+                // Keep cursor at end
+                binding.etAmount.setSelection(text.length)
+                editing = false
+            }
+        })
+
+
         binding.tvBtnProceed.setOnClickListener{
             var amount = binding.etAmount.text.toString()
             var remarks = binding.remarks.text.toString()
@@ -100,6 +179,7 @@ class SendWalletAmountPage : AppCompatActivity() {
             }
 
         }
+
 
         binding.main.viewTreeObserver.addOnGlobalLayoutListener {
             val r = Rect()
@@ -118,6 +198,7 @@ class SendWalletAmountPage : AppCompatActivity() {
         }
 
     }
+
 
 
     private fun getAllWalletBalance() {
@@ -156,27 +237,26 @@ class SendWalletAmountPage : AppCompatActivity() {
     @SuppressLint("SetTextI18n", "DefaultLocale")
     private fun getAllWalletBalanceRes(response: GetBalanceRes) {
         if (response.isSuccess == true) {
-            mainBalance = (response.data[0].result!!.toDoubleOrNull() ?: 0.0)
+            walletamount = (response.data[0].result!!.toDoubleOrNull() ?: 0.0)
             totalamoutForWithdraw = binding.etAmount.text.toString()  !!.toDoubleOrNull() ?: 0.0
 
-            if(totalamoutForWithdraw<= mainBalance){
+            if(totalamoutForWithdraw<= walletamount){
                 hitApiForSendMoneyToAdmin(totalamoutForWithdraw)
             }
             else{
                 pd.dismiss()
-                Toast.makeText(this, "Wallet balance is low. VBal = $mainBalance,  totalAmt = $totalamoutForWithdraw", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Wallet balance is low. VBal = $walletamount,  totalAmt = $totalamoutForWithdraw", Toast.LENGTH_LONG).show()
             }
 
-            binding.walletamt.text = "You can send money up to ₹$mainBalance only"
+            binding.walletamt.text = "You can send money up to ₹$walletamount only"
 
-            Log.d("actualBalance", "main = $mainBalance")
+            Log.d("actualBalance", "main = $walletamount")
 
         } else {
             toast(response.returnMessage.toString())
         }
 
     }
-
 
 
     fun hitApiForSendMoneyToAdmin(amount : Double){

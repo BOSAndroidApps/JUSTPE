@@ -318,6 +318,7 @@ object Utils {
 //        view.text = sdf.format(myCalendar.time)
 //    }
 
+
     fun updateLabel(view: EditText, myCalendar: Calendar, type: String?) {
         val myFormat = "dd/MM/yyyy" //In which you need put here
         val sdf = SimpleDateFormat(myFormat, Locale.US)

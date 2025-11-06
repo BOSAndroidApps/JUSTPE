@@ -7,6 +7,6 @@ data class MobileWiseRechargeReq(
     var number : String,
 
     @SerializedName("RegistrationID")
-    var registrationID : String
+    var registrationID : String ?
 )
 

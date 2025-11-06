@@ -16,11 +16,11 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/backcard"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            app:cardCornerRadius="@dimen/dimen_100dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            app:cardCornerRadius="102dp"
             android:layout_margin="3dp"
-            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardBackgroundColor="@color/colorPrimary"
             android:layout_centerInParent="true"
             android:visibility="gone"/>
 
@@ -57,8 +57,7 @@
         android:layout_height="wrap_content"
         android:text="Pay to mobile number"
         android:textSize="@dimen/dimen_14sp"
-        android:textColor="@color/black"
-        android:paddingStart="12dp"
+        android:textColor="@color/text_color"
         android:textAlignment="center"
         app:layout_constraintStart_toEndOf="@id/servicecard"
         app:layout_constraintTop_toTopOf="@id/servicecard"

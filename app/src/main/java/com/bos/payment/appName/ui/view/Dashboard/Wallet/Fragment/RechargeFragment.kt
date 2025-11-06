@@ -563,8 +563,7 @@ class RechargeFragment : Fragment() {
             val arrayList = ArrayList<String>()
             arrayList.add("online")
             arrayList.add("offline")
-            binding.spMode.adapter =
-                ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, arrayList)
+            binding.spMode.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, arrayList)
             binding.spMode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     adapterView: AdapterView<*>, view: View?, i: Int, l: Long
@@ -596,13 +595,19 @@ class RechargeFragment : Fragment() {
                 Toast.makeText(context, "Enter Valid Mobile Number", Toast.LENGTH_SHORT).show()
             }
             else {
-                pd.show()
-                Constants.mobileOperatorName =  binding.spOperator.selectedItem.toString()
-                Constants.mobileCircleName =  binding.etCircle.selectedItem.toString()
-                mStash!!.setStringValue(Constants.mobileOperatorName,Constants.mobileOperatorName)
-                mStash!!.setStringValue(Constants.mobileCircleName,Constants.mobileCircleName)
-                mobileRechargePlanList.clear()
-                getAllPlanList(mStash!!.getStringValue(Constants.mobileOperatorName, "").toString(), mStash!!.getStringValue(Constants.mobileCircleName, "").toString())
+                  pd.show()
+                if(binding.spOperator.selectedItem !=null && binding.spOperator.selectedItem.toString().isNotEmpty()&&binding.etCircle.selectedItem.toString().isNotEmpty()){
+                    Constants.mobileOperatorName =  binding.spOperator.selectedItem.toString()
+                    Constants.mobileCircleName =  binding.etCircle.selectedItem.toString()
+                    mStash!!.setStringValue(Constants.mobileOperatorName,Constants.mobileOperatorName)
+                    mStash!!.setStringValue(Constants.mobileCircleName,Constants.mobileCircleName)
+                    mobileRechargePlanList.clear()
+                    getAllPlanList(mStash!!.getStringValue(Constants.mobileOperatorName, "").toString(), mStash!!.getStringValue(Constants.mobileCircleName, "").toString())
+                }
+                else{
+                    Toast.makeText(requireContext(),"Operator not found",Toast.LENGTH_SHORT).show()
+                }
+
 
             }
         }
@@ -819,7 +824,7 @@ class RechargeFragment : Fragment() {
 
     private fun getMerchantBalance(mainBalance: Double) {
         val getMerchantBalanceReq = GetMerchantBalanceReq(
-            parmUser = /*mStash!!.getStringValue(Constants.MerchantId, "")*/"AOP-554",
+            parmUser = mStash!!.getStringValue(Constants.MerchantId, "")/*"AOP-554"*/,
             flag = "DebitBalance"
         )
         getAllApiServiceViewModel.getAllMerchantBalance(getMerchantBalanceReq)
@@ -2497,7 +2502,7 @@ class RechargeFragment : Fragment() {
         val apiService = RetrofitClient.apiRechargeInterface
 
         val jsonObject = JSONObject().apply {
-            put("RegistrationID", /*mStash!!.getStringValue(Constants.MerchantId, "")!!*/ "AOP-554")
+            put("RegistrationID", mStash!!.getStringValue(Constants.MerchantId, "")!! /*"AOP-554"*/)
             put("circle", circleName)
             put("operator", operatorName)
             put("number", binding.etMobileNumber.text.toString())
@@ -3233,7 +3238,7 @@ class RechargeFragment : Fragment() {
     fun hitApiForRechargeOperatorNameList(displayName: String) {
 
         var operatorsReq = RechargeOperatorsReq(
-            registrationID = /*mStash?.getStringValue(Constants.MerchantId, "")*/ "AOP-554",
+            registrationID = mStash?.getStringValue(Constants.MerchantId, "") /*"AOP-554"*/,
             displayName = DisplayName!!
         )
         Log.d("operatorReq", Gson().toJson(operatorsReq))
@@ -3385,7 +3390,7 @@ class RechargeFragment : Fragment() {
     fun hitApiForMobileWiseOperatorName(mob: String) {
 
         var operatorsReq = MobileWiseRechargeReq(
-            registrationID = /*mStash?.getStringValue(Constants.MerchantId, "")*/ "AOP-554",
+            registrationID = mStash?.getStringValue(Constants.MerchantId, "") /*"AOP-554"*/,
             number = mob
         )
         Log.d("operatorReq", Gson().toJson(operatorsReq))
@@ -3479,7 +3484,7 @@ class RechargeFragment : Fragment() {
 
 
     fun hitApiForMobileRecharge(rechargeAmt:String, mobileNo :String){
-        var registrationId =  /*mStash?.getStringValue(Constants.MerchantId, "")*/ /*"AOP-554"*/ "AOP-554"
+        var registrationId =  mStash?.getStringValue(Constants.MerchantId, "") /*"AOP-554"*/
         var productID =  mStash!!.getStringValue(Constants.OperatorId.toString(),"")
 
         var latlong = ConstantClass.latdouble.toString().plus(",").plus(ConstantClass.longdouble)
@@ -3487,9 +3492,9 @@ class RechargeFragment : Fragment() {
 
 
         var MobileRechargeReq = com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileRechargeReq(
-            registrationId = /*registrationId*/ "AOP-554",
+            registrationId = registrationId /*"AOP-554"*/,
             productId = productID!!,
-            amount = /*rechargeAmt*/ "10",
+            amount = rechargeAmt /*"10"*/,
             geoCoder = latlong,
             customerNumber = mobileNo
         )
@@ -3535,7 +3540,7 @@ class RechargeFragment : Fragment() {
         //     // new changes done by Annu
 
         var categoryreq = RechargeCategoryReq(
-            registerationID = /*mStash?.getStringValue(Constants.MerchantId, "")*/ "AOP-554"
+            registerationID = mStash?.getStringValue(Constants.MerchantId, "") /*"AOP-554"*/
         )
 
         MobileRechargeViewModel.getRechargeCategoryRequest(categoryreq).observe(requireActivity()) { resource ->
@@ -3634,7 +3639,7 @@ class RechargeFragment : Fragment() {
 
 
         var dthreq = DthInfoReq(
-            registrationId = /*mStash?.getStringValue(Constants.MerchantId, "")*/ "AOP-554",
+            registrationId = mStash?.getStringValue(Constants.MerchantId, "") /*"AOP-554"*/,
             circle = binding.etCircle.selectedItem.toString(),
             operator = selectedOperatorDTHName,
             opnumber = binding.etDTHBillNumber.text.toString()
@@ -3687,7 +3692,6 @@ class RechargeFragment : Fragment() {
             }
 
         }
-
 
     }
 

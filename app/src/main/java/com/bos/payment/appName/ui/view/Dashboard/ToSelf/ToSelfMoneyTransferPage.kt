@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -101,6 +102,33 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
 
         getBankDetails(mStash!!.getStringValue(Constants.RegistrationId, "").toString())
 
+        binding.etAmount.requestFocus()
+        binding.etAmount.postDelayed({
+            binding.etAmount.requestFocus()
+            val imm = getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(binding.etAmount, InputMethodManager.SHOW_FORCED)
+
+            binding.main.viewTreeObserver.addOnGlobalLayoutListener {
+                val rect = Rect()
+                binding.main.getWindowVisibleDisplayFrame(rect)
+
+                val screenHeight = binding.main.rootView.height
+                val keypadHeight = screenHeight - rect.bottom
+
+                Log.d("KeyboardCheck", "screenHeight=$screenHeight, rect.bottom=${rect.bottom}, keypadHeight=$keypadHeight")
+
+                if (keypadHeight > screenHeight * 0.20) {
+                    // ✅ Keyboard is open
+
+                        binding.scrollview.post {
+                            binding.scrollview.smoothScrollTo(0, binding.scrollview.bottom)
+                        }
+
+                }
+            }
+
+        }, 300)
+
         setClickListner()
 
     }
@@ -108,28 +136,15 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
         getAllWalletBalance(false)
+
+
     }
 
 
 
     fun setClickListner(){
-
-        binding.main.viewTreeObserver.addOnGlobalLayoutListener {
-            val r = Rect()
-            binding.main.getWindowVisibleDisplayFrame(r)
-            val screenHeight = binding.main.rootView.height
-            val keypadHeight = screenHeight - r.bottom
-
-            if (keypadHeight > screenHeight * 0.20) {
-                // Keyboard is open
-                if (binding.remarks.hasFocus()) {
-                    binding.scrollview.post {
-                        binding.scrollview.smoothScrollTo(0, binding.scrollview.bottom)
-                    }
-                }
-            }
-        }
 
         binding.back.setOnClickListener {
             finish()

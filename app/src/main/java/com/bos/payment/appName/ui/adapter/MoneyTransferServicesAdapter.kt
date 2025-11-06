@@ -2,8 +2,10 @@ package com.bos.payment.appName.ui.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -26,10 +28,9 @@ import com.bos.payment.appName.ui.view.travel.busfragment.BusBookingMainFragment
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
 import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.FlightMainFragment
 
-class MoneyTransferServicesAdapter( var servicesList:List<MoneyTransferServicesModel>, var context: Context,
-                                   private val activity: AppCompatActivity) : RecyclerView.Adapter<MoneyTransferServicesAdapter.ViewHolder>(){
-
+class MoneyTransferServicesAdapter( var servicesList:List<MoneyTransferServicesModel>, var context: Context, private val activity: AppCompatActivity) : RecyclerView.Adapter<MoneyTransferServicesAdapter.ViewHolder>(){
     var selectionPosition = -1
+    var default = 0
     class ViewHolder (var binding : MoneytransferServicesLayoutBinding) : RecyclerView.ViewHolder(binding.root)
 
 
@@ -40,28 +41,26 @@ class MoneyTransferServicesAdapter( var servicesList:List<MoneyTransferServicesM
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        val service = servicesList[position]
+
        holder.binding.servicesName.text= servicesList[position].name
        holder.binding.servicesImage.setImageResource(servicesList[position].image)
 
-        if (servicesList[position].name.equals(context.getString(R.string.flight))) {
-            if (activity is AllServicesSelectionActivity) {
-                activity.callFragment(FlightMainFragment(), "flight", "FlightMainFragment")
-            }
+        if (selectionPosition == position) {
+            holder.binding.backcard.visibility = View.VISIBLE
+            holder.binding.servicesName.setTextColor(context.getColor(R.color.colorPrimary))
+        } else {
+            holder.binding.backcard.visibility = View.GONE
+            holder.binding.servicesName.setTextColor(context.getColor(R.color.text_color))
         }
 
-        if(servicesList[position].name.equals(context.getString(R.string.emi))){
-            if (activity is AllServicesSelectionActivity) {
-                activity.callFragment(RechargeFragment(), "EMI","")
-            }
-        }
 
-        if(servicesList[position].name.equals(context.getString(R.string.recharge))){
-            if (activity is AllServicesSelectionActivity) {
-                activity.callFragment(RechargeFragment(), "mobile","")
-            }
-        }
 
         holder.itemView.setOnClickListener {
+
+            selectionPosition = position
+            notifyDataSetChanged()
 
            if(servicesList[position].name.equals(context.getString(R.string.flight)))
            {
@@ -154,10 +153,11 @@ class MoneyTransferServicesAdapter( var servicesList:List<MoneyTransferServicesM
                }
            }
 
-            selectionPosition= position
-            notifyDataSetChanged()
-
        }
+
+
+
+
 
     }
 

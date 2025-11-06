@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class DthInfoReq(
     @SerializedName("RegistrationID")
-    var registrationId : String,
+    var registrationId : String ?,
 
     @SerializedName("Circle")
     var circle : String,

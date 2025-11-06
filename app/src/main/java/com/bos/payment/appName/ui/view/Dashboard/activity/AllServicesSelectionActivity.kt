@@ -16,6 +16,8 @@ import com.bos.payment.appName.data.model.justpaymodel.MoneyTransferServicesMode
 import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesDataItem
 import com.bos.payment.appName.databinding.ActivityAllServicesSelectionBinding
 import com.bos.payment.appName.ui.adapter.MoneyTransferServicesAdapter
+import com.bos.payment.appName.ui.view.Dashboard.Wallet.Fragment.RechargeFragment
+import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.FlightMainFragment
 import com.bos.payment.appName.utils.Constants.BILLRECHARGE
 import com.bos.payment.appName.utils.Constants.FINANCESERVICES
 import com.bos.payment.appName.utils.Constants.RETAILERALLSERVICES
@@ -103,6 +105,8 @@ class AllServicesSelectionActivity : AppCompatActivity() {
         binding.financialserviceslist.adapter = moneyTransferServicesadapter
         moneyTransferServicesadapter.notifyDataSetChanged()
 
+        callFragment(RechargeFragment(), "EMI","")
+
     }
 
 
@@ -133,6 +137,9 @@ class AllServicesSelectionActivity : AppCompatActivity() {
         binding.financialserviceslist.adapter = moneyTransferServicesadapter
         moneyTransferServicesadapter.notifyDataSetChanged()
 
+        moneyTransferServicesadapter.selectionPosition  = 0
+        callFragment(RechargeFragment(), "mobile","")
+
     }
 
 
@@ -152,6 +159,9 @@ class AllServicesSelectionActivity : AppCompatActivity() {
         moneyTransferServicesadapter= MoneyTransferServicesAdapter(serviceslist,this@AllServicesSelectionActivity,this@AllServicesSelectionActivity)
         binding.financialserviceslist.adapter = moneyTransferServicesadapter
         moneyTransferServicesadapter.notifyDataSetChanged()
+
+        moneyTransferServicesadapter.selectionPosition  = 0
+        callFragment(FlightMainFragment(), "flight", "FlightMainFragment")
 
     }
 

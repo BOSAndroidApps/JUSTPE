@@ -16,6 +16,15 @@ import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.Recharg
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargePlanReq
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeViewPlanResponse
 import com.bos.payment.appName.data.model.serviceWiseTrans.TransactionReportReq
+import com.bos.payment.appName.data.model.supportmanagement.AddCommentReq
+import com.bos.payment.appName.data.model.supportmanagement.ChatCommentResp
+import com.bos.payment.appName.data.model.supportmanagement.TicketStatusReq
+import com.bos.payment.appName.data.model.supportmanagement.TicketStatusResp
+import com.bos.payment.appName.data.model.transactionreportsmodel.CheckRaiseTicketExistReq
+import com.bos.payment.appName.data.model.transactionreportsmodel.RaiseTicketReq
+import com.bos.payment.appName.data.model.transactionreportsmodel.RaiseTicketResp
+import com.bos.payment.appName.data.model.transactionreportsmodel.ReportListReq
+import com.bos.payment.appName.data.model.transactionreportsmodel.TransactionReportsReq
 import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsReq
 import com.bos.payment.appName.data.model.travel.flight.FlightRequeryReq
 import com.bos.payment.appName.data.model.travel.flight.GetAirTicketListReq
@@ -24,7 +33,11 @@ import com.bos.payment.appName.data.model.walletBalance.walletBalanceCal.GetBala
 import com.bos.payment.appName.network.ApiInterface
 import com.bos.payment.appName.network.RetrofitClient
 import com.google.android.gms.common.api.Response
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class GetAllAPIServiceRepository(private val apiInterface: ApiInterface) {
 
@@ -53,6 +66,68 @@ class GetAllAPIServiceRepository(private val apiInterface: ApiInterface) {
     suspend fun getRetailerContactList(req: RetailerContactListRequestModel)= apiInterface.gettingAllRetailerContactList(req)
 
     suspend fun sendMoneyToMobileReqModel(req: SendMoneyToMobileReqModel)= apiInterface.sendToMobileMoney(req)
+
+    suspend fun sendForReportListReq(req: ReportListReq)= apiInterface.getReportListReq(req)
+
+    suspend fun sendTransactionReportsReq(req: TransactionReportsReq)= apiInterface.getTransactionReportsReq(req)
+
+    suspend fun sendTransactionRaiseTicketExitsReq(req: CheckRaiseTicketExistReq)= apiInterface.getcheckTransactionExitsReq(req)
+
+
+    suspend fun uploadRaiseTicketReq(req: RaiseTicketReq): retrofit2.Response<RaiseTicketResp> {
+        val userCode = req.userCode.toRequestBody("text/plain".toMediaTypeOrNull())
+        val serviceCode = req.serviceCode.toRequestBody("text/plain".toMediaTypeOrNull())
+        val subject = req.subject.toRequestBody("text/plain".toMediaTypeOrNull())
+        val description = req.description.toRequestBody("text/plain".toMediaTypeOrNull())
+        val priority = req.priority.toRequestBody("text/plain".toMediaTypeOrNull())
+        val adminCode = req.adminCode.toRequestBody("text/plain".toMediaTypeOrNull())
+        val imagePath1 = req.imagePath1.toRequestBody("text/plain".toMediaTypeOrNull())
+        val imagePath2 = req.imagePath2.toRequestBody("text/plain".toMediaTypeOrNull())
+        val imagePath3 = req.imagePath3.toRequestBody("text/plain".toMediaTypeOrNull())
+        val transactionID = req.transactionID.toRequestBody("text/plain".toMediaTypeOrNull())
+        val transactionSummary = req.transactionSummary.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        // Convert image file to MultipartBody.Part
+        val imagePart1 = if (req.imageFile1 != null && req.imageFile1.exists()) {
+            val requestFile = req.imageFile1.asRequestBody("image/*".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("Image1_File", req.imageFile1.name, requestFile)
+        } else {
+            // send empty multipart field
+            MultipartBody.Part.createFormData("Image1_File", "")
+        }
+
+        val imagePart2 = if (req.imageFile2 != null && req.imageFile2.exists()) {
+            val requestFile = req.imageFile2.asRequestBody("image/*".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("Image2_File", req.imageFile2.name, requestFile)
+        } else {
+            // send empty multipart field
+            MultipartBody.Part.createFormData("Image2_File", "")
+        }
+
+        val imagePart3 = if (req.imageFile3 != null && req.imageFile3.exists()) {
+            val requestFile = req.imageFile3.asRequestBody("image/*".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("Image3_File", req.imageFile3.name, requestFile)
+        } else {
+            // send empty multipart field
+            MultipartBody.Part.createFormData("Image3_File", "")
+        }
+
+        return apiInterface.uploadDocumentForRaiseTicket(
+            userCode, serviceCode, subject,description,priority, adminCode, imagePath1, imagePath2,
+            imagePath3, transactionID, transactionSummary, imagePart1, imagePart2, imagePart3
+        )
+
+    }
+
+    suspend fun sendTicketStatusReq(req: TicketStatusReq): retrofit2.Response<TicketStatusResp> {
+        return apiInterface.getticketstatusreq(req.adminCode,req.userCode)
+    }
+
+    suspend fun sendTicketCommentListReq(complaintId: Int): retrofit2.Response<ChatCommentResp> {
+        return apiInterface.getTicketComments(complaintId)
+    }
+
+    suspend fun addcommentReq(commentreq: AddCommentReq)= apiInterface.addcommentReq(commentreq)
 
 
 }

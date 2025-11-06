@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class MobileRechargeReq(
     @SerializedName("RegistrationID")
-    var registrationId: String,
+    var registrationId: String ?,
 
     @SerializedName("ProductID")
     var productId: String,

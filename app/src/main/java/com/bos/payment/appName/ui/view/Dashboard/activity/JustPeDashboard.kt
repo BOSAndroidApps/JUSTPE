@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.bos.payment.appName.R
 import com.bos.payment.appName.adapter.MenuListAdapter
+import com.bos.payment.appName.constant.ConstantClass
 import com.bos.payment.appName.constant.CustomFuseLocationActivity
 import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
 import com.bos.payment.appName.data.model.justpaymodel.MoneyTransferServicesModel
@@ -39,6 +40,7 @@ import com.bos.payment.appName.data.model.menuList.GetAllMenuListReq
 import com.bos.payment.appName.data.model.menuList.GetAllMenuListRes
 import com.bos.payment.appName.data.model.merchant.merchantList.GetApiListMarchentWiseReq
 import com.bos.payment.appName.data.model.merchant.merchantList.GetApiListMarchentWiseRes
+import com.bos.payment.appName.data.model.supportmanagement.NavParentItem
 import com.bos.payment.appName.data.model.walletBalance.walletBalanceCal.GetBalanceReq
 import com.bos.payment.appName.data.model.walletBalance.walletBalanceCal.GetBalanceRes
 import com.bos.payment.appName.data.repository.GetAllAPIServiceRepository
@@ -49,6 +51,7 @@ import com.bos.payment.appName.databinding.ActivityJustPeDashboardBinding
 import com.bos.payment.appName.network.RetrofitClient
 import com.bos.payment.appName.ui.adapter.DashboardServicesAdapter
 import com.bos.payment.appName.ui.adapter.ImageSliderAdapter
+import com.bos.payment.appName.ui.adapter.NavAdapter
 import com.bos.payment.appName.ui.view.Dashboard.ToSelf.ToSelfMoneyTransferPage
 import com.bos.payment.appName.ui.view.Dashboard.activity.AllServicesSelectionActivity.Companion.checkType
 import com.bos.payment.appName.ui.view.Dashboard.dmt.DMTMobileActivity
@@ -63,6 +66,7 @@ import com.bos.payment.appName.ui.view.fragment.SideNavigationBankDetailsSheet.C
 import com.bos.payment.appName.ui.view.fragment.SideNavigationBankDetailsSheet.Companion.pincode
 import com.bos.payment.appName.ui.view.fragment.SideNavigationBankDetailsSheet.Companion.statecode
 import com.bos.payment.appName.ui.view.moneyTransfer.ScannerFragment
+import com.bos.payment.appName.ui.view.supportmanagement.TicketStatus
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightFilterActivity.Companion.TAG
 import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
 import com.bos.payment.appName.ui.viewmodel.MoneyTransferViewModel
@@ -137,6 +141,9 @@ class JustPeDashboard : AppCompatActivity() {
 
     private val imageList = listOf(R.drawable.image1, R.drawable.image2, R.drawable.image3)
 
+    val items = listOf(NavParentItem("Support Management", listOf("Ticket Status")))
+    private lateinit var navAdapter: NavAdapter
+
     companion object{
          var QRBimap : Bitmap? = null
          var vpa : String? = null
@@ -166,6 +173,22 @@ class JustPeDashboard : AppCompatActivity() {
         getBankDetails(mStash!!.getStringValue(Constants.RegistrationId, "").toString())
         setMoneyTransferServices()
         setclickListner()
+        setListForSupport()
+    }
+
+
+    fun setListForSupport(){
+        binding.nav.supportlist.layoutManager = LinearLayoutManager(this)
+        navAdapter = NavAdapter(this, items) { clickedChild ->
+            // Handle child item clicks here
+            when (clickedChild) {
+                Constants.TicketStatus ->
+                    startActivity(Intent(this@JustPeDashboard, TicketStatus::class.java)
+                )
+            }
+        }
+        binding.nav.supportlist.adapter = navAdapter
+
     }
 
 
@@ -267,13 +290,12 @@ class JustPeDashboard : AppCompatActivity() {
 
     }
 
-
     fun  setMoneyTransferServices(){
         fullServiceList.clear()
         fullServiceList.add(MoneyTransferServicesModel(R.drawable.dmticon, getString(R.string.dmt), "F0115", ""))
         fullServiceList.add(MoneyTransferServicesModel(R.drawable.paymobileicon, getString(R.string.paytomob), "", ""))
-        fullServiceList.add(MoneyTransferServicesModel(R.drawable.upidicon, getString(R.string.payupi), "", ""))
         fullServiceList.add(MoneyTransferServicesModel(R.drawable.transfericon, getString(R.string.selftrans), "", ""))
+        fullServiceList.add(MoneyTransferServicesModel(R.drawable.upidicon, getString(R.string.payupi), "", ""))
 
 
         moneyTransferServicesadapter = DashboardServicesAdapter(displayedServiceList, this@JustPeDashboard,
@@ -296,8 +318,6 @@ class JustPeDashboard : AppCompatActivity() {
         updateDisplayedList()
 
     }
-
-
 
     private fun updateDisplayedList() {
         displayedServiceList.clear()
@@ -330,9 +350,8 @@ class JustPeDashboard : AppCompatActivity() {
 
         Log.d("updateDisplayedList", "displayedServiceList size: ${displayedServiceList.size}")
         moneyTransferServicesadapter.updateList(displayedServiceList)
+
     }
-
-
 
     fun setQRCodeWithBankDetailsCodition(){
         if(mStash!!.getStringValue(Constants.ISQRCodeGenerated,"No").equals("No",ignoreCase = true)){
@@ -356,7 +375,6 @@ class JustPeDashboard : AppCompatActivity() {
             }
         }
     }
-
 
     fun setclickListner(){
 
@@ -426,8 +444,6 @@ class JustPeDashboard : AppCompatActivity() {
 
     }
 
-
-
     fun setViewPagerData(response:DashboardBannerListModel){
         // Example: taking only 2 banners from API response
 
@@ -466,8 +482,6 @@ class JustPeDashboard : AppCompatActivity() {
 
     }
 
-
-
     private fun startAutoSlide() {
         val runnable = object : Runnable {
             override fun run() {
@@ -483,8 +497,6 @@ class JustPeDashboard : AppCompatActivity() {
 
     }
 
-
-
     private fun getAllMenuList() {
         val getAllMenuListReq = GetAllMenuListReq(
             loginId = mStash!!.getStringValue(Constants.RegistrationId, ""),
@@ -499,6 +511,7 @@ class JustPeDashboard : AppCompatActivity() {
                         pd.dismiss()
                         it.data?.let { users ->
                             users.body()?.let { response ->
+                                Log.d("MenuList",Gson().toJson(response))
                                 getAllMenuListRes(response)
                             }
                         }
@@ -516,8 +529,6 @@ class JustPeDashboard : AppCompatActivity() {
         }
 
     }
-
-
 
     @SuppressLint("NotifyDataSetChanged")
     private fun getAllMenuListRes(response: GetAllMenuListRes) {
@@ -537,7 +548,8 @@ class JustPeDashboard : AppCompatActivity() {
                 if (menuItem.parentMenuCode.isNullOrEmpty()) {
                     parentMenus.add(menuItem)
                 } else {
-                    childMenusMap.getOrPut(menuItem.parentMenuCode!!) { mutableListOf() }.add(menuItem)
+                    childMenusMap.getOrPut(menuItem.parentMenuCode!!)
+                    { mutableListOf() }.add(menuItem)
                     childMenus.add(menuItem)
                 }
             }
@@ -561,7 +573,6 @@ class JustPeDashboard : AppCompatActivity() {
             Toast.makeText(this, response.returnMessage ?: "Error occurred", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     private fun getWalletBalance() {
         this.runIfConnected {
@@ -630,12 +641,10 @@ class JustPeDashboard : AppCompatActivity() {
         storageRef = storage.reference
     }
 
-
     override fun onPause() {
         super.onPause()
         handler.removeCallbacksAndMessages(null)
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -649,7 +658,6 @@ class JustPeDashboard : AppCompatActivity() {
 
     }
 
-
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -661,7 +669,6 @@ class JustPeDashboard : AppCompatActivity() {
         Toast.makeText(this, R.string.double_back_press_msg, Toast.LENGTH_SHORT).show()
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
-
 
     private fun requestLocationPermission() {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
@@ -850,6 +857,7 @@ class JustPeDashboard : AppCompatActivity() {
     fun getBankDetails(retailerCode: String){
         val requestForBankDetails = CheckBankDetailsModel(reatilerCode =  retailerCode)
         Log.d("bankdetailereq", Gson().toJson(requestForBankDetails))
+
         getAllApiServiceViewModel.getBankDetails(requestForBankDetails).observe(this) { resource ->
             resource?.let {
                 when (it.apiStatus) {
@@ -877,7 +885,6 @@ class JustPeDashboard : AppCompatActivity() {
                                         vpa =  getdata[0]!!.vpaid
                                         setQRCodeWithBankDetailsCodition()
                                     }
-
                                 }
                                 else{
 

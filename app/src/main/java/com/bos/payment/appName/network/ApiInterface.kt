@@ -99,8 +99,6 @@ import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.Recharg
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeCategoryResponse
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeOperatorNameResp
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeOperatorsReq
-import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargePlanReq
-import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeViewPlanResponse
 import com.bos.payment.appName.data.model.recharge.operator.RechargeOperatorsListReq
 import com.bos.payment.appName.data.model.recharge.operator.RechargeOperatorsListRes
 import com.bos.payment.appName.data.model.recharge.payout.PayoutAmountReq
@@ -121,6 +119,17 @@ import com.bos.payment.appName.data.model.serviceWiseTrans.ServiceWiseTransactio
 import com.bos.payment.appName.data.model.serviceWiseTrans.TransactionReportReq
 import com.bos.payment.appName.data.model.serviceWiseTrans.TransactionReportRes
 import com.bos.payment.appName.data.model.stateDistrict.GetStateRes
+import com.bos.payment.appName.data.model.supportmanagement.AddCommentReq
+import com.bos.payment.appName.data.model.supportmanagement.AddCommentResp
+import com.bos.payment.appName.data.model.supportmanagement.ChatCommentResp
+import com.bos.payment.appName.data.model.supportmanagement.TicketStatusResp
+import com.bos.payment.appName.data.model.transactionreportsmodel.CheckRaiseTicketExistReq
+import com.bos.payment.appName.data.model.transactionreportsmodel.CheckRaiseTicketExistResp
+import com.bos.payment.appName.data.model.transactionreportsmodel.RaiseTicketResp
+import com.bos.payment.appName.data.model.transactionreportsmodel.ReportListReq
+import com.bos.payment.appName.data.model.transactionreportsmodel.ReportListResp
+import com.bos.payment.appName.data.model.transactionreportsmodel.TransactionReportsReq
+import com.bos.payment.appName.data.model.transactionreportsmodel.TransactionReportsResp
 import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsReq
 import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsRes
 import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsWithCalculationReq
@@ -156,6 +165,7 @@ import com.bos.payment.appName.data.model.walletBalance.walletBalanceCal.WalletB
 import com.bos.payment.appName.data.model.walletBalance.walletBalanceCal.WalletBalanceRes
 import com.example.example.FetchConsumerDetailsRes
 import com.example.example.LoginReq
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -163,7 +173,11 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiInterface {
@@ -195,7 +209,6 @@ interface ApiInterface {
     // Generate staticQR Code
     @POST("api/AOP/BOSVPAStaticQR")
     suspend fun createQRCode(@Body req: com.bos.payment.appName.data.model.justpaymodel.GenerateQRCodeReq): Response<GenerateQRCodeResponse>?
-
 
     @POST("/api/Login/UserLogin")
     suspend fun login(@Body req: LoginReq): Response<LoginRes>?
@@ -476,33 +489,78 @@ interface ApiInterface {
     @POST("api/Air/api/AirbookingList")
     suspend fun getAirTicketListReq(@Body req: GetAirTicketListReq): Response<AirTicketListResp>? // Annu
 
+
     // new api for recharge............................................................................
 
-    @POST("api/AOP/V2/GetRechargeCategories")
+
+    @POST("api/AOP/V2/Mobile/GetRechargeCategories")
     suspend fun getRechargeCategory(@Body req: RechargeCategoryReq): Response<RechargeCategoryResponse>? // Annu
 
 
-    @POST("api/AOP/V2/GetRechargeSubCategories")
+    @POST("api/AOP/V2/Mobile/GetRechargeSubCategories")
     suspend fun getRechargeOperatorNameReq(@Body req: RechargeOperatorsReq): Response<RechargeOperatorNameResp>? // Annu
 
 
-    @POST("api/AOP/V2/RechargehlrCheck")
+    @POST("api/AOP/V2/Mobile/RechargehlrCheck")
     suspend fun getMobileWiseRechargeReq(@Body req: MobileWiseRechargeReq): Response<MobileWiseRechargeResp>? // Annu
 
 
-    @POST("api/AOP/V2/GetRechargeBrowsePlan")
+    @POST("api/AOP/V2/Mobile/GetRechargeBrowsePlan")
     fun getRechargePlanReq(@Body body: RequestBody): Call<ResponseBody>
 
 
-    @POST("api/AOP/V2/MobileRecharge")
+    @POST("api/AOP/V2/Mobile/MobileRecharge")
     suspend fun getMobileRechargeReq(@Body req: com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileRechargeReq): Response<MobileRechargeRespo>? // Annu
 
 
-    @POST("api/AOP/V2/GetDthInfo")
+    @POST("api/AOP/V2/Mobile/GetDthInfo")
     suspend fun getDthInfoPlanReq(@Body req: DthInfoReq): Response<DthInfoPlanResp>?
 
 
+    // transaction recharge reports....................................................
 
+    @POST("api/common/Commonlist")
+    suspend fun getReportListReq(@Body req: ReportListReq): Response<ReportListResp>?
+
+
+    @POST("api/Reports/TransactionReport")
+    suspend fun getTransactionReportsReq(@Body req: TransactionReportsReq): Response<TransactionReportsResp>?
+
+
+    @POST("api/Complaint/CheckTransactionExists")
+    suspend fun getcheckTransactionExitsReq(@Body req: CheckRaiseTicketExistReq): Response<CheckRaiseTicketExistResp>?
+
+
+    @Multipart
+    @POST("api/Complaint/CreateTicket")
+    suspend fun uploadDocumentForRaiseTicket(
+        @Part("UserCode") mode: RequestBody,
+        @Part("ServiceCode") rid: RequestBody,
+        @Part("Subject") loancode: RequestBody,
+        @Part("Description") emiAmount: RequestBody,
+        @Part("Priority") paymentDate: RequestBody,
+        @Part("AdminCode") paidAmount: RequestBody,
+        @Part("ImagePath1") paymentMode: RequestBody,
+        @Part("ImagePath2") utrNumber: RequestBody,
+        @Part("ImagePath3") remarks: RequestBody,
+        @Part("TransactionID") createdBy: RequestBody,
+        @Part("TransactionSummary") receiptNo: RequestBody,
+        @Part imageFile1: MultipartBody.Part,
+        @Part imageFile2: MultipartBody.Part,
+        @Part imageFile3: MultipartBody.Part
+    ): Response<RaiseTicketResp>
+
+
+    @GET("api/Complaint/TicketList")
+    suspend fun getticketstatusreq(@Query("adminCode") userId: String, @Query("userCode") status: String): Response<TicketStatusResp>
+
+
+    @GET("api/Complaint/TicketComments/{complaintId}")
+    suspend fun getTicketComments(@Path("complaintId") complaintId: Int): Response<ChatCommentResp>
+
+
+    @POST("api/Complaint/AddComment")
+    suspend fun addcommentReq(@Body req: AddCommentReq): Response<AddCommentResp>?
 
 
 }

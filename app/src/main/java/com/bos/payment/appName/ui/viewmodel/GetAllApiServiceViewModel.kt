@@ -16,6 +16,12 @@ import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.Recharg
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeOperatorsReq
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargePlanReq
 import com.bos.payment.appName.data.model.serviceWiseTrans.TransactionReportReq
+import com.bos.payment.appName.data.model.supportmanagement.AddCommentReq
+import com.bos.payment.appName.data.model.supportmanagement.TicketStatusReq
+import com.bos.payment.appName.data.model.transactionreportsmodel.CheckRaiseTicketExistReq
+import com.bos.payment.appName.data.model.transactionreportsmodel.RaiseTicketReq
+import com.bos.payment.appName.data.model.transactionreportsmodel.ReportListReq
+import com.bos.payment.appName.data.model.transactionreportsmodel.TransactionReportsReq
 import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsReq
 import com.bos.payment.appName.data.model.travel.flight.FlightRequeryReq
 import com.bos.payment.appName.data.model.travel.flight.GetAirTicketListReq
@@ -315,5 +321,127 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
         }
     }
 
+
+
+    fun sendForReportListReq(req: ReportListReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.sendForReportListReq(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(ApiResponse.error(data = null, message = "Something went wrong: ${e.localizedMessage}"))
+        }
+    }
+
+
+
+    fun sendTransactionReportsReq(req: TransactionReportsReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.sendTransactionReportsReq(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(ApiResponse.error(data = null, message = "Something went wrong: ${e.localizedMessage}"))
+        }
+    }
+
+
+    fun sendTransactionRaiseTicketExitsReq(req: CheckRaiseTicketExistReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.sendTransactionRaiseTicketExitsReq(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(ApiResponse.error(data = null, message = "Something went wrong: ${e.localizedMessage}"))
+        }
+    }
+
+
+
+    fun uploadRaiseTicketReq(req: RaiseTicketReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            emit(ApiResponse.success(data = repository.uploadRaiseTicketReq(req)))
+        }
+        catch (exception: Exception) {
+            emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))
+        }
+    }
+
+
+    fun sendTicketStatusReq(req: TicketStatusReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            emit(ApiResponse.success(data = repository.sendTicketStatusReq(req)))
+        }
+        catch (exception: Exception) {
+            emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))
+        }
+    }
+
+
+
+    fun sendTicketCommentListReq(complaintId: Int) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            emit(ApiResponse.success(data = repository.sendTicketCommentListReq(complaintId)))
+        }
+        catch (exception: Exception) {
+            emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))
+        }
+    }
+
+
+
+    fun sendTicketCommentListReq(commentreq: AddCommentReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            emit(ApiResponse.success(data = repository.addcommentReq(commentreq)))
+        }
+        catch (exception: Exception) {
+            emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))
+        }
+    }
 
 }

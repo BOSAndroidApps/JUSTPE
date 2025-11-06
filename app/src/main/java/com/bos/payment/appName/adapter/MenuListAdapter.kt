@@ -16,6 +16,7 @@ import com.bos.payment.appName.ui.view.Dashboard.Wallet.Fragment.RechargeFragmen
 import com.bos.payment.appName.ui.view.Dashboard.activity.DashboardActivity
 import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard
 import com.bos.payment.appName.ui.view.Dashboard.dmt.PayoutDMT
+import com.bos.payment.appName.ui.view.Dashboard.transactionreports.TransactionReportsActivity
 import com.bos.payment.appName.ui.view.moneyTransfer.ScannerFragment
 
 class MenuListAdapter(
@@ -71,7 +72,7 @@ class MenuListAdapter(
                     "M00013" -> navigateToFragment(CreditCardDetailsFragment(), "CreditCard")
                     "M00014" -> context.startActivity(Intent(context, GenerateQRCodeActivity::class.java))
                     "M00030" -> context.startActivity(Intent(context, ServiceWiseTransaction::class.java))
-                    "M00031" -> context.startActivity(Intent(context, ServiceWiseTransaction::class.java))
+                    "M00031" -> context.startActivity(Intent(context, TransactionReportsActivity::class.java))
                     "M00008" -> context.startActivity(Intent(context, JustPeDashboard::class.java /*DashboardActivity::class.java*/))
                     "M00042" -> context.startActivity(Intent(context,JustPeDashboard::class.java /*DashboardActivity::class.java*/))
                     "M00009" -> context.startActivity(Intent(context,JustPeDashboard::class.java /*DashboardActivity::class.java*/))
@@ -81,7 +82,7 @@ class MenuListAdapter(
             }
         }
     }
-
+     //TransactionReportsActivity
     // Navigation logic
     private fun navigateToFragment(fragment: Fragment, rechargeType: String) {
         fragmentManager.beginTransaction()

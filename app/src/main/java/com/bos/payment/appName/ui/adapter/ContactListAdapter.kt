@@ -25,8 +25,7 @@ class ContactListAdapter(var context: android.content.Context,var listContact:Li
     )
 
 
-    inner class ViewHolder(val binding: ContactlistItemBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ContactlistItemBinding) : RecyclerView.ViewHolder(binding.root)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactListAdapter.ViewHolder {

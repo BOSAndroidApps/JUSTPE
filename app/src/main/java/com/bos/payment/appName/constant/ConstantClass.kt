@@ -1,5 +1,14 @@
 package com.bos.payment.appName.constant
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import java.io.FileOutputStream
 import java.util.Random
 
 object ConstantClass {
@@ -23,6 +32,28 @@ object ConstantClass {
         }
 
         return uniqueNumbers.first()
+    }
+
+
+    fun saveImageToCache(context: Context, imageUri: Uri, filename: String): File? {
+        return try {
+            val inputStream = context.contentResolver.openInputStream(imageUri) ?: return null
+            val bitmap = BitmapFactory.decodeStream(inputStream) ?: return null
+            inputStream.close()
+
+            val fileName = "$filename${System.currentTimeMillis()}.jpg"
+            val tempFile = File(context.cacheDir, fileName)
+
+            FileOutputStream(tempFile).use { output ->
+                // Compress to ~70% quality
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, output)
+            }
+
+            tempFile
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
 
