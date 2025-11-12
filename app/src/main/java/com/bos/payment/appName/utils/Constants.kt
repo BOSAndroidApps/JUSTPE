@@ -1,17 +1,32 @@
 package com.bos.payment.appName.utils
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesDataItem
 import com.bos.payment.appName.data.model.recharge.operator.Data
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.gson.internal.bind.ArrayTypeAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -206,6 +221,9 @@ object Constants {
     var ISQRCodeActivate = "is_QRCodeActivate"
     var StaticQR = "staticQR"
    var TicketStatus =  "Ticket Status"
+   var AdminBank =  "Adminbank"
+   var BranchNamee =  "branchname"
+   var CashDeposit =  "Cash Deposit"
 
 
     val KEY_192 = "your-24-byte-key-here!".toByteArray(Charsets.UTF_8) // 24 bytes
@@ -311,6 +329,23 @@ object Constants {
     var RETAILERALLSERVICES: List<RetailerWiseServicesDataItem?>? = listOf()
 
 
+
+    fun isInternetAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork ?: return false
+            val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+            return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        }
+        else {
+            val networkInfo = connectivityManager.activeNetworkInfo
+            return networkInfo != null && networkInfo.isConnected
+        }
+
+    }
+
+
     fun uploadDataOnFirebaseConsole(data:String, collectionPath:String,context: Context){
         val context = context
         val db = Firebase.firestore
@@ -393,6 +428,52 @@ object Constants {
             else -> null
         }
     }
+
+    suspend fun downloadImageFromUrl(context: Context, imageUrl: String, fileName: String = "downloaded_image.jpg"): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                val url = URL(imageUrl)
+                val connection = url.openConnection()
+                connection.connect()
+
+                val inputStream = connection.getInputStream()
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+
+                saveImageToDevice(context, bitmap, fileName)
+                true // ✅ Success
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false // ❌ Failed
+            }
+        }
+    }
+
+    private fun saveImageToDevice(context: Context, bitmap: Bitmap, fileName: String) {
+        val outputStream: OutputStream?
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // Android 10 and above
+            val contentValues = ContentValues().apply {
+                put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+                put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+                put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/MyAppImages")
+            }
+
+            val imageUri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            outputStream = context.contentResolver.openOutputStream(imageUri!!)
+        } else {
+            // Older Android versions
+            val imagesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
+            val file = File(imagesDir, fileName)
+            outputStream = FileOutputStream(file)
+        }
+
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream!!)
+        outputStream?.flush()
+        outputStream?.close()
+    }
+
+
 
 
 

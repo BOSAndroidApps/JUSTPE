@@ -8,6 +8,9 @@ import com.bos.payment.appName.data.model.justpaymodel.RetailerContactListReques
 import com.bos.payment.appName.data.model.justpaymodel.SendMoneyToMobileReqModel
 import com.bos.payment.appName.data.model.justpaymodel.UpdateBankDetailsReq
 import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesRequest
+import com.bos.payment.appName.data.model.makepaymentnew.BankDetailsReq
+import com.bos.payment.appName.data.model.makepaymentnew.RaiseMakePaymentReq
+import com.bos.payment.appName.data.model.makepaymentnew.ReferenceIDGenerateReq
 import com.bos.payment.appName.data.model.menuList.GetAllMenuListReq
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.GetPayoutCommercialReq
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.mobileCharge.GetCommercialReq
@@ -438,6 +441,39 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
         emit(ApiResponse.loading(data = null))
         try {
             emit(ApiResponse.success(data = repository.addcommentReq(commentreq)))
+        }
+        catch (exception: Exception) {
+            emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))
+        }
+    }
+
+
+    fun getReferenceIdReq(referenceID: ReferenceIDGenerateReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            emit(ApiResponse.success(data = repository.getReferenceID(referenceID)))
+        }
+        catch (exception: Exception) {
+            emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))
+        }
+    }
+
+
+    fun getbanklistreq(banklistreq: BankDetailsReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            emit(ApiResponse.success(data = repository.getbanklistreq(banklistreq)))
+        }
+        catch (exception: Exception) {
+            emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))
+        }
+    }
+
+
+    fun RaisMakePaymentReq(req: RaiseMakePaymentReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            emit(ApiResponse.success(data = repository.uploadDocumentForRaisAmountTransferAdminReq(req)))
         }
         catch (exception: Exception) {
             emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))

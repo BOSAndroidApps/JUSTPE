@@ -20,27 +20,8 @@
             android:layout_alignParentLeft="true"
             android:layout_height="30dp"/>
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:text="@string/app_name"-->
-<!--            android:id="@+id/tvToolbarName"-->
-<!--            android:textSize="19dp"-->
-<!--            android:fontFamily="@font/roboto_medium"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:layout_centerInParent="true"-->
-<!--            android:layout_height="wrap_content"/>-->
-
-<!--        <ImageView-->
-<!--            android:layout_width="20dp"-->
-<!--            android:src="@drawable/menu_bar"-->
-<!--            android:layout_marginLeft="15dp"-->
-<!--            android:id="@+id/menuBarBtn"-->
-<!--            android:layout_marginEnd="@dimen/dimen_10sp"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_height="20dp"/>-->
-
     </RelativeLayout>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

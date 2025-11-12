@@ -60,6 +60,11 @@ import com.bos.payment.appName.data.model.loginSignUp.signUp.SignUpRes
 import com.bos.payment.appName.data.model.loginSignUp.ValidateReferenceIdRes
 import com.bos.payment.appName.data.model.makePayment.GetMakePaymentReq
 import com.bos.payment.appName.data.model.makePayment.GetMakePaymentRes
+import com.bos.payment.appName.data.model.makepaymentnew.BankDetailsReq
+import com.bos.payment.appName.data.model.makepaymentnew.BankDetailsResp
+import com.bos.payment.appName.data.model.makepaymentnew.MakePaymentReportResp
+import com.bos.payment.appName.data.model.makepaymentnew.ReferenceIDGenerateReq
+import com.bos.payment.appName.data.model.makepaymentnew.ReferenceIDGenerateResp
 import com.bos.payment.appName.data.model.menuList.GetAllMenuListReq
 import com.bos.payment.appName.data.model.menuList.GetAllMenuListRes
 import com.bos.payment.appName.data.model.merchant.activeInActiveStatus.GetAPIActiveInactiveStatusReq
@@ -182,7 +187,7 @@ import retrofit2.http.Query
 
 interface ApiInterface {
 
-/*   BASE URL =  https://bosapi.bos.center*/
+     /*  BASE URL =  https://bosapi.bos.center*/
 
      @FormUrlEncoded
      @POST("api/Banner/BannerDetail")
@@ -200,7 +205,6 @@ interface ApiInterface {
     // update  BankDetails
     @POST("api/Retailer/UpdateQRCodeStatus")
     suspend fun updateBankDetails(@Body req: UpdateBankDetailsReq): Response<UpdateBankDetailsResponse>?
-
 
     // Generate virtual account
     @POST("api/AOP/SNBOSCreateVPA")
@@ -562,5 +566,45 @@ interface ApiInterface {
     @POST("api/Complaint/AddComment")
     suspend fun addcommentReq(@Body req: AddCommentReq): Response<AddCommentResp>?
 
+    //make payment........................................................................
+
+    @POST("api/BankMaster/GetAccountList")
+    suspend fun getAdminBankList(@Body req: BankDetailsReq): Response<BankDetailsResp>?
+
+
+    @POST("api/Payout/GenerateSeriesNextCode")
+    suspend fun getRandomReferenceID(@Body req: ReferenceIDGenerateReq): Response<ReferenceIDGenerateResp>?
+
+
+    @Multipart
+    @POST("api/MakePayment/ManageMakePaymentDetails")
+    suspend fun uploadDocumentForRaisAmountTransferAdmin(
+        @Part("Mode") mode: RequestBody,
+        @Part("RID") rid: RequestBody,
+        @Part("RefrenceID") referenceid: RequestBody,
+        @Part("PaymentMode") paymentmode: RequestBody,
+        @Part("PaymentDate") paymentDate: RequestBody,
+        @Part("DepositBankName") depositbank: RequestBody,
+        @Part("BranchCode_ChecqueNo") branchcode: RequestBody,
+        @Part("Remarks") remark: RequestBody,
+        @Part("TransactionID") transactionid: RequestBody,
+        @Part("DocumentPath") documentpath: RequestBody,
+        @Part("RecordDateTime") recorddatetime: RequestBody,
+        @Part("UpdatedBy") updatedby: RequestBody,
+        @Part("UpdatedOn") updatedon: RequestBody,
+        @Part("ApprovedBy") approvedby: RequestBody,
+        @Part("ApprovedDateTime") approveddatetime: RequestBody,
+        @Part("ApporvedStatus") approvestatus: RequestBody,
+        @Part("RegistrationId") registratiionid: RequestBody,
+        @Part("ApporveRemakrs") approveremarks: RequestBody,
+        @Part("Amount") amount: RequestBody,
+        @Part("CompanyCode") companycode: RequestBody,
+        @Part("BeneId") beneid: RequestBody,
+        @Part("AccountHolder") accountholder: RequestBody,
+        @Part("Payment_type") paymenttype: RequestBody,
+        @Part("Flag") flag: RequestBody,
+        @Part("AdminCode") admincode: RequestBody,
+        @Part imageFile1: MultipartBody.Part
+    ): Response<MakePaymentReportResp>
 
 }

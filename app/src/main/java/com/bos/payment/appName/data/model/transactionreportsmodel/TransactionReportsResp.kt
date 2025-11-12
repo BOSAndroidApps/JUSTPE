@@ -35,7 +35,7 @@ data class DataItem(
 	val servicETYPE: String? = null,
 
 	@field:SerializedName("ipAddress")
-	val ipAddress: Any? = null,
+	val ipAddress: String? = null,
 
 	@field:SerializedName("gst")
 	val gst: String? = null,
@@ -44,7 +44,7 @@ data class DataItem(
 	val transferto: String? = null,
 
 	@field:SerializedName("tdsAmt")
-	val tdsAmt: Any? = null,
+	val tdsAmt: String? = null,
 
 	@field:SerializedName("dr")
 	val dr: String? = null,
@@ -53,7 +53,7 @@ data class DataItem(
 	val cr: String? = null,
 
 	@field:SerializedName("flagRemarks")
-	val flagRemarks: Any? = null,
+	val flagRemarks: String? = null,
 
 	@field:SerializedName("transferfrom")
 	val transferfrom: String? = null,
@@ -62,19 +62,19 @@ data class DataItem(
 	val sNo: String? = null,
 
 	@field:SerializedName("serviceCh")
-	val serviceCh: Any? = null,
+	val serviceCh: String? = null,
 
 	@field:SerializedName("tranAmt")
-	val tranAmt: Any? = null,
+	val tranAmt: String? = null,
 
 	@field:SerializedName("serviceCh_Gst")
-	val serviceChGst: Any? = null,
+	val serviceChGst: String? = null,
 
 	@field:SerializedName("time")
 	val time: String? = null,
 
 	@field:SerializedName("retailerComm")
-	val retailerComm: Any? = null,
+	val retailerComm: String? = null,
 
 	@field:SerializedName("id")
 	val id: String? = null,

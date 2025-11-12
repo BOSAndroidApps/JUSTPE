@@ -93,7 +93,6 @@
 
             </RelativeLayout>
 
-
             <RelativeLayout
                 android:id="@+id/secondlayout"
                 android:layout_width="match_parent"
@@ -339,13 +338,42 @@
                 app:layout_constraintTop_toBottomOf="@+id/recyclerView"/>
 
             <RelativeLayout
-                android:id="@+id/fingerPrintLayout"
+                android:id="@+id/makepaymentlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/dimen_4dp"
                 app:layout_constraintTop_toBottomOf="@+id/supportlist">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/screen_lock"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Make Payment"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/fingerPrintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dimen_4dp"
+                app:layout_constraintTop_toBottomOf="@+id/makepaymentlayout">
 
                 <ImageView
                     android:layout_width="30dp"

@@ -66,7 +66,7 @@ class MoneyTransferServicesAdapter( var servicesList:List<MoneyTransferServicesM
            {
              // context.startActivity(Intent(context, FlightMainActivity::class.java))
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(FlightMainFragment(), "fight","FlightMainFragment")
+                   activity.callFragment(FlightMainFragment(), "fight",servicesList[position].featurecode,"FlightMainFragment")
                }
            }
 
@@ -75,67 +75,67 @@ class MoneyTransferServicesAdapter( var servicesList:List<MoneyTransferServicesM
                //context.startActivity(Intent(context, BookingTravel::class.java))
 
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(BusBookingMainFragment(), "bus","BusMainFragment")
+                   activity.callFragment(BusBookingMainFragment(), "bus",servicesList[position].featurecode,"BusMainFragment")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.recharge))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "mobile","")
+                   activity.callFragment(RechargeFragment(), "mobile",servicesList[position].featurecode,"")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.postpaid))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "postpaid","")
+                   activity.callFragment(RechargeFragment(), "postpaid",servicesList[position].featurecode,"")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.dth))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "dth","")
+                   activity.callFragment(RechargeFragment(), "dth",servicesList[position].featurecode,"")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.electricity))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "Electricity","")
+                   activity.callFragment(RechargeFragment(), "Electricity",servicesList[position].featurecode,"")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.gas))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "Gas","")
+                   activity.callFragment(RechargeFragment(), "Gas",servicesList[position].featurecode,"")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.waterbill))){
                if (activity is AllServicesSelectionActivity) {
-                   activity. callFragment(RechargeFragment(), "Water","")
+                   activity. callFragment(RechargeFragment(), "Water",servicesList[position].featurecode,"")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.broadband))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "Broadband","")
+                   activity.callFragment(RechargeFragment(), "Broadband",servicesList[position].featurecode,"")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.emi))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "EMI","")
+                   activity.callFragment(RechargeFragment(), "EMI",servicesList[position].featurecode,"")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.creditcard))){
                if (activity is AllServicesSelectionActivity) {
-                   activity. callFragment(CreditCardDetailsFragment(), "CreditCard","")
+                   activity. callFragment(CreditCardDetailsFragment(), "CreditCard",servicesList[position].featurecode,"")
                }
            }
 
            if(servicesList[position].name.equals(context.getString(R.string.muncipal))){
                if (activity is AllServicesSelectionActivity) {
-                   activity.callFragment(RechargeFragment(), "Municipality","")
+                   activity.callFragment(RechargeFragment(), "Municipality",servicesList[position].featurecode,"")
                }
            }
 

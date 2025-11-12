@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/datelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        android:layout_marginStart="@dimen/dimen_4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/bg_black_border"
+        android:padding="@dimen/dimen_8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date Wise"
+            android:textSize="12sp"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/toDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Date"
+            android:paddingVertical="@dimen/dimen_4dp"
+            android:textSize="@dimen/dimen_14sp"
+            android:textColor="@color/edittext_color"
+            android:drawableEnd="@drawable/baseline_calendar_month_24"
+            android:drawablePadding="@dimen/dimen_4dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/spinnerlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimen_4dp"
+        app:layout_constraintTop_toBottomOf="@+id/datelayout"
+        android:orientation="vertical">
+
+        <TextView
+            android:text="Report Mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:padding="@dimen/dimen_4dp"
+            android:textSize="@dimen/dimen_14sp"
+            android:textColor="@color/edittext_color"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/dimen_10dp"
+            android:paddingEnd="@dimen/dimen_10dp"
+            android:background="@drawable/bg_black_border">
+
+            <Spinner
+                android:id="@+id/reportmode"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/dropdownListPreferredItemHeight"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/makepaymentreports"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/makepaymentreport"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerlayout"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/notfoundlayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerlayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <ImageView
+            android:layout_width="@dimen/dimen_150sp"
+            android:layout_height="@dimen/dimen_150sp"
+            android:src="@drawable/notfoundimage"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

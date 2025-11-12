@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 
 data class GetMakePaymentReq(
-
     @SerializedName("RegistrationId"  ) var RegistrationId: String? = null,
     @SerializedName("Amount"          ) var Amount: String? = null,
     @SerializedName("DepositBankName" ) var DepositBankName: String? = null,

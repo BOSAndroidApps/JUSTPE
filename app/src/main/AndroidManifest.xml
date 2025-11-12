@@ -58,9 +58,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
-            android:name=".ui.view.supportmanagement.ChatToAdminActivity"
+            android:name=".ui.view.makepayment.AdminBankListActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.view.makepayment.MakePaymentActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.view.supportmanagement.ChatToAdminActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.supportmanagement.TicketStatus"
             android:exported="false"
@@ -368,7 +376,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

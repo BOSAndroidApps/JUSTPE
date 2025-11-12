@@ -15,6 +15,7 @@ import com.bos.payment.appName.R
 import com.bos.payment.appName.databinding.ActivityRechargeBinding
 import com.bos.payment.appName.ui.view.Dashboard.activity.DashboardActivity
 import com.bos.payment.appName.ui.view.Dashboard.Wallet.Fragment.RechargeFragment
+import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard
 import com.bos.payment.appName.utils.Constants
 import com.bos.payment.appName.utils.MStash
 
@@ -60,29 +61,9 @@ class RechargeSuccessfulPageActivity : AppCompatActivity() {
 
             // Logic for service and commission charges
             when {
-                // Handle retailer commission visibility and data
-//                !mStash!!.getStringValue(Constants.retailerCommissionWithoutTDS, "").isNullOrEmpty() -> {
-//                    binding.retailerCommissionLayout.visibility = View.VISIBLE
-//                    binding.customerCommWithoutTDSNameLayout.visibility = View.GONE
-//                    binding.serviceChargeLayout.visibility = View.GONE
-//                    binding.totalAmount.text = "₹${intent.getStringExtra("amount")}"
-//                }
-//
-//                // Handle customer commission visibility and data
-//                !mStash!!.getStringValue(Constants.customerCommissionWithoutTDS, "").isNullOrEmpty() -> {
-//                    binding.retailerCommissionLayout.visibility = View.VISIBLE
-//                    binding.customerCommWithoutTDSNameLayout.visibility = View.VISIBLE
-//                    binding.retailerCommWithoutTDSNamelayout.visibility = View.GONE
-//                    binding.serviceChargeLayout.visibility = View.GONE
-//                    binding.totalAmount.text = "₹${intent.getStringExtra("amount")}"
-//                }
-
                 // Handle service charge with GST visibility and data
                 !mStash!!.getStringValue(Constants.serviceChargeWithGST, "").isNullOrEmpty() -> {
-//                    binding.retailerCommissionLayout.visibility = View.GONE
                     binding.serviceChargeLayout.visibility = View.VISIBLE
-//                    binding.totalAmount.text = "₹${intent.getStringExtra("totalTransaction")}"
-//                    binding.totalAmount.text = "₹${mStash!!.getStringValue(Constants.actualAmountServiceChargeWithGST, "")}"
                 }
 
                 else -> {
@@ -91,13 +72,7 @@ class RechargeSuccessfulPageActivity : AppCompatActivity() {
             }
 
             // Set remaining commission and tax values
-//            binding.retailerCommWithoutTDSText.text = intent.getStringExtra("retailerCommissionWithoutTDS")
-//            binding.customerCommWithoutTDSText.text = intent.getStringExtra("customerCommissionWithoutTDS")
-//            binding.tdsText.text = intent.getStringExtra("tdsTax")
             binding.totalAmount.text = "₹" + intent.getStringExtra("totalTransaction")
-
-//            binding.serviceChargeText.text = intent.getStringExtra("serviceCharge")
-//                binding.serviceChargeCommissionLayout.visibility = View.VISIBLE
             binding.serviceChargeWithGSTText.text = "₹" + intent.getStringExtra("serviceChargeWithGST")
             binding.totalTransactionText.text = "₹" + intent.getStringExtra("totalTransaction")
 
@@ -117,72 +92,6 @@ class RechargeSuccessfulPageActivity : AppCompatActivity() {
             }
         }
 
-//        binding.let {
-//            binding.operatorName.text =
-//                "Pay " + intent.getStringExtra("operatorName") + " Prepaid"
-////            binding.totalAmount.text = "₹" + intent.getStringExtra("amount")
-//            binding.rechargeAmount.text = "₹" + intent.getStringExtra("amount")
-////            binding.tax.text = "₹" + intent.getStringExtra("tdsTax")
-//            binding.dateAndTime.text = intent.getStringExtra("dateAndTime")
-//            binding.transactionId.text = intent.getStringExtra("transactionId")
-//            binding.referenceId.text = intent.getStringExtra("referenceId")
-//            binding.mobileNo.text = "+91" + intent.getStringExtra("mobileNumber")
-//
-//            //  service and commission charge
-//            if (mStash!!.getStringValue(Constants.retailerCommissionWithoutTDS, "") != null){
-//                binding.customerCommWithoutTDSNameLayout.visibility = View.GONE
-//                binding.serviceChargeLayout.visibility = View.GONE
-//                binding.retailerCommissionLayout.visibility = View.VISIBLE
-//                binding.totalAmount.text = "₹" + intent.getStringExtra("amount")
-//
-//            } else if (mStash!!.getStringValue(Constants.customerCommissionWithoutTDS,"") != null){
-//                binding.retailerCommissionLayout.visibility = View.VISIBLE
-//                binding.customerCommWithoutTDSNameLayout.visibility = View.VISIBLE
-//                binding.retailerCommWithoutTDSNamelayout.visibility = View.GONE
-//                binding.serviceChargeLayout.visibility = View.GONE
-//                binding.totalAmount.text = "₹" + intent.getStringExtra("amount")
-//
-//            }else if (mStash!!.getStringValue(Constants.serviceChargeWithGST, "") != null){
-//                binding.retailerCommissionLayout.visibility = View.GONE
-//                binding.serviceChargeLayout.visibility = View.VISIBLE
-//                binding.totalAmount.text = "₹" + intent.getStringExtra("totalTransaction")
-//
-//            }else {
-//
-//            }
-//            binding.retailerCommWithoutTDSText.text = intent.getStringExtra("retailerCommissionWithoutTDS")
-//            binding.customerCommWithoutTDSText.text = intent.getStringExtra("customerCommissionWithoutTDS")
-//            binding.tdsText.text = intent.getStringExtra("tdsTax")
-//            binding.serviceChargeText.text = intent.getStringExtra("serviceCharge")
-//            binding.serviceChargeWithGSTText.text = intent.getStringExtra("serviceChargeWithGST")
-//            binding.totalTransactionText.text = intent.getStringExtra("totalTransaction")
-//
-//            val isSuccess = (intent.getStringExtra("Status") == "true")
-//
-//            val colorResId = if (isSuccess) {
-//                R.drawable.green_circle
-//            } else {
-//                R.drawable.red_circle
-//            }
-//
-//            binding.circle.setBackgroundResource(colorResId)
-//            binding.status.text = if (isSuccess) {
-//                " Recharge Successful"
-//            } else {
-//                " Recharge Failed"
-//            }
-//
-//
-//
-//            val imageResourceName = intent.getStringExtra("image")
-//            if (imageResourceName != null) {
-//                val imageResId = resources.getIdentifier(imageResourceName, "drawable", packageName)
-//                it.operatorLogo.setImageResource(imageResId)
-//            } else {
-//                it.operatorLogo.setImageResource(R.drawable.no_image)
-//            }
-//        }
-
     }
 
     private fun callFragment(fragment: Fragment, rechargeType: String) {
@@ -198,7 +107,7 @@ class RechargeSuccessfulPageActivity : AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        startActivity(Intent(this, DashboardActivity::class.java))
+        startActivity(Intent(this, JustPeDashboard::class.java))
         finish()
     }
 

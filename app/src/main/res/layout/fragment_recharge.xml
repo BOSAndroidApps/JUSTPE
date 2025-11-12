@@ -168,6 +168,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dimen_4dp"
                     tools:listitem="@layout/showing_details_dthinfo"
+                    android:visibility="gone"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                 <TextView
@@ -236,6 +237,7 @@
                     android:textColorHint="@color/button_text_gray"
                     android:textSize="12dp"
                     android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/userNameText"
                     android:layout_width="wrap_content"
@@ -260,42 +262,6 @@
                     android:textColorHint="@color/button_text_gray"
                     android:textSize="12dp"
                     android:visibility="gone" />
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/llLayout"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_alignParentBottom="true"-->
-<!--                    android:layout_marginTop="30dp"-->
-<!--                    android:layout_marginBottom="30dp"-->
-<!--                    android:orientation="horizontal"-->
-<!--                    android:weightSum="2">-->
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/cancelBtnService"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="45dp"-->
-<!--                        android:layout_marginRight="15dp"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:background="@drawable/bg_button_border_blue"-->
-<!--                        android:fontFamily="@font/roboto_medium"-->
-<!--                        android:gravity="center"-->
-<!--                        android:text="Cancel"-->
-<!--                        android:textColor="@color/colorPrimary"-->
-<!--                        android:textSize="15dp" />-->
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/proceedBtn"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="45dp"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:background="@drawable/bg_button_blue"-->
-<!--                        android:fontFamily="@font/roboto_medium"-->
-<!--                        android:gravity="center"-->
-<!--                        android:text="Proceed"-->
-<!--                        android:textColor="@color/white"-->
-<!--                        android:textSize="15dp" />-->
-<!--                </LinearLayout>-->
-
 
                 <LinearLayout
                     android:id="@+id/ll"
@@ -342,10 +308,8 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="20dp"
-                        android:layout_marginBottom="@dimen/dimen_4sp"
-                        app:cardElevation="@dimen/dimen_10dp"
-                        app:cardMaxElevation="10dp">
+                        app:cardCornerRadius="10dp"
+                        app:cardUseCompatPadding="true">
 
                         <!-- Vertical layout for different commission sections -->
                         <LinearLayout
@@ -354,68 +318,6 @@
                             android:orientation="vertical"
                             android:layout_marginBottom="@dimen/dimen_10dp"
                             android:padding="8dp">
-
-
-                            <!-- Distributor Commission Section -->
-<!--                            <LinearLayout-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:orientation="horizontal"-->
-<!--                                android:weightSum="2"-->
-<!--                                android:layout_marginTop="8dp">-->
-
-<!--                                <TextView-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight="1.5"-->
-<!--                                    android:text="Dis Commission"-->
-<!--                                    android:textAllCaps="false"-->
-<!--                                    android:textColor="@color/black"-->
-<!--                                    android:textSize="@dimen/dimen_18sp" />-->
-
-<!--                                <TextView-->
-<!--                                    android:id="@+id/dis_CommissionType"-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight=".5"-->
-<!--                                    android:text="0.00"-->
-<!--                                    android:textAllCaps="false"-->
-<!--                                    android:textColor="@color/black"-->
-<!--                                    android:textSize="@dimen/dimen_18sp" />-->
-
-<!--                            </LinearLayout>-->
-
-                            <!-- Sub Distributor Commission Section -->
-<!--                            <LinearLayout-->
-<!--                                android:id="@+id/Sub_Dis_CommissionLayout"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:orientation="horizontal"-->
-<!--                                android:weightSum="2"-->
-<!--                                android:layout_marginTop="16dp">-->
-
-<!--                                <TextView-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight="1.5"-->
-<!--                                    android:text="Sub Dis Commission"-->
-<!--                                    android:textAllCaps="false"-->
-<!--                                    android:textColor="@color/black"-->
-<!--                                    android:textSize="@dimen/dimen_18sp" />-->
-
-<!--                                <TextView-->
-<!--                                    android:id="@+id/sub_Dis_Commission"-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight=".5"-->
-<!--                                    android:text="0.00"-->
-<!--                                    android:textAllCaps="false"-->
-<!--                                    android:textColor="@color/black"-->
-
-
-<!--                                    android:textSize="@dimen/dimen_18sp" />-->
-
-<!--                            </LinearLayout>-->
 
                             <!-- Retailer Commission Section -->
                             <TextView
@@ -428,145 +330,6 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/dimen_18sp"
                                 android:textStyle="bold" />
-
-<!--                            <LinearLayout-->
-<!--                                android:id="@+id/retailerCommissionLayout"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:orientation="horizontal"-->
-<!--                                android:weightSum="4">-->
-
-<!--                                <TextView-->
-<!--                                    android:id="@+id/retailerCommissionName"-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight="3"-->
-<!--                                    android:text="Retailer Commission"-->
-<!--                                    android:textAllCaps="false"-->
-<!--                                    android:textColor="@color/black"-->
-<!--                                    android:textSize="@dimen/dimen_14sp" />-->
-
-<!--                                <TextView-->
-<!--                                    android:id="@+id/retailer_Commission"-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    android:text="0.00"-->
-<!--                                    android:textAllCaps="false"-->
-<!--                                    android:textColor="@color/black"-->
-<!--                                    android:textSize="@dimen/dimen_14sp" />-->
-<!--                            </LinearLayout>-->
-<!--                            <LinearLayout-->
-<!--                                android:id="@+id/retailerCommissionWithoutTDSLayout"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:orientation="horizontal"-->
-<!--                                android:weightSum="4"-->
-<!--                                android:layout_marginTop="@dimen/dimen_10dp">-->
-
-<!--                                <TextView-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight="3"-->
-<!--                                    android:text="Retailer Commission without TDS"-->
-<!--                                    android:textAllCaps="false"-->
-<!--                                    android:textColor="@color/black"-->
-<!--                                    android:textSize="@dimen/dimen_14sp" />-->
-
-<!--                                <TextView-->
-<!--                                    android:id="@+id/retailer_CommissionWithoutTDs"-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    android:text="0.00"-->
-<!--                                    android:textAllCaps="false"-->
-<!--                                    android:textColor="@color/black"-->
-<!--                                    android:textSize="@dimen/dimen_14sp" />-->
-<!--                            </LinearLayout>-->
-
-<!--                            <LinearLayout-->
-<!--                                android:id="@+id/customerCommissionLayout"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:orientation="horizontal"-->
-<!--                                android:weightSum="4"-->
-<!--                                android:layout_marginTop="@dimen/dimen_10dp">-->
-
-<!--                                <TextView-->
-<!--                                    android:id="@+id/customerCommissionName"-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight="3"-->
-<!--                                    android:text="Customer Commission"-->
-<!--                                    android:textAllCaps="false"-->
-<!--                                    android:textColor="@color/black"-->
-<!--                                    android:textSize="@dimen/dimen_14sp" />-->
-
-<!--                                <TextView-->
-<!--                                    android:id="@+id/customer_CommissionText"-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    android:text="0.00"-->
-<!--                                    android:textAllCaps="false"-->
-<!--                                    android:textColor="@color/black"-->
-<!--                                    android:textSize="@dimen/dimen_14sp" />-->
-<!--                            </LinearLayout>-->
-<!--                            <LinearLayout-->
-<!--                                android:id="@+id/customerCommissionWithoutTDSLayout"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:orientation="horizontal"-->
-<!--                                android:weightSum="4"-->
-<!--                                android:layout_marginTop="@dimen/dimen_10dp">-->
-
-<!--                                <TextView-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight="3"-->
-<!--                                    android:text="Customer Comm without TDS"-->
-<!--                                    android:textAllCaps="false"-->
-<!--                                    android:textColor="@color/black"-->
-<!--                                    android:textSize="@dimen/dimen_14sp" />-->
-
-<!--                                <TextView-->
-<!--                                    android:id="@+id/customer_CommissionWithoutTDSText"-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    android:text="0.00"-->
-<!--                                    android:textAllCaps="false"-->
-<!--                                    android:textColor="@color/black"-->
-<!--                                    android:textSize="@dimen/dimen_14sp" />-->
-<!--                            </LinearLayout>-->
-
-<!--                            <LinearLayout-->
-<!--                                android:id="@+id/tdsLayout"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:orientation="horizontal"-->
-<!--                                android:weightSum="4"-->
-<!--                                android:layout_marginTop="@dimen/dimen_10dp">-->
-
-<!--                                <TextView-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight="3"-->
-<!--                                    android:text="TDS"-->
-<!--                                    android:textAllCaps="false"-->
-<!--                                    android:textColor="@color/black"-->
-<!--                                    android:textSize="@dimen/dimen_14sp" />-->
-
-<!--                                <TextView-->
-<!--                                    android:id="@+id/tdsText"-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    android:text="0.00"-->
-<!--                                    android:textAllCaps="false"-->
-<!--                                    android:textColor="@color/black"-->
-<!--                                    android:textSize="@dimen/dimen_14sp" />-->
-<!--                            </LinearLayout>-->
 
                             <LinearLayout
                                 android:id="@+id/serviceChargeLayout"
@@ -596,6 +359,7 @@
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/dimen_14sp" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/serviceGStLayout"
                                 android:layout_width="match_parent"
@@ -623,6 +387,7 @@
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/dimen_14sp" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/totalTransactionLayout"
                                 android:layout_width="match_parent"
@@ -652,7 +417,9 @@
                             </LinearLayout>
 
                         </LinearLayout>
+
                     </androidx.cardview.widget.CardView>
+
                 </RelativeLayout>
 
                 <LinearLayout
@@ -1013,6 +780,7 @@
                 </LinearLayout>
 
             </LinearLayout>
+
         </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>

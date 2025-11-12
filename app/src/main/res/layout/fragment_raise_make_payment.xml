@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_10dp"
+            android:paddingBottom="@dimen/dimen_50dp">
+
+            <LinearLayout
+                android:id="@+id/statuslayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <TextView
+                    android:text="Transfer Mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textColor="@color/edittext_color"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:padding="@dimen/dimen_4dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentLeft="true"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/dimen_10dp"
+                    android:paddingEnd="@dimen/dimen_10dp"
+                    android:background="@drawable/bg_black_border">
+
+                    <Spinner
+                        android:id="@+id/transfermode"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/dropdownListPreferredItemHeight"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/Depositlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/statuslayout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <TextView
+                    android:text="Deposit Bank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textColor="@color/edittext_color"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:padding="@dimen/dimen_4dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentLeft="true"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/dimen_10dp"
+                    android:paddingEnd="@dimen/dimen_10dp"
+                    android:background="@drawable/bg_black_border">
+
+                    <Spinner
+                        android:id="@+id/depositbanklist"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/dropdownListPreferredItemHeight"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/branchcodelayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/Depositlayout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <TextView
+                    android:text="Branch Code/Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textColor="@color/edittext_color"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:padding="@dimen/dimen_4dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentLeft="true"/>
+
+                <TextView
+                    android:id="@+id/branchcodetxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dimen_10dp"
+                    android:background="@drawable/bg_black_border">
+
+                </TextView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/transactionidlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/branchcodelayout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <TextView
+                    android:text="Transaction ID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textColor="@color/edittext_color"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:padding="@dimen/dimen_4dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentLeft="true"/>
+
+                <EditText
+                    android:id="@+id/transactionIdetv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dimen_10dp"
+                    android:hint="Enter Trasnaction id"
+                    android:textSize="@dimen/dimen_16sp"
+                    android:background="@drawable/bg_black_border">
+
+                </EditText>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/amountlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/transactionidlayout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <TextView
+                    android:text="Amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textColor="@color/edittext_color"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:padding="@dimen/dimen_4dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentLeft="true"/>
+
+                <EditText
+                    android:id="@+id/amountetxtve"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dimen_10dp"
+                    android:hint="Enter amount hint : 00.00"
+                    android:textSize="@dimen/dimen_16sp"
+                    android:inputType="numberDecimal"
+                    android:background="@drawable/bg_black_border">
+
+                </EditText>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/remarklayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/amountlayout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <TextView
+                    android:text="Remarks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textColor="@color/edittext_color"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:padding="@dimen/dimen_4dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentLeft="true"/>
+
+                <EditText
+                    android:id="@+id/remarksetxtev"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dimen_10dp"
+                    android:hint="Enter remarks"
+                    android:textSize="@dimen/dimen_16sp"
+                    android:background="@drawable/bg_black_border">
+
+                </EditText>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/uploadpiclayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_140dp"
+                android:layout_margin="@dimen/dimen_40dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_black_border"
+                app:layout_constraintTop_toBottomOf="@id/remarklayout"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/uploadIMEI1Photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/dimen_12sp"
+                        android:textColor="@color/purple"
+                        android:padding="@dimen/dimen_6dp"
+                        android:visibility="gone"
+                        android:text="Seal Phone Photo (Front)" />
+
+                    <ImageView
+                        android:id="@+id/receiptPhoto"
+                        android:layout_width="@dimen/dimen_100dp"
+                        android:layout_height="@dimen/dimen_100dp"
+                        android:scaleType="fitCenter"
+                        android:visibility="gone"
+                        android:layout_margin="@dimen/dimen_6dp"/>
+
+                    <ImageView
+                        android:id="@+id/cameraicon"
+                        android:layout_width="@dimen/dimen_50dp"
+                        android:layout_height="@dimen/dimen_50dp"
+                        android:layout_margin="@dimen/dimen_6dp"
+                        android:src="@drawable/photo_camera"
+                        android:visibility="visible"/>
+
+                    <TextView
+                        android:id="@+id/clicktosealphoto1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Click to upload"
+                        android:gravity="center"
+                        android:padding="@dimen/dimen_4dp"
+                        android:textSize="@dimen/dimen_14sp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/black"/>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/confirmbutton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_50dp"
+                android:background="@drawable/searchbutton"
+                android:backgroundTint="#007BFF"
+                app:layout_constraintTop_toBottomOf="@+id/uploadpiclayout">
+
+                <TextView
+                    android:text="Transfer Amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textStyle="bold"
+                    android:padding="@dimen/dimen_10dp"/>
+
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

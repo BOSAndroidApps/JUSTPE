@@ -638,8 +638,8 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
                 transferTo = "Admin",
                 transferAmt = mStash!!.getStringValue(Constants.totalTransaction, "") ?: "0",
                 remark = binding.remarks.text.toString().trim(),
-                transferFromMsg = "Your Account is debited by ${rechargeAmount ?: "0"} Rs. Due to Pay Out on number ${bankAccountNo ?: ""}.",
-                transferToMsg = "Your Account is credited by ${rechargeAmount ?: "0"} Rs. Due to Pay Out on number ${bankAccountNo ?: ""}.",
+                transferFromMsg = "Your account is debited by ${rechargeAmount ?: "0"} Rs from wallet and credited to your bank account due to ToSelf on number ${bankAccountNo ?: ""}",
+                transferToMsg = "", // for toself commission remarks
                 amountType = "Payout",
                 actualTransactionAmount = rechargeAmount ?: "0",
                 transIpAddress = mStash!!.getStringValue(Constants.deviceIPAddress, "") ?: "0.0.0.0",
@@ -739,7 +739,11 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
 
     private fun sendAllPayoutAmountRes(response: AOPPayOutRes) {
         if (response.statuss == "SUCCESS"){
+            if(dialog!=null && dialog.isShowing){
+                dialog.dismiss()
+            }
             pd.dismiss()
+            Toast.makeText(this, response.message.toString(), Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, response.message.toString(), Toast.LENGTH_SHORT).show()
         }
@@ -748,7 +752,7 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     fun openDialogForPayout(serviceCharge: Double, transferAmount: Double) {
-        val dialog = Dialog(this@ToSelfMoneyTransferPage, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog = Dialog(this@ToSelfMoneyTransferPage, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.payoutscreen)
 
@@ -786,6 +790,7 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
         creditedamt.text = String.format("%.2f", toBeCreditedAmt)
 
         var checkView : Boolean = false
+
 
         viewBreakLayout.setOnClickListener {
             if(checkView){

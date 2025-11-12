@@ -65,6 +65,8 @@ import com.bos.payment.appName.ui.view.fragment.SideNavigationBankDetailsSheet.C
 import com.bos.payment.appName.ui.view.fragment.SideNavigationBankDetailsSheet.Companion.long
 import com.bos.payment.appName.ui.view.fragment.SideNavigationBankDetailsSheet.Companion.pincode
 import com.bos.payment.appName.ui.view.fragment.SideNavigationBankDetailsSheet.Companion.statecode
+import com.bos.payment.appName.ui.view.makepayment.AdminBankListActivity
+import com.bos.payment.appName.ui.view.makepayment.MakePaymentActivity
 import com.bos.payment.appName.ui.view.moneyTransfer.ScannerFragment
 import com.bos.payment.appName.ui.view.supportmanagement.TicketStatus
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightFilterActivity.Companion.TAG
@@ -188,9 +190,7 @@ class JustPeDashboard : AppCompatActivity() {
             }
         }
         binding.nav.supportlist.adapter = navAdapter
-
     }
-
 
     private fun startMerchantListPolling(merchantId: String) {
         stopPolling() // Ensure no duplicate polling occurs
@@ -204,11 +204,9 @@ class JustPeDashboard : AppCompatActivity() {
         }
     }
 
-
     private fun stopPolling() {
         coroutineScope.cancel() // Cancel existing coroutine scope to stop polling
     }
-
 
     private fun getAllMerchantList(merchantId: String) {
         runIfConnected {
@@ -238,7 +236,6 @@ class JustPeDashboard : AppCompatActivity() {
                 }
         }
     }
-
 
     private fun getAllMerchantListRes(response: GetApiListMarchentWiseRes, merchantId: String) {
         if (response.isSuccess == true) {
@@ -271,7 +268,6 @@ class JustPeDashboard : AppCompatActivity() {
             toast(response.returnMessage.orEmpty())
         }
     }
-
 
     fun init(){
         mStash = MStash.getInstance(this@JustPeDashboard)
@@ -381,6 +377,10 @@ class JustPeDashboard : AppCompatActivity() {
         binding.nav.shareqrcode.setOnClickListener {
             if(QRBimap!=null)
             shareBitmap(QRBimap!!,this)
+        }
+
+        binding.nav.makepaymentlayout.setOnClickListener {
+           startActivity(Intent(this@JustPeDashboard, AdminBankListActivity::class.java))
         }
 
         binding.nav.saveqrcode.setOnClickListener {
@@ -641,10 +641,12 @@ class JustPeDashboard : AppCompatActivity() {
         storageRef = storage.reference
     }
 
+
     override fun onPause() {
         super.onPause()
         handler.removeCallbacksAndMessages(null)
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -658,6 +660,7 @@ class JustPeDashboard : AppCompatActivity() {
 
     }
 
+
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -670,10 +673,10 @@ class JustPeDashboard : AppCompatActivity() {
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
+
     private fun requestLocationPermission() {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
     }
-
 
     private fun checkLocationPermission(): Boolean {
         val fineLocationPermission = ContextCompat.checkSelfPermission(
@@ -688,7 +691,6 @@ class JustPeDashboard : AppCompatActivity() {
         return fineLocationPermission == PackageManager.PERMISSION_GRANTED &&
                 coarseLocationPermission == PackageManager.PERMISSION_GRANTED
     }
-
 
     private fun checkPermissions() {
         Dexter.withActivity(this).withPermissions(
@@ -711,7 +713,6 @@ class JustPeDashboard : AppCompatActivity() {
             }).check()
     }
 
-
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -725,7 +726,6 @@ class JustPeDashboard : AppCompatActivity() {
             }
         }
     }
-
 
     fun hitApiForBanner(){
         var retailerCode = /*mStash!!.getStringValue(Constants.RegistrationId,"")*/ "BOS-1142"
@@ -756,7 +756,6 @@ class JustPeDashboard : AppCompatActivity() {
         }
 
     }
-
 
     fun hitApiForServicesRequest(){
         var retailerCode = mStash!!.getStringValue(Constants.RegistrationId,"")
@@ -847,12 +846,10 @@ class JustPeDashboard : AppCompatActivity() {
 
     }
 
-
     data class BannerItem(
         val imagePath: String,
         val urlRedirect: String
     )
-
 
     fun getBankDetails(retailerCode: String){
         val requestForBankDetails = CheckBankDetailsModel(reatilerCode =  retailerCode)
@@ -907,7 +904,6 @@ class JustPeDashboard : AppCompatActivity() {
 
     }
 
-
     private fun getFuseLocation() {
 
         customFuseLocation = CustomFuseLocationActivity(this, this) { mCurrentLocation ->
@@ -917,7 +913,6 @@ class JustPeDashboard : AppCompatActivity() {
             getAddressFromLatLng(this,latt,long)
         }
     }
-
 
     fun getAddressFromLatLng(context: Context, latitude: Double, longitude: Double): String {
         return try {
@@ -946,7 +941,6 @@ class JustPeDashboard : AppCompatActivity() {
         }
     }
 
-
     private fun shareBitmap(bitmap: Bitmap, context: Context) {
         // Save bitmap to cache directory
         val cachePath = File(context.cacheDir, "shared_images")
@@ -969,7 +963,6 @@ class JustPeDashboard : AppCompatActivity() {
         // Start chooser
         context.startActivity(Intent.createChooser(shareIntent, "Share Image Via"))
     }
-
 
     @SuppressLint("Recycle")
     fun saveBitmapToGallery(context: Context, bitmap: Bitmap, fileName: String): Uri? {

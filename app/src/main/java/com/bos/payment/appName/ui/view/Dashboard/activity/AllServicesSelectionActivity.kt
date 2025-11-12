@@ -105,7 +105,7 @@ class AllServicesSelectionActivity : AppCompatActivity() {
         binding.financialserviceslist.adapter = moneyTransferServicesadapter
         moneyTransferServicesadapter.notifyDataSetChanged()
 
-        callFragment(RechargeFragment(), "EMI","")
+        callFragment(RechargeFragment(), "EMI","F0116","")
 
     }
 
@@ -138,7 +138,7 @@ class AllServicesSelectionActivity : AppCompatActivity() {
         moneyTransferServicesadapter.notifyDataSetChanged()
 
         moneyTransferServicesadapter.selectionPosition  = 0
-        callFragment(RechargeFragment(), "mobile","")
+        callFragment(RechargeFragment(), "mobile","F0140","")
 
     }
 
@@ -161,15 +161,16 @@ class AllServicesSelectionActivity : AppCompatActivity() {
         moneyTransferServicesadapter.notifyDataSetChanged()
 
         moneyTransferServicesadapter.selectionPosition  = 0
-        callFragment(FlightMainFragment(), "flight", "FlightMainFragment")
+        callFragment(FlightMainFragment(), "flight", "F0134","FlightMainFragment")
 
     }
 
 
 
-     fun callFragment(fragment: Fragment, rechargeType: String,tag: String) {
+     fun callFragment(fragment: Fragment, rechargeType: String,featureCode:String,tag: String) {
         val bundle = Bundle()
         bundle.putString("RechargeType", rechargeType)
+        bundle.putString("FeatureCode", featureCode)
         fragment.arguments = bundle
 
         val fragmentManager: FragmentManager = supportFragmentManager

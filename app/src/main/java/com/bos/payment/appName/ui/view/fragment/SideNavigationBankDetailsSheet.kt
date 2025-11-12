@@ -171,9 +171,7 @@ class SideNavigationBankDetailsSheet:BottomSheetDialogFragment() {
         }
 
 
-
     }
-
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -201,7 +199,6 @@ class SideNavigationBankDetailsSheet:BottomSheetDialogFragment() {
         super.onDismiss(dialog)
 
     }
-
 
 
     fun createVirtual(){
@@ -246,6 +243,7 @@ class SideNavigationBankDetailsSheet:BottomSheetDialogFragment() {
                         it.data?.let { users ->
                             users.body()?.let { response ->
                                 pd.dismiss()
+                                Log.d("virtualaccountresp", Gson().toJson(requestForCreateVirtualAccount))
                                 if(response.status!!){
                                     createQRCode()
                                 }

@@ -51,7 +51,9 @@ class TransactionReportsActivity : AppCompatActivity() {
     lateinit var pd : ProgressDialog
     private var mStash: MStash? = null
     var displayReportList : MutableList<String?> = arrayListOf()
-    var reportModeList : MutableList<String?> = arrayListOf()
+    var rechargeModeList : MutableList<String?> = arrayListOf()
+    var payoutModeList : MutableList<String?> = arrayListOf()
+    var dmtModeList : MutableList<String?> = arrayListOf()
     var displaytxtReportList : MutableList<String?> = arrayListOf()
     private val myCalender = Calendar.getInstance()
     private val myCalender1 = Calendar.getInstance()
@@ -74,6 +76,7 @@ class TransactionReportsActivity : AppCompatActivity() {
 
         hitapiforReports()
         setClickListner()
+        setReportModeInSpinner()
 
     }
 
@@ -88,22 +91,41 @@ class TransactionReportsActivity : AppCompatActivity() {
             DatePickerDialog(
                 this,
                 { _, year, monthOfYear, dayOfMonth ->
+                    val actualMonth = monthOfYear + 1 // Fix zero-based month
                     myCalender.set(year, monthOfYear, dayOfMonth)
-                    binding.fromDate.text = "$dayOfMonth/$monthOfYear/$year"
+                    binding.fromDate.text = "$dayOfMonth/$actualMonth/$year"
 
                     val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-                    calendar.set(year, monthOfYear - 1, dayOfMonth, 0, 0, 0) // Example time
-                    calendar.set(Calendar.MILLISECOND, 860)
+                    calendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0)
+                    calendar.set(Calendar.MILLISECOND, 0)
 
                     val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
                     sdf.timeZone = TimeZone.getTimeZone("UTC")
 
-                    val isoString = sdf.format(calendar.time)
-                    FromDate = isoString
-                    if(binding.reportmode.selectedItem.toString().trim().isNotEmpty() && binding.selectreport.selectedItem.toString().trim().isNotEmpty()&& ToDate.isNotEmpty() && FromDate.isNotEmpty()){
-                        hitApiForGettingTransactionReports()
-                    }
+                    FromDate = sdf.format(calendar.time)
                     Log.d("FromDate", FromDate)
+
+                    // If both dates are selected, validate and call API
+                    if (binding.reportmode.selectedItem.toString().trim().isNotEmpty()
+                        && binding.selectreport.selectedItem.toString().trim().isNotEmpty()
+                        && ToDate.isNotEmpty()
+                        && FromDate.isNotEmpty()
+                    ) {
+                        val from = sdf.parse(FromDate)
+                        val to = sdf.parse(ToDate)
+
+                        when {
+                            to.before(from) -> {
+                                Toast.makeText(this, "To date cannot be before From date", Toast.LENGTH_SHORT).show()
+                            }
+                            to.equals(from) -> {
+                                Toast.makeText(this, "From and To dates cannot be the same", Toast.LENGTH_SHORT).show()
+                            }
+                            else -> {
+                                hitApiForGettingTransactionReports()
+                            }
+                        }
+                    }
                 },
                 myCalender.get(Calendar.YEAR),
                 myCalender.get(Calendar.MONTH),
@@ -112,31 +134,51 @@ class TransactionReportsActivity : AppCompatActivity() {
         }
 
         binding.toDate.setOnClickListener {
-
             DatePickerDialog(
-                this, { _, year, monthOfYear, dayOfMonth ->
+                this,
+                { _, year, monthOfYear, dayOfMonth ->
+                    val actualMonth = monthOfYear + 1 // Fix zero-based month
                     myCalender1.set(year, monthOfYear, dayOfMonth)
-                    binding.toDate.text = "$dayOfMonth/$monthOfYear/$year"
+                    binding.toDate.text = "$dayOfMonth/$actualMonth/$year"
 
                     val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-                    calendar.set(year, monthOfYear - 1, dayOfMonth, 0, 0, 0) // Example time
-                    calendar.set(Calendar.MILLISECOND, 860)
+                    calendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0)
+                    calendar.set(Calendar.MILLISECOND, 0)
 
                     val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
                     sdf.timeZone = TimeZone.getTimeZone("UTC")
 
-                    val isoString = sdf.format(calendar.time)
-                    ToDate = isoString
-                    if(binding.reportmode.selectedItem.toString().trim().isNotEmpty() && binding.selectreport.selectedItem.toString().trim().isNotEmpty()&& ToDate.isNotEmpty() && FromDate.isNotEmpty()){
-                        hitApiForGettingTransactionReports()
-                    }
+                    ToDate = sdf.format(calendar.time)
                     Log.d("ToDate", ToDate)
+
+                    // If both dates are selected, validate and call API
+                    if (binding.reportmode.selectedItem.toString().trim().isNotEmpty()
+                        && binding.selectreport.selectedItem.toString().trim().isNotEmpty()
+                        && ToDate.isNotEmpty()
+                        && FromDate.isNotEmpty()
+                    ) {
+                        val from = sdf.parse(FromDate)
+                        val to = sdf.parse(ToDate)
+
+                        when {
+                            to.before(from) -> {
+                                Toast.makeText(this, "To date cannot be before From date", Toast.LENGTH_SHORT).show()
+                            }
+                            to.equals(from) -> {
+                                Toast.makeText(this, "From and To dates cannot be the same", Toast.LENGTH_SHORT).show()
+                            }
+                            else -> {
+                                hitApiForGettingTransactionReports()
+                            }
+                        }
+                    }
                 },
                 myCalender1.get(Calendar.YEAR),
                 myCalender1.get(Calendar.MONTH),
                 myCalender1.get(Calendar.DAY_OF_MONTH)
             ).show()
         }
+
 
         binding.reportmode.onItemSelectedListener= object : OnItemSelectedListener{
 
@@ -158,6 +200,17 @@ class TransactionReportsActivity : AppCompatActivity() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 var selectedItem = binding.selectreport.selectedItem.toString().trim()
+
+                if(selectedItem.contains("Recharge" ,ignoreCase = true)){
+                    setDataForModeBasedOnSelectedReport(rechargeModeList)
+                }
+                if(selectedItem.contains("dmt",ignoreCase = true)){
+                    setDataForModeBasedOnSelectedReport(dmtModeList)
+                }
+
+                if(selectedItem.contains("payout",ignoreCase = true)){
+                    setDataForModeBasedOnSelectedReport(payoutModeList)
+                }
 
                 if(selectedItem.isNotEmpty() && binding.reportmode.selectedItem.toString().trim().isNotEmpty()&& ToDate.isNotEmpty() && FromDate.isNotEmpty()){
                     hitApiForGettingTransactionReports()
@@ -218,15 +271,31 @@ class TransactionReportsActivity : AppCompatActivity() {
         var adapter = ArrayAdapter(this@TransactionReportsActivity, android.R.layout.simple_spinner_dropdown_item, displayReportList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.selectreport.adapter = adapter
-        setReportModeInSpinner()
+
     }
 
 
     private fun setReportModeInSpinner(){
-        reportModeList.clear()
-        reportModeList.add("Recharge History")
-        reportModeList.add("Dmt History")
-        var adapter = ArrayAdapter(this@TransactionReportsActivity, android.R.layout.simple_spinner_dropdown_item, reportModeList)
+        rechargeModeList.clear()
+        payoutModeList.clear()
+        dmtModeList.clear()
+
+        dmtModeList.add("")
+
+        rechargeModeList.add("Recharge History")
+        rechargeModeList.add("Commission History")
+
+        payoutModeList.add("All")
+        payoutModeList.add("Approved")
+        payoutModeList.add("Pending")
+        payoutModeList.add("Rejected")
+        payoutModeList.add("Commission History")
+
+
+    }
+
+    private fun setDataForModeBasedOnSelectedReport(report :MutableList<String?> ){
+        var adapter = ArrayAdapter(this@TransactionReportsActivity, android.R.layout.simple_spinner_dropdown_item, report)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.reportmode.adapter = adapter
     }
@@ -313,7 +382,7 @@ class TransactionReportsActivity : AppCompatActivity() {
                                           if(response.data!!.isValid!!){
                                             startActivity(Intent(this,RaiseTicketActivity::class.java))
                                           }else{
-                                              PopOpForCibileScoreRequestToAdmin(transactionID)
+                                              popupforshowingraiseticketstatus(transactionID)
                                           }
                                         }
                                         else{
@@ -338,8 +407,7 @@ class TransactionReportsActivity : AppCompatActivity() {
      }
 
 
-
-    fun PopOpForCibileScoreRequestToAdmin(transactionId : String){
+    fun popupforshowingraiseticketstatus(transactionId : String){
         dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.signoutalert)

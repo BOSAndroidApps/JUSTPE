@@ -1,20 +1,17 @@
 package com.bos.payment.appName.data.repository
 
 import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
-import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualAccountModel
 import com.bos.payment.appName.data.model.justpaymodel.RetailerContactListRequestModel
 import com.bos.payment.appName.data.model.justpaymodel.SendMoneyToMobileReqModel
 import com.bos.payment.appName.data.model.justpaymodel.UpdateBankDetailsReq
-import com.bos.payment.appName.data.model.justpedashboard.DashboardBannerListModel
 import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesRequest
+import com.bos.payment.appName.data.model.makepaymentnew.BankDetailsReq
+import com.bos.payment.appName.data.model.makepaymentnew.MakePaymentReportResp
+import com.bos.payment.appName.data.model.makepaymentnew.RaiseMakePaymentReq
+import com.bos.payment.appName.data.model.makepaymentnew.ReferenceIDGenerateReq
 import com.bos.payment.appName.data.model.menuList.GetAllMenuListReq
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.GetPayoutCommercialReq
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.mobileCharge.GetCommercialReq
-import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileWiseRechargeReq
-import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeCategoryReq
-import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeOperatorsReq
-import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargePlanReq
-import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeViewPlanResponse
 import com.bos.payment.appName.data.model.serviceWiseTrans.TransactionReportReq
 import com.bos.payment.appName.data.model.supportmanagement.AddCommentReq
 import com.bos.payment.appName.data.model.supportmanagement.ChatCommentResp
@@ -31,11 +28,8 @@ import com.bos.payment.appName.data.model.travel.flight.GetAirTicketListReq
 import com.bos.payment.appName.data.model.walletBalance.merchantBal.GetMerchantBalanceReq
 import com.bos.payment.appName.data.model.walletBalance.walletBalanceCal.GetBalanceReq
 import com.bos.payment.appName.network.ApiInterface
-import com.bos.payment.appName.network.RetrofitClient
-import com.google.android.gms.common.api.Response
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
@@ -129,5 +123,54 @@ class GetAllAPIServiceRepository(private val apiInterface: ApiInterface) {
 
     suspend fun addcommentReq(commentreq: AddCommentReq)= apiInterface.addcommentReq(commentreq)
 
+
+    suspend fun getReferenceID(commentreq: ReferenceIDGenerateReq)= apiInterface.getRandomReferenceID(commentreq)
+
+    suspend fun getbanklistreq(banklistreq: BankDetailsReq)= apiInterface.getAdminBankList(banklistreq)
+
+
+    suspend fun uploadDocumentForRaisAmountTransferAdminReq(req: RaiseMakePaymentReq): retrofit2.Response<MakePaymentReportResp> {
+        val mode = req.Mode.toRequestBody("text/plain".toMediaTypeOrNull())
+        val rid = req.RID.toRequestBody("text/plain".toMediaTypeOrNull())
+        val referenceId = req.RefrenceID.toRequestBody("text/plain".toMediaTypeOrNull())
+        val paymentmode = req.PaymentMode.toRequestBody("text/plain".toMediaTypeOrNull())
+        val paymentdate = req.PaymentDate.toRequestBody("text/plain".toMediaTypeOrNull())
+        val depositbankname = req.DepositBankName.toRequestBody("text/plain".toMediaTypeOrNull())
+        val branchcode = req.BranchCode_ChecqueNo.toRequestBody("text/plain".toMediaTypeOrNull())
+        val remarks = req.Remarks.toRequestBody("text/plain".toMediaTypeOrNull())
+        val transactionId = req.TransactionID.toRequestBody("text/plain".toMediaTypeOrNull())
+        val documentPath = req.DocumentPath.toRequestBody("text/plain".toMediaTypeOrNull())
+        val recorddatetime = req.RecordDateTime.toRequestBody("text/plain".toMediaTypeOrNull())
+        val updateby = req.UpdatedBy.toRequestBody("text/plain".toMediaTypeOrNull())
+        val updateon = req.UpdatedOn.toRequestBody("text/plain".toMediaTypeOrNull())
+        val approvedby = req.ApprovedBy.toRequestBody("text/plain".toMediaTypeOrNull())
+        val approveddatetime = req.ApprovedDateTime.toRequestBody("text/plain".toMediaTypeOrNull())
+        val approvedstatus = req.ApporvedStatus.toRequestBody("text/plain".toMediaTypeOrNull())
+        val registrationid = req.RegistrationId.toRequestBody("text/plain".toMediaTypeOrNull())
+        val approvedremarks = req.ApporveRemakrs.toRequestBody("text/plain".toMediaTypeOrNull())
+        val amount = req.Amount.toRequestBody("text/plain".toMediaTypeOrNull())
+        val companycode = req.CompanyCode.toRequestBody("text/plain".toMediaTypeOrNull())
+        val beneId = req.BeneId.toRequestBody("text/plain".toMediaTypeOrNull())
+        val accoundholder = req.AccountHolder.toRequestBody("text/plain".toMediaTypeOrNull())
+        val paymenttype = req.PaymentType.toRequestBody("text/plain".toMediaTypeOrNull())
+        val flag = req.Flag.toRequestBody("text/plain".toMediaTypeOrNull())
+        val admincode = req.AdminCode.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        // Convert image file to MultipartBody.Part
+        val imagePart1 = if (req.imagefile1 != null && req.imagefile1.exists()) {
+            val requestFile = req.imagefile1.asRequestBody("image/*".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("Image1_File", req.imagefile1.name, requestFile)
+        } else {
+            // send empty multipart field
+            MultipartBody.Part.createFormData("Image1_File", "")
+        }
+
+
+        return apiInterface.uploadDocumentForRaisAmountTransferAdmin(
+            mode, rid, referenceId,paymentmode,paymentdate, depositbankname, branchcode, remarks,
+            transactionId, documentPath, recorddatetime, updateby, updateon,approvedby,approveddatetime,approvedstatus,registrationid
+            ,approvedremarks,amount,companycode,beneId,accoundholder,paymenttype,flag,admincode,imagePart1)
+
+    }
 
 }
