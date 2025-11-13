@@ -9,6 +9,8 @@ import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.Recharg
 import com.bos.payment.appName.data.model.recharge.qrCode.GenerateQRCodeReq
 import com.bos.payment.appName.data.model.recharge.recharge.DthInfoReq
 import com.bos.payment.appName.data.model.recharge.recharge.MobileRechargeReq
+import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespReq
+import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespRespReq
 import com.bos.payment.appName.data.model.travel.flight.FlightRequeryReq
 import com.bos.payment.appName.data.model.travel.flight.GetAirTicketListReq
 import com.bos.payment.appName.network.ApiInterface
@@ -25,6 +27,10 @@ class MobileRechargeRepository(private var apiInterface: ApiInterface) {
     suspend fun getDthInfoReq(req:DthInfoReq)= apiInterface.getDthInfoPlanReq(req)
 
     suspend fun getMobileRechargeReq(req: com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileRechargeReq)= apiInterface.getMobileRechargeReq(req)
+
+    suspend fun putRechargemobileReq(req: UploadRechargeMobileRespReq)= apiInterface.putRechargemobileReq(req)
+
+    suspend fun putRechargemobileResponseReq(req: UploadRechargeMobileRespRespReq)= apiInterface.putRechargemobileResponseReq(req)
 
     suspend fun createVirtualAccount(req: GenerateVirtualAccountModel)= apiInterface.createVirtualAccount(req)
 

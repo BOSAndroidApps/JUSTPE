@@ -17,7 +17,7 @@ data class MobileRechargeRespo(
 	val value: String? = null,
 
 	@field:SerializedName("error")
-	val error: Any? = null,
+	val error: String? = null,
 
 	@field:SerializedName("message")
 	val message: String? = null,
@@ -26,7 +26,10 @@ data class MobileRechargeRespo(
 	val status: Boolean? = null,
 
 	@field:SerializedName("statusCode")
-	val statusCode: Int? = null
+	val statusCode: Int? = null,
+
+	@field:SerializedName("ReferanceID")
+	val referanceID: String? = null
 )
 
 data class RechargeData(

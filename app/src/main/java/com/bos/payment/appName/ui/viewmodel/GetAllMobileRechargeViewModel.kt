@@ -10,6 +10,8 @@ import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.Recharg
 import com.bos.payment.appName.data.model.recharge.qrCode.GenerateQRCodeReq
 import com.bos.payment.appName.data.model.recharge.recharge.DthInfoReq
 import com.bos.payment.appName.data.model.recharge.recharge.MobileRechargeReq
+import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespReq
+import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespRespReq
 import com.bos.payment.appName.data.repository.GetAllAPIServiceRepository
 import com.bos.payment.appName.data.repository.MobileRechargeRepository
 import com.bos.payment.appName.utils.ApiResponse
@@ -172,6 +174,68 @@ class GetAllMobileRechargeViewModel(private val repository: MobileRechargeReposi
             )
         }
     }
+
+
+
+    fun putRechargemobileReq(req: UploadRechargeMobileRespReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.putRechargemobileReq(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "Something went wrong: ${e.localizedMessage}"
+                )
+            )
+        }
+    }
+
+    fun putRechargemobileResponseReq(req: UploadRechargeMobileRespRespReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.putRechargemobileResponseReq(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "Something went wrong: ${e.localizedMessage}"
+                )
+            )
+        }
+    }
+
+
 
 
     fun createVirtualAccount(req: GenerateVirtualAccountModel) = liveData(Dispatchers.IO) {

@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -70,6 +71,7 @@ import com.bos.payment.appName.data.model.recharge.mobile.MobileCheckReq
 import com.bos.payment.appName.data.model.recharge.mobile.MobileRechargePlanModel
 import com.bos.payment.appName.data.model.recharge.mobile.Plan
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.DataItemOperator
+import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileRechargeRespo
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileWiseRechargeReq
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeCategoryReq
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeOperatorsReq
@@ -78,6 +80,10 @@ import com.bos.payment.appName.data.model.recharge.operator.RechargeOperatorsLis
 import com.bos.payment.appName.data.model.recharge.recharge.DthInfoReq
 import com.bos.payment.appName.data.model.recharge.recharge.MobileRechargeReq
 import com.bos.payment.appName.data.model.recharge.recharge.MobileRechargeRes
+import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespReq
+import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespRespReq
+import com.bos.payment.appName.data.model.recharge.status.RechargeStatusReq
+import com.bos.payment.appName.data.model.recharge.status.RechargeStatusRes
 import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsReq
 import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsRes
 import com.bos.payment.appName.data.model.walletBalance.merchantBal.GetMerchantBalanceReq
@@ -95,6 +101,16 @@ import com.bos.payment.appName.network.RetrofitClient
 import com.bos.payment.appName.ui.adapter.DTHViewInfoAdapter
 import com.bos.payment.appName.ui.adapter.RechargePlanNameAdapter
 import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity
+import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.Datetime
+import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.mobileNumber
+import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.operatorLogo
+import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.orderID
+import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.planPrice
+import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.rechargeStatus
+import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.referenceId
+import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.serviceChargeWithGST
+import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.totalTransaction
+import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.transactionID
 import com.bos.payment.appName.ui.view.LoginActivity
 import com.bos.payment.appName.ui.viewmodel.AttendanceViewModel
 import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
@@ -102,6 +118,7 @@ import com.bos.payment.appName.ui.viewmodel.GetAllMobileRechargeViewModel
 import com.bos.payment.appName.ui.viewmodel.MoneyTransferViewModel
 import com.bos.payment.appName.utils.ApiStatus
 import com.bos.payment.appName.utils.Constants
+import com.bos.payment.appName.utils.Constants.operatorName
 import com.bos.payment.appName.utils.Constants.uploadDataOnFirebaseConsole
 import com.bos.payment.appName.utils.MStash
 import com.bos.payment.appName.utils.Utils.PD
@@ -117,6 +134,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -171,6 +189,12 @@ class RechargeFragment : Fragment() {
     private var lastTriggeredBy: String? = null
 
     lateinit var dialog: Dialog
+
+    // for successful Page after Mobile Recharge................................
+
+    lateinit var operatorlogo : Drawable
+
+
 
 
     @SuppressLint("SetTextI18n")
@@ -285,7 +309,7 @@ class RechargeFragment : Fragment() {
         }
 
         if (rechargeType == "mobile") {
-             var debounceHandler: Handler? = null
+             /*var debounceHandler: Handler? = null
              var debounceRunnable: Runnable? = null
 
             binding.rechargeAmount.addTextChangedListener(object : TextWatcher {
@@ -328,7 +352,7 @@ class RechargeFragment : Fragment() {
                 }
 
                 override fun afterTextChanged(s: Editable?) {}
-            })
+            })*/
 
 
         }
@@ -718,7 +742,8 @@ class RechargeFragment : Fragment() {
                 getBill()
                 hideKeyboard(binding.etAmount)
             }
-        } else if (rechargeType == "Water") {
+        }
+            else if (rechargeType == "Water") {
             if (selectedModel == "0") {
                 Toast.makeText(context, "Please Select Water Board", Toast.LENGTH_SHORT).show()
             }
@@ -734,17 +759,20 @@ class RechargeFragment : Fragment() {
             if (rechargeType == "EMI") {
             if (selectedModel == "0") {
                 Toast.makeText(context, "Please Select Lender", Toast.LENGTH_SHORT).show()
-            } else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
+            }
+            else
+                if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
                 Toast.makeText(context, "Enter Loan Account No.", Toast.LENGTH_SHORT).show()
-            } else {
+            }
+                else {
                 getBill()
                 hideKeyboard(binding.etAmount)
-            }
-        }
+            }}
             else if (rechargeType == "Cable") {
             if (selectedModel == "0") {
                 Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
-            } else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
+            }
+            else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
                 Toast.makeText(context, "Enter Mobile / Acc No.", Toast.LENGTH_SHORT).show()
             } else {
                 getBill()
@@ -787,6 +815,28 @@ class RechargeFragment : Fragment() {
                 getAllWalletBalance()
                 hideKeyboard(binding.etAmount)
             }*/
+
+                val amount = binding.rechargeAmount.text.toString().trim()
+                val mobile = binding.etMobileNumber.text.toString().trim()
+                val operatorId = mStash!!.getStringValue(Constants.OperatorId.toString(), "")
+
+                    // schedule a new one after delay (e.g., 800ms)
+
+                    if (amount.isEmpty()) {
+                        Toast.makeText(context, "Enter Valid Amount", Toast.LENGTH_SHORT).show()
+                        return
+                    }
+                    if (mobile.length != 10) {
+                        Toast.makeText(context, "Enter Valid Mobile Number", Toast.LENGTH_SHORT).show()
+                        return
+                    }
+                    if (operatorId!!.isEmpty()) {
+                        Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
+                        return
+                    }
+
+                    // ✅ Trigger popup only after typing stopped
+                    getAllServiceChargeRetailer(amount)
 
 
         }
@@ -834,13 +884,13 @@ class RechargeFragment : Fragment() {
 
             Log.d("actualBalance", "main = $mainBalance")
 
-            val totalAmount =
-                mStash!!.getStringValue(Constants.totalTransaction, "")?.toDoubleOrNull() ?: 0.0
+            val totalAmount = mStash!!.getStringValue(Constants.totalTransaction, "")?.toDoubleOrNull() ?: 0.0
 
         } else {
             toast(response.returnMessage.toString())
         }
     }
+
 
     private fun getMerchantBalance(mainBalance: Double) {
         val getMerchantBalanceReq = GetMerchantBalanceReq(
@@ -884,17 +934,20 @@ class RechargeFragment : Fragment() {
             Log.d("balanceCheck", "MainBal = $mainBalance, merchantBal = $merchantBalance,totalAmount = $totalAmount, Status = ${totalAmount <= mainBalance && totalAmount <= merchantBalance}")
 
             if (totalAmount <= mainBalance && totalAmount <= merchantBalance) {
-                //getTransferAmountToAgentWithCal(binding.etAmount.text.toString())
+
                 if(rechargeType=="mobile"){
                     var  mobileNo  = binding.etMobileNumber.text.toString()
                     hitApiForMobileRecharge(binding.rechargeAmount.text.toString(),mobileNo)
+                    //getTransferAmountToAgentWithCal(binding.rechargeAmount.text.toString())
                 }
+
                 if(rechargeType=="dth"){
                     var CANumber = binding.etDTHBillNumber.text.toString()
                     hitApiForMobileRecharge(binding.etAmount.text.toString(),CANumber)
                 }
 
-            } else {
+            }
+            else {
                 pd.dismiss()
                 Toast.makeText(requireContext(), "Wallet balance is low. VBal = $mainBalance, MBal = $merchantBalance, totalAmt = $totalAmount", Toast.LENGTH_LONG).show()
             }
@@ -912,27 +965,18 @@ class RechargeFragment : Fragment() {
             transferTo = "Admin",
             transferAmt = mStash!!.getStringValue(Constants.totalTransaction, "0.00") ?: "0.00",
             remark = "RECH",
-            transferFromMsg = "Your Account is debited by $rechargeAmount Rs. Due to RECH on number ${
-                binding.etMobileNumber.text.toString().trim()
-            }.",
-            transferToMsg = "Your Account is credited by $rechargeAmount Rs. Due to RECH on number ${
-                binding.etMobileNumber.text.toString().trim()
-            }.",
+            transferFromMsg = "Your Account is debited by $rechargeAmount Rs. Due to RECH on number ${binding.rechargeAmount.text.toString().trim()}.",
+            transferToMsg = "Your Account is credited by $rechargeAmount Rs. Due to RECH on number ${binding.rechargeAmount.text.toString().trim()}.",
             amountType = "Payout",
             actualTransactionAmount = rechargeAmount,
             transIpAddress = mStash!!.getStringValue(Constants.deviceIPAddress, ""),
             parmUserName = mStash!!.getStringValue(Constants.RegistrationId, ""),
             merchantCode = mStash!!.getStringValue(Constants.MerchantId, ""),
             servicesChargeAmt = mStash!!.getStringValue(Constants.serviceCharge, "0.00") ?: "0.00",
-            servicesChargeGSTAmt = mStash!!.getStringValue(Constants.serviceChargeWithGST, "0.00")
-                ?: "0.00",
-            servicesChargeWithoutGST = mStash!!.getStringValue(Constants.serviceCharge, "0.00")
-                ?: "0.00",
+            servicesChargeGSTAmt = mStash!!.getStringValue(Constants.serviceChargeWithGST, "0.00") ?: "0.00",
+            servicesChargeWithoutGST = mStash!!.getStringValue(Constants.serviceCharge, "0.00") ?: "0.00",
             customerVirtualAddress = "",
-            retailerCommissionAmt = mStash!!.getStringValue(
-                Constants.retailerCommissionWithoutTDS,
-                "0.00"
-            ) ?: "0.00",
+            retailerCommissionAmt = mStash!!.getStringValue(Constants.retailerCommissionWithoutTDS, "0.00") ?: "0.00",
             retailerId = "",
             paymentMode = "IMPS",
             depositBankName = "",
@@ -949,7 +993,7 @@ class RechargeFragment : Fragment() {
                 resource?.let {
                     when (it.apiStatus) {
                         ApiStatus.SUCCESS -> {
-//                        pd.dismiss()
+                           pd.dismiss()
                             it.data?.let { users ->
                                 users.body()?.let { response ->
                                     getTransferAmountToAgentWithCalRes(response)
@@ -970,6 +1014,7 @@ class RechargeFragment : Fragment() {
                 }
             }
     }
+
 
     private fun getTransferAmountToAgentWithCalRes(response: TransferAmountToAgentsRes) {
         if (response.isSuccess == true) {
@@ -1099,7 +1144,7 @@ class RechargeFragment : Fragment() {
     private fun rechargeApi(response: Response<MobileRechargeRes>) {
         if (response.body()!!.status == true) {
             val refId = response.body()!!.refid.toString()
-            //rechargeStatusCheck(refId)
+            rechargeStatusCheck(refId)
         } else {
             pd.dismiss()
             toast(response.message().toString())
@@ -1310,13 +1355,12 @@ class RechargeFragment : Fragment() {
 
     }
 
-    /*  private fun rechargeStatusCheck(referenceID: String) {
+      private fun rechargeStatusCheck(referenceID: String) {
           val rechargeStatusReq = RechargeStatusReq(
               registrationID = mStash!!.getStringValue(Constants.MerchantId, ""),
               referenceid = referenceID
           )
           Log.d("rechargeStatusReq", Gson().toJson(rechargeStatusReq))
-  //        pd.show()
           viewModel.rechargeStatus(rechargeStatusReq).observe(viewLifecycleOwner) { resource ->
               resource?.let {
                   when (it.apiStatus) {
@@ -1339,9 +1383,9 @@ class RechargeFragment : Fragment() {
               }
           }
 
-      }*/
+      }
 
-    /*  @SuppressLint("SetTextI18n")
+      @SuppressLint("SetTextI18n")
       private fun rechargeStatusRes(response: Response<RechargeStatusRes>) {
           try {
               response.body()?.let { body ->
@@ -1350,7 +1394,7 @@ class RechargeFragment : Fragment() {
                       toast(response.message().toString())
                       // Clear input fields
                       binding.etMobileNumber.setText("")
-                      binding.etCircle.setText("")
+                     // binding.etCircle.setText("")
                       binding.etAmount.setText("")
                       binding.spOperator.setSelection(0)
                       binding.llViewPlan.visibility = View.GONE
@@ -1383,17 +1427,6 @@ class RechargeFragment : Fragment() {
                               putExtra("operationId", body.data?.operatorid.toString())
                               putExtra("dateAndTime", body.data?.dateadded.toString())
                               putExtra("message", response.message().toString())
-  //                        putExtra("tdsTax", body.data?.tds.toString())
-  //
-  //                            putExtra("tdsTax", mStash!!.getStringValue(Constants.tds, ""))
-  //                            putExtra(
-  //                                "retailerCommissionWithoutTDS",
-  //                                mStash!!.getStringValue(Constants.retailerCommissionWithoutTDS, "")
-  //                            )
-  //                            putExtra(
-  //                                "customerCommissionWithoutTDS",
-  //                                mStash!!.getStringValue(Constants.customerCommissionWithoutTDS, "")
-  //                            )
                               putExtra(
                                   "serviceCharge",
                                   mStash!!.getStringValue(Constants.serviceCharge, "")
@@ -1422,7 +1455,7 @@ class RechargeFragment : Fragment() {
               Toast.makeText(requireContext(), "JSONException: ${e.message}", Toast.LENGTH_SHORT)
                   .show()
           }
-      }*/
+      }
 
     private fun getOperatorName(number: String, type: String) {
         requireContext().runIfConnected {
@@ -2840,8 +2873,9 @@ class RechargeFragment : Fragment() {
                         }
                     }
                 }
-        }
+         }
     }
+
 
     private fun getAllServiceChargeAdmin(rechargeAmount: String) {
         requireContext().runIfConnected {
@@ -2961,7 +2995,7 @@ class RechargeFragment : Fragment() {
                 binding.totalTrnasaction.text = String.format("%.2f", totalRechargeAmount)
                 Log.d("rechargeAmount", String.format("%.2f", totalRechargeAmount))
 
-                openDialogForPayout(serviceCharge,rechargeAmount.toDoubleOrNull() ?: 0.0,totalServiceChargeWithGst,totalRechargeAmount,"")
+                openDialogForPayout(serviceCharge,rechargeAmount.toDoubleOrNull() ?: 0.0,totalServiceChargeWithGst,totalRechargeAmount,retailerCommission,"")
 
             } else
             {
@@ -3054,7 +3088,7 @@ class RechargeFragment : Fragment() {
                 binding.totalTrnasaction.text = String.format("%.2f", totalRechargeAmount)
                 Log.d("rechargeAmount", String.format("%.2f", totalRechargeAmount))
 
-                openDialogForPayout(serviceCharge,rechargeAmount.toDoubleOrNull() ?: 0.0,totalServiceChargeWithGst,totalRechargeAmount,"")
+                openDialogForPayout(serviceCharge,rechargeAmount.toDoubleOrNull() ?: 0.0,totalServiceChargeWithGst,totalRechargeAmount,retailerCommission,"")
 
             } else
             {
@@ -3062,7 +3096,7 @@ class RechargeFragment : Fragment() {
                 /*Toast.makeText(requireContext(), response.returnMessage.toString(), Toast.LENGTH_SHORT).show()*/
                 val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + 0.0
                 var msg = "Warning : Slab structure not found. This transaction will proceed without any commission being credited."
-                openDialogForPayout(0.0,rechargeAmount.toDoubleOrNull() ?: 0.0,0.0,totalRechargeAmount,msg)
+                openDialogForPayout(0.0,rechargeAmount.toDoubleOrNull() ?: 0.0,0.0,totalRechargeAmount,0.0,msg)
             }
         }
     }
@@ -3070,7 +3104,7 @@ class RechargeFragment : Fragment() {
     // showing pop up for showing services and commission during mobile recharge
 
     @SuppressLint("SetTextI18n")
-    fun openDialogForPayout(serviceCharge: Double, transferAmount: Double , servicechargeGst:Double,totalRechargeAmount:Double, msg:String) {
+    fun openDialogForPayout(serviceCharge: Double, transferAmount: Double , servicechargeGst:Double,totalRechargeAmount:Double,retailerCommission:Double ,msg:String) {
         dialog = Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.mobilerechargecommissionlayout)
@@ -3088,6 +3122,7 @@ class RechargeFragment : Fragment() {
         val warningmsg = dialog.findViewById<TextView>(R.id.warningmsg)
         val transferamt = dialog.findViewById<TextView>(R.id.transferamt)
         val serviceChargeamount = dialog.findViewById<TextView>(R.id.servicescharge)
+        val retailercommission = dialog.findViewById<TextView>(R.id.retailercommission)
         val gstamount = dialog.findViewById<TextView>(R.id.gstamount)
         val cancel = dialog.findViewById<ImageView>(R.id.cancel)
         val done = dialog.findViewById<LinearLayout>(R.id.Proceedbtn)
@@ -3103,6 +3138,7 @@ class RechargeFragment : Fragment() {
 
         transferamttxt.text = "$transferAmount"
         serviceChargetxt.text = "$serviceCharge"
+        retailercommission.text = "$retailerCommission"
 
 
         serviceChargeamount.text = "$serviceCharge"
@@ -3123,16 +3159,14 @@ class RechargeFragment : Fragment() {
             }
         }
 
-
         done.setOnClickListener {
             if(totalRechargeAmount>0){
+                mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
+                mStash!!.setStringValue(Constants.serviceChargeWithGST, String.format("%.2f", servicechargeGst))
                 getAllWalletBalance()
             }
             else{
-                Toast.makeText(requireContext(),
-                    "Transfer amount must be greater than the service charge.",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(requireContext(), "Transfer amount must be greater than the service charge.", Toast.LENGTH_LONG).show()
             }
 
         }
@@ -3154,14 +3188,8 @@ class RechargeFragment : Fragment() {
 
     private fun getAgentReferenceIdRes(response: AgentRefrenceidRes) {
         if (response.Status == true) {
-            mStash!!.setStringValue(
-                Constants.dIS_RegistrationId,
-                response.DISRegistrationId.toString()
-            )
-            mStash!!.setStringValue(
-                Constants.mD_RegistrationId,
-                response.MDRegistrationId.toString()
-            )
+            mStash!!.setStringValue(Constants.dIS_RegistrationId, response.DISRegistrationId.toString())
+            mStash!!.setStringValue(Constants.mD_RegistrationId, response.MDRegistrationId.toString())
         }
         else {
             toast(response.message.toString())
@@ -3171,12 +3199,8 @@ class RechargeFragment : Fragment() {
 
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
-    private fun serviceChargeCalculation(
-        serviceCharge: Double,
-        gstRate: Double,
-        rechargeAmount: String,
-        response: GetCommercialRes
-    ): Double {
+    private fun serviceChargeCalculation(serviceCharge: Double, gstRate: Double, rechargeAmount: String, response: GetCommercialRes): Double {
+
         val rechargeAmountValue = rechargeAmount.toDoubleOrNull() ?: 0.0
 
         val totalAmountWithGst = when (response.data[0].serviceType) {
@@ -3184,14 +3208,9 @@ class RechargeFragment : Fragment() {
                 // Service charge is a fixed amount
                 binding.serviceChargeText.text = "Service Charge Rs"
                 val serviceChargeWithGst = serviceCharge * (gstRate / 100)
-                mStash!!.setStringValue(
-                    Constants.serviceCharge,
-                    String.format("%.2f", serviceCharge)
-                )
+
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", serviceCharge))
                 serviceCharge + serviceChargeWithGst
-
-
-//                mStash.setStringValue(Constants.serviceCharge, )
             }
 
             "Percentage" -> {
@@ -3201,12 +3220,7 @@ class RechargeFragment : Fragment() {
                 val serviceWithGst = serviceInAmount * (gstRate / 100)
                 binding.serviceChargeWithGST.text = String.format("%.2f", serviceWithGst)
 
-
-                mStash!!.setStringValue(
-                    Constants.serviceCharge,
-                    String.format("%.2f", serviceInAmount)
-                )
-//                mStash!!.setStringValue(Constants.serviceChargeWithGST, String.format("%.2f", serviceWithGst))
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", serviceInAmount))
                 serviceInAmount + serviceWithGst
 
             }
@@ -3216,21 +3230,13 @@ class RechargeFragment : Fragment() {
 
         // Display service charge and total amount with GST in the UI
         binding.serviceCharge.text = String.format("%.2f", serviceCharge)
-        binding.serviceChargeWithGST.text =
-            String.format("%.2f", totalAmountWithGst)
+        binding.serviceChargeWithGST.text = String.format("%.2f", totalAmountWithGst)
 
+        mStash!!.setStringValue(Constants.serviceChargeWithGST, String.format("%.2f", totalAmountWithGst))
 
-//        mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", serviceCharge))
-        mStash!!.setStringValue(
-            Constants.serviceChargeWithGST,
-            String.format("%.2f", totalAmountWithGst)
-        )
 
         Log.d("totalAmountWithGst", mStash!!.getStringValue(Constants.serviceCharge, "").toString())
-        Log.d(
-            "totalAmountWithGst",
-            mStash!!.getStringValue(Constants.serviceChargeWithGST, "").toString()
-        )
+        Log.d("totalAmountWithGst", mStash!!.getStringValue(Constants.serviceChargeWithGST, "").toString())
 
         // Return the total service charge (with GST) to include in the final transaction
         return totalAmountWithGst
@@ -3355,6 +3361,7 @@ class RechargeFragment : Fragment() {
 
     }
 
+
     // Function to capitalize all text in an EditText
     fun capitalizeEditText(editText: EditText) {
         val textWatcher = object : TextWatcher {
@@ -3380,6 +3387,7 @@ class RechargeFragment : Fragment() {
         editText.addTextChangedListener(textWatcher)
     }
 
+
     private fun getFuseLocation() {
 
         customFuseLocation = CustomFuseLocationActivity(requireActivity(), requireContext()) { mCurrentLocation ->
@@ -3389,13 +3397,16 @@ class RechargeFragment : Fragment() {
         }
     }
 
+
     override fun onResume() {
         super.onResume()
         try {
             customFuseLocation!!.onResume()
+            getFuseLocation()
         } catch (e: java.lang.Exception) {
         }
     }
+
 
     override fun onStop() {
         try {
@@ -3405,6 +3416,7 @@ class RechargeFragment : Fragment() {
         super.onStop()
     }
 
+
     override fun onPause() {
         super.onPause()
         try {
@@ -3412,6 +3424,7 @@ class RechargeFragment : Fragment() {
         } catch (e: java.lang.Exception) {
         }
     }
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun showUpdateKycDetails(context: Context) {
@@ -3691,7 +3704,7 @@ class RechargeFragment : Fragment() {
             geoCoder = latlong,
             customerNumber = mobileNo
         )
-        Log.d("rechargeReq", Gson().toJson(MobileRechargeReq))
+        Log.d("rechargeReq", Gson().toJson(MobileRechargeReq).toString())
 
         MobileRechargeViewModel.getMobileRechargeRequest(MobileRechargeReq)
             .observe(requireActivity()) { resource ->
@@ -3702,15 +3715,40 @@ class RechargeFragment : Fragment() {
                             it.data?.let { users ->
                                 users.body()?.let { response ->
                                     uploadDataOnFirebaseConsole(Gson().toJson(response),"RechargeFragmentRechargeRequest",requireContext())
+                                    getFuseLocation()
                                     pd.dismiss()
                                     Log.d("rechargeResp", Gson().toJson(response))
-                                    if (response.statusCode == 200) {
-                                     startActivity(Intent(requireContext(), RechargeSuccessfulPageActivity::class.java))
-                                     Toast.makeText(requireContext(),response.data!!.message,Toast.LENGTH_SHORT).show()
-                                    }
-                                    else{
-                                        Toast.makeText(requireContext(),response.data!!.message,Toast.LENGTH_SHORT).show()
-                                    }
+
+
+
+                                    /*if (response.statusCode == 200) {*/
+
+                                        when(productID){
+                                         "518"->  operatorlogo = context.resources.getDrawable(R.drawable.airtel)
+                                         "521" -> operatorlogo = context.resources.getDrawable(R.drawable.bsnl)
+                                         "519" -> operatorlogo = context.resources.getDrawable(R.drawable.jio)
+                                         "520" -> operatorlogo = context.resources.getDrawable(R.drawable.vodaphone)
+                                     }
+
+                                        RechargeSuccessfulPageActivity.operatorName = binding.spOperator.selectedItem.toString().trim()
+                                        Log.d("operatorName",RechargeSuccessfulPageActivity.operatorName )
+                                        Log.d("productID", productID )
+                                        operatorLogo =  operatorlogo
+                                        rechargeStatus = response.data!!.status!!
+                                        Datetime = Constants.getCurrentDateTime()
+                                        planPrice = binding.rechargeAmount.text.toString().trim()
+                                        transactionID = response.data.txnId!!
+                                        referenceId = response.referanceID ?: ""
+                                        mobileNumber = mobileNo
+                                        orderID = response.data.ackno!!
+                                        serviceChargeWithGST = mStash!!.getStringValue(Constants.serviceChargeWithGST, "")!!
+                                        totalTransaction =  mStash!!.getStringValue(Constants.totalTransaction,"")!!
+
+                                       /* var intent = Intent (requireContext(), RechargeSuccessfulPageActivity::class.java)
+                                        startActivity(intent)*/
+
+                                       hitApiForMobileRechargeReqUpload(rechargeAmt,mobileNo,response,Gson().toJson(MobileRechargeReq).toString())
+
                                 }
                             }
                         }
@@ -3729,6 +3767,108 @@ class RechargeFragment : Fragment() {
 
 
     }
+
+
+
+    fun hitApiForMobileRechargeReqUpload(rechargeAmt:String, mobileNo :String,rechargeResponse: MobileRechargeRespo, rechargeresuqst:String){
+
+        var mearchantId =  mStash?.getStringValue(Constants.MerchantId, "")
+        var registrationId =  mStash?.getStringValue(Constants.RegistrationId, "")
+        var productID =  mStash!!.getStringValue(Constants.OperatorId.toString(),"")
+
+        var MobileRechargeReq = UploadRechargeMobileRespReq(
+            amount = rechargeAmt ,
+            requestParam = rechargeresuqst ,
+            operators =  productID,
+            registrationID = mearchantId,
+            ipAddress = "",
+            paramuser = registrationId,
+            canumber = mobileNo,
+            referenceid = rechargeResponse.data!!.txnId ,
+        )
+        Log.d("rechargeReq", Gson().toJson(MobileRechargeReq).toString())
+
+        getAllApiServiceViewModel.putRechargemobileReq(MobileRechargeReq)
+            .observe(requireActivity()) { resource ->
+                resource?.let {
+                    when (it.apiStatus) {
+                        ApiStatus.SUCCESS -> {
+                            pd.dismiss()
+                            it.data?.let { users ->
+                                users.body()?.let { response ->
+                                    Log.d("RechargeReqResp",Gson().toJson(response))
+                                    hitApiForMobileRechargeRespUpload(rechargeResponse)
+
+                                }
+                            }
+                        }
+
+                        ApiStatus.ERROR -> {
+                            pd.dismiss()
+                        }
+
+                        ApiStatus.LOADING -> {
+                            pd.show()
+                        }
+                    }
+                }
+
+            }
+
+
+    }
+
+
+    fun hitApiForMobileRechargeRespUpload(rechargeResponse: MobileRechargeRespo){
+        var mearchantId =  mStash?.getStringValue(Constants.MerchantId, "")
+        var registrationId =  mStash?.getStringValue(Constants.RegistrationId, "")
+        var productID =  mStash!!.getStringValue(Constants.OperatorId.toString(),"")
+
+        var MobileRechargeReq = UploadRechargeMobileRespRespReq(
+            status =  rechargeResponse.data!!.message ,
+            responsecode = rechargeResponse.statusCode ,
+            operators =  productID,
+            ackno = rechargeResponse.data!!.ackno,
+            refid = rechargeResponse.data!!.txnId,
+            message = registrationId,
+            registrationID = mearchantId,
+            ipAddress = "" ,
+            responseParam =Gson().toJson(rechargeResponse).toString(),
+            paramuser  = registrationId ,
+        )
+        Log.d("rechargeresponseReq", Gson().toJson(MobileRechargeReq).toString())
+
+        getAllApiServiceViewModel.putRechargemobileResponseReq(MobileRechargeReq)
+            .observe(requireActivity()) { resource ->
+                resource?.let {
+                    when (it.apiStatus) {
+                        ApiStatus.SUCCESS -> {
+                            pd.dismiss()
+                            it.data?.let { users ->
+                                users.body()?.let { response ->
+                                    Log.d("RechargeRespResp",Gson().toJson(response))
+
+                                }
+                            }
+                        }
+
+                        ApiStatus.ERROR -> {
+                            pd.dismiss()
+                        }
+
+                        ApiStatus.LOADING -> {
+                            pd.show()
+                        }
+                    }
+                }
+
+            }
+
+
+    }
+
+
+
 
 
     fun hitApiForRechargeCategory(){

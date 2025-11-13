@@ -114,6 +114,9 @@ import com.bos.payment.appName.data.model.recharge.qrCode.GenerateQRCodeRes
 import com.bos.payment.appName.data.model.recharge.recharge.DthInfoPlanResp
 import com.bos.payment.appName.data.model.recharge.recharge.DthInfoReq
 import com.bos.payment.appName.data.model.recharge.recharge.MobileRechargeReq
+import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespReq
+import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespResp
+import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespRespReq
 import com.bos.payment.appName.data.model.recharge.rechargeHistory.RechargeHistoryReq
 import com.bos.payment.appName.data.model.recharge.rechargeHistory.RechargeHistoryRes
 import com.bos.payment.appName.data.model.recharge.status.RechargeStatusRes
@@ -513,8 +516,16 @@ interface ApiInterface {
     fun getRechargePlanReq(@Body body: RequestBody): Call<ResponseBody>
 
 
-    @POST("api/AOP/V2/Mobile/MobileRecharge")
+    @POST("api/AOP/V2/MobileRecharge")
     suspend fun getMobileRechargeReq(@Body req: com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileRechargeReq): Response<MobileRechargeRespo>? // Annu
+
+
+    @POST("api/Recharge/RechargeRequest")
+    suspend fun putRechargemobileReq(@Body req: UploadRechargeMobileRespReq): Response<UploadRechargeMobileRespResp>? // Annu
+
+
+    @POST("api/Recharge/RechargeResponse")
+    suspend fun putRechargemobileResponseReq(@Body req: UploadRechargeMobileRespRespReq): Response<UploadRechargeMobileRespResp>? // Annu
 
 
     @POST("api/AOP/V2/Mobile/GetDthInfo")

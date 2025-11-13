@@ -474,6 +474,13 @@ object Constants {
     }
 
 
+    fun getCurrentDateTime(): String {
+        val dateFormat = SimpleDateFormat("MMM d, yyyy, h:mm a", Locale.getDefault())
+        val currentDate = Date()
+        return dateFormat.format(currentDate).lowercase()  // to get "pm" instead of "PM"
+    }
+
+
 
 
 

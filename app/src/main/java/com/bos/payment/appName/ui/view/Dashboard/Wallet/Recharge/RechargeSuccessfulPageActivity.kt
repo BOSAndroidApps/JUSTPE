@@ -2,6 +2,7 @@ package com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -23,6 +24,20 @@ import com.bos.payment.appName.utils.MStash
 class RechargeSuccessfulPageActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRechargeBinding
     private var mStash: MStash? = null
+
+    companion object{
+      lateinit  var operatorLogo: Drawable
+      lateinit  var rechargeStatus: String
+      lateinit  var Datetime: String
+      lateinit  var planPrice: String
+      lateinit  var serviceChargeWithGST: String
+      lateinit  var totalTransaction: String
+      lateinit  var transactionID: String
+      lateinit  var referenceId: String
+      lateinit  var mobileNumber: String
+      lateinit  var orderID: String
+      lateinit  var operatorName: String
+    }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,12 +67,12 @@ class RechargeSuccessfulPageActivity : AppCompatActivity() {
 
         binding.let {
             // Set various UI components with data from the intent
-            binding.operatorName.text = "Pay ${intent.getStringExtra("operatorName")} Prepaid"
-            binding.rechargeAmount.text = "₹${intent.getStringExtra("amount")}"
-            binding.dateAndTime.text = intent.getStringExtra("dateAndTime")
-            binding.transactionId.text = intent.getStringExtra("transactionId")
-            binding.referenceId.text = intent.getStringExtra("referenceId")
-            binding.mobileNo.text = "+91${intent.getStringExtra("mobileNumber")}"
+            binding.operatorName.text = /*"Pay ${intent.getStringExtra("operatorName")} Prepaid"*/ "Pay $operatorName"
+            binding.rechargeAmount.text = "₹ ${/*intent.getStringExtra("amount")*/planPrice}"
+            binding.dateAndTime.text = /*intent.getStringExtra("dateAndTime")*/ Datetime
+            binding.transactionId.text = /*intent.getStringExtra("transactionId")*/ transactionID
+            binding.referenceId.text = /*intent.getStringExtra("transactionId")*/ referenceId
+            binding.mobileNo.text = "+91 ${/*intent.getStringExtra("mobileNumber")*/ mobileNumber}"
 
             // Logic for service and commission charges
             when {
@@ -71,23 +86,23 @@ class RechargeSuccessfulPageActivity : AppCompatActivity() {
                 }
             }
 
+
             // Set remaining commission and tax values
-            binding.totalAmount.text = "₹" + intent.getStringExtra("totalTransaction")
-            binding.serviceChargeWithGSTText.text = "₹" + intent.getStringExtra("serviceChargeWithGST")
-            binding.totalTransactionText.text = "₹" + intent.getStringExtra("totalTransaction")
+            binding.totalAmount.text = "₹ ${totalTransaction}"  /* +intent.getStringExtra("totalTransaction")*/
+            binding.serviceChargeWithGSTText.text = "₹ ${serviceChargeWithGST}" /*+ intent.getStringExtra("serviceChargeWithGST")*/
+            binding.totalTransactionText.text = "₹ ${totalTransaction}" /*+ intent.getStringExtra("totalTransaction")*/
 
             // Set transaction status and related UI components
-            val isSuccess = intent.getStringExtra("Status") == "true"
+            val isSuccess = rechargeStatus == "SUCCESS"
             val colorResId = if (isSuccess) R.drawable.green_circle else R.drawable.red_circle
+
             binding.circle.setBackgroundResource(colorResId)
             binding.status.text = if (isSuccess) "Recharge Successful" else "Recharge Failed"
 
-            // Set the operator logo or a fallback image
-            val imageResourceName = intent.getStringExtra("image")
-            if (!imageResourceName.isNullOrEmpty()) {
-                val imageResId = resources.getIdentifier(imageResourceName, "drawable", packageName)
-                it.operatorLogo.setImageResource(imageResId)
-            } else {
+            if(operatorLogo!=null){
+                it.operatorLogo.setImageDrawable(operatorLogo)
+            }
+            else{
                 it.operatorLogo.setImageResource(R.drawable.no_image)
             }
         }

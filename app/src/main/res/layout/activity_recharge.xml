@@ -60,6 +60,7 @@
                     android:layout_gravity="center"
                     android:textSize="@dimen/dimen_44dp"
                     android:layout_marginTop="@dimen/dimen_16dp"/>
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/repeatRecharge"
                     android:layout_width="wrap_content"
@@ -89,11 +90,13 @@
                         android:padding="@dimen/dimen_4sp"
                         android:src="@drawable/check_sign"
                         android:background="@drawable/green_circle"/>
+
                     <TextView
                         android:id="@+id/status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="  Completed"
+                        android:text="Completed"
+                        android:layout_marginLeft="@dimen/dimen_10dp"
                         android:textColor="@color/grey"
                         android:layout_gravity="center"
                         android:textSize="@dimen/dimen_12sp"/>
@@ -434,13 +437,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Transaction ID"
+                        android:text="Reference ID"
                         android:layout_marginTop="@dimen/dimen_16sp"
                         android:textSize="@dimen/dimen_12sp"
                         android:textColor="@color/grey"
                         android:paddingStart="@dimen/dimen_10dp"/>
+
                     <TextView
-                        android:id="@+id/transactionId"
+                        android:id="@+id/referenceId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="12345678909"
@@ -452,13 +456,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Reference ID"
-                        android:layout_marginTop="@dimen/dimen_16dp"
+                        android:text="Transaction ID"
+                        android:layout_marginTop="@dimen/dimen_16sp"
                         android:textSize="@dimen/dimen_12sp"
                         android:textColor="@color/grey"
                         android:paddingStart="@dimen/dimen_10dp"/>
+
                     <TextView
-                        android:id="@+id/referenceId"
+                        android:id="@+id/transactionId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="12345678909"
@@ -466,6 +471,8 @@
                         android:textSize="@dimen/dimen_12sp"
                         android:textColor="@color/grey"
                         android:paddingStart="@dimen/dimen_10dp"/>
+
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
