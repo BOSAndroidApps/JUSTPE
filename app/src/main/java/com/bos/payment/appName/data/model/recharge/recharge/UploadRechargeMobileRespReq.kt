@@ -36,7 +36,7 @@ data class UploadRechargeMobileRespRespReq(
 	val status: String? = null,
 
 	@field:SerializedName("response_code")
-	val responsecode: Int? = null,
+	val responsecode: String? = null,
 
 	@field:SerializedName("operatorid")
 	val operators: String? = null,

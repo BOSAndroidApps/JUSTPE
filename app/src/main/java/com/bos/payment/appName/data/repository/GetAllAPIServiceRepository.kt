@@ -12,6 +12,10 @@ import com.bos.payment.appName.data.model.makepaymentnew.ReferenceIDGenerateReq
 import com.bos.payment.appName.data.model.menuList.GetAllMenuListReq
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.GetPayoutCommercialReq
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.mobileCharge.GetCommercialReq
+import com.bos.payment.appName.data.model.recharge.recharge.RechargeapiresponseReq
+import com.bos.payment.appName.data.model.recharge.recharge.TransferToAgentReq
+import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespReq
+import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespRespReq
 import com.bos.payment.appName.data.model.serviceWiseTrans.TransactionReportReq
 import com.bos.payment.appName.data.model.supportmanagement.AddCommentReq
 import com.bos.payment.appName.data.model.supportmanagement.ChatCommentResp
@@ -172,5 +176,14 @@ class GetAllAPIServiceRepository(private val apiInterface: ApiInterface) {
             ,approvedremarks,amount,companycode,beneId,accoundholder,paymenttype,flag,admincode,imagePart1)
 
     }
+
+
+    suspend fun putRechargemobileReq(req: UploadRechargeMobileRespReq)= apiInterface.putRechargemobileReq(req)
+
+    suspend fun putRechargemobileResponseReq(req: UploadRechargeMobileRespRespReq)= apiInterface.putRechargemobileResponseReq(req)
+
+    suspend fun putRechargeapiresponseReq(req: RechargeapiresponseReq)= apiInterface.putRechargeapiresponseReq(req)
+
+    suspend fun transferToAgentReq(req: TransferToAgentReq)= apiInterface.getTransferAmountToAgentsForCommission(req)
 
 }

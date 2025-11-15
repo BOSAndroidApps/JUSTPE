@@ -2,13 +2,26 @@ package com.bos.payment.appName.data.model.transferAMountToAgent
 
 import com.google.gson.annotations.SerializedName
 
+data class TransferAmountToAgentsRes(
 
-data class TransferAmountToAgentsRes (
+	@field:SerializedName("returnCode")
+	val returnCode: String? = null,
 
-  @SerializedName("isSuccess"     ) var isSuccess     : Boolean? = null,
-  @SerializedName("returnMessage" ) var returnMessage : String?  = null,
-  @SerializedName("returnCode"    ) var returnCode    : String?  = null,
-  @SerializedName("data"          ) var data          : Data?    = Data()
+	@field:SerializedName("data")
+	val data: Data? = null,
 
+	@field:SerializedName("returnMessage")
+	val returnMessage: String? = null,
 
+	@field:SerializedName("isSuccess")
+	val isSuccess: Boolean? = null
+)
+
+data class Data(
+
+	@field:SerializedName("refTransID")
+	val refTransID: String? = null,
+
+	@field:SerializedName("requestData")
+	val requestData: Any? = null
 )

@@ -18,6 +18,10 @@ import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileW
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeCategoryReq
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargeOperatorsReq
 import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.RechargePlanReq
+import com.bos.payment.appName.data.model.recharge.recharge.RechargeapiresponseReq
+import com.bos.payment.appName.data.model.recharge.recharge.TransferToAgentReq
+import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespReq
+import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespRespReq
 import com.bos.payment.appName.data.model.serviceWiseTrans.TransactionReportReq
 import com.bos.payment.appName.data.model.supportmanagement.AddCommentReq
 import com.bos.payment.appName.data.model.supportmanagement.TicketStatusReq
@@ -436,7 +440,6 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
     }
 
 
-
     fun sendTicketCommentListReq(commentreq: AddCommentReq) = liveData(Dispatchers.IO) {
         emit(ApiResponse.loading(data = null))
         try {
@@ -458,7 +461,6 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
         }
     }
 
-
     fun getbanklistreq(banklistreq: BankDetailsReq) = liveData(Dispatchers.IO) {
         emit(ApiResponse.loading(data = null))
         try {
@@ -468,7 +470,6 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
             emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))
         }
     }
-
 
     fun RaisMakePaymentReq(req: RaiseMakePaymentReq) = liveData(Dispatchers.IO) {
         emit(ApiResponse.loading(data = null))
@@ -480,7 +481,124 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
         }
     }
 
+    fun putRechargemobileReq(req: UploadRechargeMobileRespReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.putRechargemobileReq(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "Something went wrong: ${e.localizedMessage}"
+                )
+            )
+        }
+    }
 
+
+    fun putRechargemobileResponseReq(req: UploadRechargeMobileRespRespReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.putRechargemobileResponseReq(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "Something went wrong: ${e.localizedMessage}"
+                )
+            )
+        }
+    }
+
+
+    fun putRechargeapiresponseReq(req: RechargeapiresponseReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.putRechargeapiresponseReq(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "Something went wrong: ${e.localizedMessage}"
+                )
+            )
+        }
+    }
+
+
+    fun transferToAgentReq(req: TransferToAgentReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_0000) { // 10 seconds timeout
+                repository.transferToAgentReq(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "Something went wrong: ${e.localizedMessage}"
+                )
+            )
+        }
+    }
 
 
 

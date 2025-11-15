@@ -28,9 +28,6 @@ class MobileRechargeRepository(private var apiInterface: ApiInterface) {
 
     suspend fun getMobileRechargeReq(req: com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileRechargeReq)= apiInterface.getMobileRechargeReq(req)
 
-    suspend fun putRechargemobileReq(req: UploadRechargeMobileRespReq)= apiInterface.putRechargemobileReq(req)
-
-    suspend fun putRechargemobileResponseReq(req: UploadRechargeMobileRespRespReq)= apiInterface.putRechargemobileResponseReq(req)
 
     suspend fun createVirtualAccount(req: GenerateVirtualAccountModel)= apiInterface.createVirtualAccount(req)
 

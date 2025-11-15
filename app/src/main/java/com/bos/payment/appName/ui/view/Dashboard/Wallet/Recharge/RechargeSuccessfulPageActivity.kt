@@ -67,12 +67,12 @@ class RechargeSuccessfulPageActivity : AppCompatActivity() {
 
         binding.let {
             // Set various UI components with data from the intent
-            binding.operatorName.text = /*"Pay ${intent.getStringExtra("operatorName")} Prepaid"*/ "Pay $operatorName"
-            binding.rechargeAmount.text = "₹ ${/*intent.getStringExtra("amount")*/planPrice}"
-            binding.dateAndTime.text = /*intent.getStringExtra("dateAndTime")*/ Datetime
-            binding.transactionId.text = /*intent.getStringExtra("transactionId")*/ transactionID
-            binding.referenceId.text = /*intent.getStringExtra("transactionId")*/ referenceId
-            binding.mobileNo.text = "+91 ${/*intent.getStringExtra("mobileNumber")*/ mobileNumber}"
+            binding.operatorName.text = "Pay $operatorName"
+            binding.rechargeAmount.text = "₹ ${planPrice}"
+            binding.dateAndTime.text = Datetime
+            binding.transactionId.text = transactionID
+            binding.referenceId.text =  referenceId
+            binding.mobileNo.text = "+91 ${ mobileNumber}"
 
             // Logic for service and commission charges
             when {
@@ -88,9 +88,16 @@ class RechargeSuccessfulPageActivity : AppCompatActivity() {
 
 
             // Set remaining commission and tax values
-            binding.totalAmount.text = "₹ ${totalTransaction}"  /* +intent.getStringExtra("totalTransaction")*/
-            binding.serviceChargeWithGSTText.text = "₹ ${serviceChargeWithGST}" /*+ intent.getStringExtra("serviceChargeWithGST")*/
-            binding.totalTransactionText.text = "₹ ${totalTransaction}" /*+ intent.getStringExtra("totalTransaction")*/
+            binding.totalAmount.text = "₹ ${totalTransaction}"
+            binding.serviceChargeWithGSTText.text = "₹ ${serviceChargeWithGST}"
+            binding.totalTransactionText.text = "₹ ${totalTransaction}"
+
+            if(serviceChargeWithGST.toDouble()>0.0){
+                binding.servicewithgstlayout.visibility=View.VISIBLE
+            }
+            else{
+                binding.servicewithgstlayout.visibility=View.GONE
+            }
 
             // Set transaction status and related UI components
             val isSuccess = rechargeStatus == "SUCCESS"

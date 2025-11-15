@@ -56,6 +56,7 @@ class TransactionReportAdapter(var context: Context, var transactionList: List<D
 
     override fun onBindViewHolder(holder: TransactionReportAdapter.ViewHolder, position: Int) {
          if(transactionList[position]!!.status.isNullOrBlank()){
+             // for commission report
              holder.binding.withoutCommissionRequestcard.visibility=View.GONE
              holder.binding.CommissionRequestcard.visibility=View.VISIBLE
 
@@ -87,8 +88,12 @@ class TransactionReportAdapter(var context: Context, var transactionList: List<D
                  holder.binding.statustxt.setTextColor(ContextCompat.getColor(context, R.color.green))
              }
 
-             if (transactionList[position]!!.status!!.toLowerCase().equals("rejected")) {
+             if (transactionList[position]!!.status!!.toLowerCase().equals("rejected") || transactionList[position]!!.status!!.toLowerCase().equals("failed")) {
                  holder.binding.statustxt.setTextColor(ContextCompat.getColor(context, R.color.red))
+                 holder.binding.raiseticketcard.visibility= View.INVISIBLE
+             }
+             else {
+                 holder.binding.raiseticketcard.visibility= View.VISIBLE
              }
 
              holder.binding.statustxt.text = transactionList[position]!!.status

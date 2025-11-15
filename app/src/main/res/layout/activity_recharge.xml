@@ -334,6 +334,7 @@
 <!--                                        android:padding="10dp"/>-->
 <!--                                </LinearLayout>-->
                                 <LinearLayout
+                                    android:id="@+id/servicewithgstlayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:weightSum="4"
@@ -428,7 +429,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="12345678909"
+                        android:text=""
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:textSize="@dimen/dimen_12sp"
                         android:textColor="@color/grey"

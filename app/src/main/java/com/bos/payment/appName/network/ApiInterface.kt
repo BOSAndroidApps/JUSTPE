@@ -114,6 +114,8 @@ import com.bos.payment.appName.data.model.recharge.qrCode.GenerateQRCodeRes
 import com.bos.payment.appName.data.model.recharge.recharge.DthInfoPlanResp
 import com.bos.payment.appName.data.model.recharge.recharge.DthInfoReq
 import com.bos.payment.appName.data.model.recharge.recharge.MobileRechargeReq
+import com.bos.payment.appName.data.model.recharge.recharge.RechargeapiresponseReq
+import com.bos.payment.appName.data.model.recharge.recharge.TransferToAgentReq
 import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespReq
 import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespResp
 import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespRespReq
@@ -430,7 +432,7 @@ interface ApiInterface {
     suspend fun getWalletBalance(@Body req: GetBalanceReq): Response<GetBalanceRes>?
 
 
-    @POST("/api/Payout/BosPayoutTransaction")
+    @POST("api/Payout/BosPayoutTransaction")
     suspend fun getTransferAmountToAgents(@Body req: TransferAmountToAgentsReq): Response<TransferAmountToAgentsRes>?
 
 
@@ -526,6 +528,15 @@ interface ApiInterface {
 
     @POST("api/Recharge/RechargeResponse")
     suspend fun putRechargemobileResponseReq(@Body req: UploadRechargeMobileRespRespReq): Response<UploadRechargeMobileRespResp>? // Annu
+
+
+    @POST("api/Recharge/Rechargeapiresponse")
+    suspend fun putRechargeapiresponseReq(@Body req: RechargeapiresponseReq): Response<UploadRechargeMobileRespResp>? // Annu
+
+
+    // when having commission use this api
+    @POST("/api/BosTransfer/TransfertoAgent")
+    suspend fun getTransferAmountToAgentsForCommission(@Body req: TransferToAgentReq): Response<UploadRechargeMobileRespResp>?
 
 
     @POST("api/AOP/V2/Mobile/GetDthInfo")

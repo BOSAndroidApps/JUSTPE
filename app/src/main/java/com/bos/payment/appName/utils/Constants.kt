@@ -13,6 +13,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesDataItem
@@ -28,6 +29,9 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import java.net.URL
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
@@ -145,12 +149,17 @@ object Constants {
     var mobileCircleName = "mobileCircleName"
     var uploadImage = ""
     var retailerCommissionWithoutTDS = "retailerCommissionWithoutTDS"
+    var retailerCommission = "retailerCommission"
     var adminCommissionWithoutTDS = "adminCommissionWithoutTDS"
     var mDistributerCommissionWithoutTDS = "mDistributerCommissionWithoutTDS"
     var customerCommissionWithoutTDS = "customerCommissionWithoutTDS"
     var tds = "tds"
+    var gst = "gst"
     var totalTransaction = "totalTransaction"
+    var actualRechargeAmount = "rechargeplanamount"
+    var actualRetailerCommissionAmount = "retaileractualcommissionamount"
     var serviceCharge = "serviceCharge"
+    var serviceChargewithgst = "serviceChargewithgst"
     var serviceChargeGST = "serviceChargeGst"
     var toBeCreditedAmt = "tobecreditedamt"
     var serviceChargeWithGST = "serviceChargeWithGST"
@@ -481,8 +490,10 @@ object Constants {
     }
 
 
-
-
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getCurrentIsoDate(): String {
+        return Instant.now().toString()
+    }
 
 
 

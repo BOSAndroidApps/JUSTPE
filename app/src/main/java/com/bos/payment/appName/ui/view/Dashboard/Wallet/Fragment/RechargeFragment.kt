@@ -80,6 +80,8 @@ import com.bos.payment.appName.data.model.recharge.operator.RechargeOperatorsLis
 import com.bos.payment.appName.data.model.recharge.recharge.DthInfoReq
 import com.bos.payment.appName.data.model.recharge.recharge.MobileRechargeReq
 import com.bos.payment.appName.data.model.recharge.recharge.MobileRechargeRes
+import com.bos.payment.appName.data.model.recharge.recharge.RechargeapiresponseReq
+import com.bos.payment.appName.data.model.recharge.recharge.TransferToAgentReq
 import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespReq
 import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespRespReq
 import com.bos.payment.appName.data.model.recharge.status.RechargeStatusReq
@@ -118,6 +120,7 @@ import com.bos.payment.appName.ui.viewmodel.GetAllMobileRechargeViewModel
 import com.bos.payment.appName.ui.viewmodel.MoneyTransferViewModel
 import com.bos.payment.appName.utils.ApiStatus
 import com.bos.payment.appName.utils.Constants
+import com.bos.payment.appName.utils.Constants.getCurrentIsoDate
 import com.bos.payment.appName.utils.Constants.operatorName
 import com.bos.payment.appName.utils.Constants.uploadDataOnFirebaseConsole
 import com.bos.payment.appName.utils.MStash
@@ -154,7 +157,8 @@ class RechargeFragment : Fragment() {
     private lateinit var spinnerType: String
     private lateinit var adapter: ViewPlanListAdapter
     private var oeratorList = ArrayList<Data>()
-    private var getAllOperatorList = ArrayList<com.bos.payment.appName.data.model.recharge.operator.Data>()
+    private var getAllOperatorList =
+        ArrayList<com.bos.payment.appName.data.model.recharge.operator.Data>()
     private var rechargeType: String = ""
     private var featureCode: String = ""
     private lateinit var pd: AlertDialog
@@ -171,35 +175,38 @@ class RechargeFragment : Fragment() {
     // Latest object for new update......................................................................................
     var mob: String = ""
     var operatorsNameList: MutableList<DataItemOperator> = mutableListOf()
-    lateinit var RechargePlanNameAdapter : RechargePlanNameAdapter
+    lateinit var RechargePlanNameAdapter: RechargePlanNameAdapter
 
     companion object {
         var DisplayName: String? = ""
     }
 
-    var mobileRechargePlanList : MutableList<MobileRechargePlanModel> = mutableListOf()
-    var mobilePlan : MutableList<Plan> = mutableListOf()
+    var mobileRechargePlanList: MutableList<MobileRechargePlanModel> = mutableListOf()
+    var mobilePlan: MutableList<Plan> = mutableListOf()
 
-    var operatorNameDTHList : MutableList<Pair<String,Int>> = mutableListOf()
-    var operatorNameMobileList : MutableList<Pair<String,Int>> = mutableListOf()
+    var operatorNameDTHList: MutableList<Pair<String, Int>> = mutableListOf()
+    var operatorNameMobileList: MutableList<Pair<String, Int>> = mutableListOf()
 
-    var apiCalled : Boolean = false
+    var apiCalled: Boolean = false
 
-    var DthInfoList : MutableList<com.bos.payment.appName.data.model.recharge.recharge.DataItem> = mutableListOf()
+    var DthInfoList: MutableList<com.bos.payment.appName.data.model.recharge.recharge.DataItem> =
+        mutableListOf()
     private var lastTriggeredBy: String? = null
 
     lateinit var dialog: Dialog
 
     // for successful Page after Mobile Recharge................................
 
-    lateinit var operatorlogo : Drawable
-
-
+    lateinit var operatorlogo: Drawable
 
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.M)
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentRechargeBinding.inflate(inflater, container, false)
         context = requireContext()
         rechargeType = arguments?.getString("RechargeType").toString()
@@ -236,31 +243,29 @@ class RechargeFragment : Fragment() {
     }
 
 
-    fun setOperatorNameForDTH():MutableList<Pair<String,Int>>{
+    fun setOperatorNameForDTH(): MutableList<Pair<String, Int>> {
         operatorNameDTHList.clear()
-        operatorNameDTHList.add(Pair("Airteldth",522))
-        operatorNameDTHList.add(Pair("TataSky",525))
-        operatorNameDTHList.add(Pair("Videocon",526))
-        operatorNameDTHList.add(Pair("SunDirect",524))
-        operatorNameDTHList.add(Pair("DishTV",523))
-        return  operatorNameDTHList
+        operatorNameDTHList.add(Pair("Airteldth", 522))
+        operatorNameDTHList.add(Pair("TataSky", 525))
+        operatorNameDTHList.add(Pair("Videocon", 526))
+        operatorNameDTHList.add(Pair("SunDirect", 524))
+        operatorNameDTHList.add(Pair("DishTV", 523))
+        return operatorNameDTHList
     }
 
 
-    fun setMobileOperatorNameWithProductID() : MutableList<Pair<String,Int>>{
+    fun setMobileOperatorNameWithProductID(): MutableList<Pair<String, Int>> {
         operatorNameMobileList.clear()
-        operatorNameMobileList.add(Pair("Airtel Prepaid",518))
-        operatorNameMobileList.add(Pair("BSNL Prepaid",521))
-        operatorNameMobileList.add(Pair("Reliance Jio Prepaid",519))
-        operatorNameMobileList.add(Pair("VI Prepaid",520))
+        operatorNameMobileList.add(Pair("Airtel Prepaid", 518))
+        operatorNameMobileList.add(Pair("BSNL Prepaid", 521))
+        operatorNameMobileList.add(Pair("Reliance Jio Prepaid", 519))
+        operatorNameMobileList.add(Pair("VI Prepaid", 520))
 
-        return  operatorNameMobileList
+        return operatorNameMobileList
     }
 
 
-    private fun isUserLoggedIn(): Boolean
-
-    {
+    private fun isUserLoggedIn(): Boolean {
         // Add your logic to check if the user is logged in (e.g., check SharedPreferences)
         return mStash!!.getBoolanValue(Constants.IS_LOGIN.toString(), false)
     }
@@ -293,9 +298,8 @@ class RechargeFragment : Fragment() {
                     //getOperatorName(binding.etMobileNumber.text.toString().trim(), "mobile")
                     hitApiForMobileWiseOperatorName(mob)
                     hideKeyboard(binding.etMobileNumber)
-                }
-                else{
-                    if(s.length==0){
+                } else {
+                    if (s.length == 0) {
                         hitApiForRechargeOperatorNameList(DisplayName!!)
                     }
 
@@ -304,71 +308,20 @@ class RechargeFragment : Fragment() {
 
         })
 
+
         binding.tvBtnViewPlan.setOnClickListener {
             viewPlanList()
-        }
-
-        if (rechargeType == "mobile") {
-             /*var debounceHandler: Handler? = null
-             var debounceRunnable: Runnable? = null
-
-            binding.rechargeAmount.addTextChangedListener(object : TextWatcher {
-                @SuppressLint("SetTextI18n")
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    binding.serviceChargeCommissionLayout.visibility = View.GONE
-
-                    debounceHandler?.removeCallbacks(debounceRunnable!!) // cancel any previous run
-
-                    val amount = s.toString().trim()
-                    val mobile = binding.etMobileNumber.text.toString().trim()
-                    val operatorId = mStash!!.getStringValue(Constants.OperatorId.toString(), "")
-
-                    // schedule a new one after delay (e.g., 800ms)
-                    debounceRunnable = Runnable {
-                        if (amount.isEmpty()) {
-                            Toast.makeText(context, "Enter Valid Amount", Toast.LENGTH_SHORT).show()
-                            return@Runnable
-                        }
-                        if (mobile.length != 10) {
-                            Toast.makeText(context, "Enter Valid Mobile Number", Toast.LENGTH_SHORT).show()
-                            return@Runnable
-                        }
-                        if (operatorId!!.isEmpty()) {
-                            Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
-                            return@Runnable
-                        }
-
-                        // ✅ Trigger popup only after typing stopped
-                        getAllServiceChargeRetailer(amount)
-                    }
-
-                    if (debounceHandler == null) {
-                        debounceHandler = Handler(Looper.getMainLooper())
-                    }
-
-                    debounceHandler?.postDelayed(debounceRunnable!!, 800) // waits 0.8s after typing stops
-                }
-
-                override fun afterTextChanged(s: Editable?) {}
-            })*/
-
-
-        }
-        else {
-            binding.serviceChargeCommissionLayout.visibility = View.GONE
         }
 
 
         binding.etDTHBillNumber.addTextChangedListener(object : TextWatcher {
             @SuppressLint("SetTextI18n")
             override fun afterTextChanged(s: Editable) {
-                if (binding.etDTHBillNumber.length() >0) {
+                if (binding.etDTHBillNumber.length() > 0) {
                     /*getOperatorName(binding.etDTHBillNumber.text.toString().trim(), "dth")
                     hideKeyboard(binding.etDTHBillNumber)*/
 
-                    if(binding.etDTHBillNumber.text.length>=10){
+                    if (binding.etDTHBillNumber.text.length >= 10) {
                         lastTriggeredBy = "circle"
                         CheckAndHitApi()
                     }
@@ -402,6 +355,7 @@ class RechargeFragment : Fragment() {
             }
             false
         }
+
 
         binding.cancelBtn.setOnClickListener {
             binding.llViewBill.visibility = View.GONE
@@ -507,7 +461,6 @@ class RechargeFragment : Fragment() {
         }
     }
 
-
     @RequiresApi(Build.VERSION_CODES.M)
     private fun initView() {
         pd = PD(requireContext())
@@ -515,15 +468,23 @@ class RechargeFragment : Fragment() {
         bill_model = FetchConsumerDetailsRes()
         selectedFastTagModel = com.bos.payment.appName.data.model.fastTag.fastTagOperator.Data()
 
-        getAllApiServiceViewModel = ViewModelProvider(this, GetAllApiServiceViewModelFactory(GetAllAPIServiceRepository(RetrofitClient.apiAllInterface)))[GetAllApiServiceViewModel::class.java]
+        getAllApiServiceViewModel = ViewModelProvider(
+            this,
+            GetAllApiServiceViewModelFactory(GetAllAPIServiceRepository(RetrofitClient.apiAllInterface))
+        )[GetAllApiServiceViewModel::class.java]
 
-        MobileRechargeViewModel = ViewModelProvider(this, MobileRechargeViewModelFactory (MobileRechargeRepository(RetrofitClient.apiRechargeInterface))
+        MobileRechargeViewModel = ViewModelProvider(
+            this,
+            MobileRechargeViewModelFactory(MobileRechargeRepository(RetrofitClient.apiRechargeInterface))
         )[GetAllMobileRechargeViewModel::class.java]
 
-        viewModel = ViewModelProvider(this, MoneyTransferViewModelFactory(MoneyTransferRepository(RetrofitClient.apiAllAPIService)))[MoneyTransferViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            MoneyTransferViewModelFactory(MoneyTransferRepository(RetrofitClient.apiAllAPIService))
+        )[MoneyTransferViewModel::class.java]
 
         binding.etDTHBillNumber.visibility = View.GONE
-        binding.serviceChargeLayout.visibility = View.GONE
+
 
         Constants.operatorName = ArrayList()
         Constants.dthName = ArrayList()
@@ -576,14 +537,14 @@ class RechargeFragment : Fragment() {
         Constants.landLineNameMapForGettingLandLineName = HashMap()
         Constants.municipalityNameMapForGettingMunicipalityName = HashMap()
         Constants.fastTagNameMapForGettingFastTagName = HashMap()
-        if(rechargeType=="mobile"){
-            binding.etAmount.visibility=View.GONE
-            binding.rechargeAmount.visibility= View.VISIBLE
-        }
-       else if (rechargeType == "dth") {
+
+        if (rechargeType == "mobile") {
+            binding.etAmount.visibility = View.GONE
+            binding.rechargeAmount.visibility = View.VISIBLE
+        } else if (rechargeType == "dth") {
             binding.tvRechargeType.text = "Enter CA No"
-            binding.etAmount.visibility=View.VISIBLE
-            binding.rechargeAmount.visibility= View.GONE
+            binding.etAmount.visibility = View.VISIBLE
+            binding.rechargeAmount.visibility = View.GONE
             binding.tvCircle.visibility = View.VISIBLE
             binding.etDTHBillNumber.visibility = View.VISIBLE
             binding.etMobileNumber2.visibility = View.GONE
@@ -600,50 +561,52 @@ class RechargeFragment : Fragment() {
             capitalizeEditText(binding.etMobileNumber2)
         } else
             if (rechargeType == "postpaid" || rechargeType == "Broadband" || rechargeType == "Electricity" || rechargeType == "Landline" || rechargeType == "Water" || rechargeType == "Gas" || rechargeType == "EMI" || rechargeType == "Cable" || rechargeType == "Insurance" || rechargeType == "Municipality") {
-            binding.llMode.visibility = View.VISIBLE
-            binding.tvRechargeType.visibility = View.GONE
-            binding.etMobileNumber.visibility = View.GONE
-            binding.tvCircle.visibility = View.GONE
-            binding.etCircle.visibility = View.GONE
-            binding.tvBtnViewPlan.visibility = View.GONE
+                binding.llMode.visibility = View.VISIBLE
+                binding.tvRechargeType.visibility = View.GONE
+                binding.etMobileNumber.visibility = View.GONE
+                binding.tvCircle.visibility = View.GONE
+                binding.etCircle.visibility = View.GONE
+                binding.tvBtnViewPlan.visibility = View.GONE
 
-            if (rechargeType == "Broadband" || rechargeType == "Landline") {
-                binding.tvAmount.text = "No. + STD Code"
-            } else if (rechargeType == "Electricity" || rechargeType == "Gas" || rechargeType == "Municipality") {
-                binding.tvAmount.text = "Enter CA Number"
-            } else if (rechargeType == "Water") {
-                binding.tvOperator.text = "Water Board"
-                binding.tvAmount.text = "CA / RR No."
-            } else if (rechargeType == "EMI") {
-                binding.tvOperator.text = "Lender"
-                binding.tvAmount.text = "Loan Account No."
-            } else if (rechargeType == "Cable") {
-                binding.tvAmount.text = "Mobile / Acc No."
-            } else if (rechargeType == "Insurance") {
-                binding.tvOperator.text = "Insurance"
-                binding.tvAmount.text = "Policy Number."
-            } else {
-                binding.tvAmount.text = "Enter Mobile No"
-            }
-            binding.tvBtnProceed.text = "Get Bill"
-            val arrayList = ArrayList<String>()
-            arrayList.add("online")
-            arrayList.add("offline")
-            binding.spMode.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, arrayList)
-            binding.spMode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    adapterView: AdapterView<*>, view: View?, i: Int, l: Long
-                ) {
-                    try {
-                        spinnerType = arrayList[i]
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                if (rechargeType == "Broadband" || rechargeType == "Landline") {
+                    binding.tvAmount.text = "No. + STD Code"
+                } else if (rechargeType == "Electricity" || rechargeType == "Gas" || rechargeType == "Municipality") {
+                    binding.tvAmount.text = "Enter CA Number"
+                } else if (rechargeType == "Water") {
+                    binding.tvOperator.text = "Water Board"
+                    binding.tvAmount.text = "CA / RR No."
+                } else if (rechargeType == "EMI") {
+                    binding.tvOperator.text = "Lender"
+                    binding.tvAmount.text = "Loan Account No."
+                } else if (rechargeType == "Cable") {
+                    binding.tvAmount.text = "Mobile / Acc No."
+                } else if (rechargeType == "Insurance") {
+                    binding.tvOperator.text = "Insurance"
+                    binding.tvAmount.text = "Policy Number."
+                } else {
+                    binding.tvAmount.text = "Enter Mobile No"
                 }
+                binding.tvBtnProceed.text = "Get Bill"
+                val arrayList = ArrayList<String>()
+                arrayList.add("online")
+                arrayList.add("offline")
+                binding.spMode.adapter =
+                    ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, arrayList)
+                binding.spMode.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            adapterView: AdapterView<*>, view: View?, i: Int, l: Long
+                        ) {
+                            try {
+                                spinnerType = arrayList[i]
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }
 
-                override fun onNothingSelected(adapterView: AdapterView<*>) {}
+                        override fun onNothingSelected(adapterView: AdapterView<*>) {}
+                    }
             }
-        }
     }
 
 
@@ -652,26 +615,32 @@ class RechargeFragment : Fragment() {
         imm.hideSoftInputFromWindow(editText.windowToken, 0)
     }
 
-
     private fun viewPlanList() {
         if (rechargeType == "mobile") {
             if (TextUtils.isEmpty(binding.etMobileNumber.text.toString()) || binding.etMobileNumber.length() != 10) {
                 binding.llViewPlan.visibility = View.GONE
                 binding.llTransactionHistory.visibility = View.GONE
                 Toast.makeText(context, "Enter Valid Mobile Number", Toast.LENGTH_SHORT).show()
-            }
-            else {
-                  pd.show()
-                if(binding.spOperator.selectedItem !=null && binding.spOperator.selectedItem.toString().isNotEmpty()&&binding.etCircle.selectedItem.toString().isNotEmpty()){
-                    Constants.mobileOperatorName =  binding.spOperator.selectedItem.toString()
-                    Constants.mobileCircleName =  binding.etCircle.selectedItem.toString()
-                    mStash!!.setStringValue(Constants.mobileOperatorName,Constants.mobileOperatorName)
-                    mStash!!.setStringValue(Constants.mobileCircleName,Constants.mobileCircleName)
+            } else {
+                pd.show()
+                if (binding.spOperator.selectedItem != null && binding.spOperator.selectedItem.toString()
+                        .isNotEmpty() && binding.etCircle.selectedItem.toString().isNotEmpty()
+                ) {
+                    Constants.mobileOperatorName = binding.spOperator.selectedItem.toString()
+                    Constants.mobileCircleName = binding.etCircle.selectedItem.toString()
+                    mStash!!.setStringValue(
+                        Constants.mobileOperatorName,
+                        Constants.mobileOperatorName
+                    )
+                    mStash!!.setStringValue(Constants.mobileCircleName, Constants.mobileCircleName)
                     mobileRechargePlanList.clear()
-                    getAllPlanList(mStash!!.getStringValue(Constants.mobileOperatorName, "").toString(), mStash!!.getStringValue(Constants.mobileCircleName, "").toString())
-                }
-                else{
-                    Toast.makeText(requireContext(),"Operator not found",Toast.LENGTH_SHORT).show()
+                    getAllPlanList(
+                        mStash!!.getStringValue(Constants.mobileOperatorName, "").toString(),
+                        mStash!!.getStringValue(Constants.mobileCircleName, "").toString()
+                    )
+                } else {
+                    Toast.makeText(requireContext(), "Operator not found", Toast.LENGTH_SHORT)
+                        .show()
                 }
 
 
@@ -679,25 +648,27 @@ class RechargeFragment : Fragment() {
         }
     }
 
-
-
     @RequiresApi(Build.VERSION_CODES.M)
     private fun validation() {
         if (rechargeType == "dth") {
             if (TextUtils.isEmpty(binding.etDTHBillNumber.text.toString())) {
                 Toast.makeText(context, "Enter Valid CA Number", Toast.LENGTH_SHORT).show()
-            }
-            else if (mStash!!.getStringValue(Constants.OperatorId.toString(),"").equals("")) {
-                    Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
-                    return
-            }
-            else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
+            } else if (mStash!!.getStringValue(Constants.OperatorId.toString(), "").equals("")) {
+                Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
+                return
+            } else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
                 Toast.makeText(context, "Enter Valid Amount", Toast.LENGTH_SHORT).show()
-            }
-            else {
-                getAllWalletBalance()
+            } else {
+               /* getAllWalletBalance()
                 //recharge()
-                hideKeyboard(binding.etAmount)
+                hideKeyboard(binding.etAmount)*/
+
+                // mobile recharge
+                val amount = binding.etAmount.text.toString().trim()
+                val operatorId = mStash!!.getStringValue(Constants.OperatorId.toString(), "")
+
+                // ✅ Trigger popup only after typing stopped
+                getAllServiceChargeRetailer(amount)
             }
 
         }
@@ -711,7 +682,7 @@ class RechargeFragment : Fragment() {
                 hideKeyboard(binding.etAmount)
             }
         }
-            else if (rechargeType == "Broadband" || rechargeType == "Landline") {
+        else if (rechargeType == "Broadband" || rechargeType == "Landline") {
             if (selectedModel == "0") {
                 Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
             } else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
@@ -720,126 +691,131 @@ class RechargeFragment : Fragment() {
                 getBill()
                 hideKeyboard(binding.etAmount)
             }
-        }
-            else
+        } else
             if (rechargeType == "Electricity" || rechargeType == "Gas") {
-            if (selectedModel == "0") {
-                Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
-            } else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
-                Toast.makeText(context, "Enter CA Number", Toast.LENGTH_SHORT).show()
-            } else {
-                getBill()
-                hideKeyboard(binding.etAmount)
+                if (selectedModel == "0") {
+                    Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
+                } else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
+                    Toast.makeText(context, "Enter CA Number", Toast.LENGTH_SHORT).show()
+                } else {
+                    getBill()
+                    hideKeyboard(binding.etAmount)
+                }
             }
-        }
-            else
-            if (rechargeType == "Municipality") {
-            if (selectedModel == "0") {
-                Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
-            } else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
-                Toast.makeText(context, "Enter CA Number", Toast.LENGTH_SHORT).show()
-            } else {
-                getBill()
-                hideKeyboard(binding.etAmount)
-            }
-        }
+            else if (rechargeType == "Municipality") {
+                    if (selectedModel == "0") {
+                        Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
+                    } else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
+                        Toast.makeText(context, "Enter CA Number", Toast.LENGTH_SHORT).show()
+                    } else {
+                        getBill()
+                        hideKeyboard(binding.etAmount)
+                    }
+                }
             else if (rechargeType == "Water") {
-            if (selectedModel == "0") {
-                Toast.makeText(context, "Please Select Water Board", Toast.LENGTH_SHORT).show()
-            }
-            else
-                if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
-                Toast.makeText(context, "Enter CA / RR No.", Toast.LENGTH_SHORT).show()
-            }
-                else {
-                getBill()
-                hideKeyboard(binding.etAmount)
-            }
-        } else
-            if (rechargeType == "EMI") {
-            if (selectedModel == "0") {
-                Toast.makeText(context, "Please Select Lender", Toast.LENGTH_SHORT).show()
-            }
-            else
-                if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
-                Toast.makeText(context, "Enter Loan Account No.", Toast.LENGTH_SHORT).show()
-            }
-                else {
-                getBill()
-                hideKeyboard(binding.etAmount)
-            }}
+                    if (selectedModel == "0") {
+                        Toast.makeText(context, "Please Select Water Board", Toast.LENGTH_SHORT).show()
+                    } else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
+                            Toast.makeText(context, "Enter CA / RR No.", Toast.LENGTH_SHORT).show()
+                        }
+                    else {
+                            getBill()
+                            hideKeyboard(binding.etAmount)
+                        }
+                }
+            else if (rechargeType == "EMI") {
+                        if (selectedModel == "0") {
+                            Toast.makeText(context, "Please Select Lender", Toast.LENGTH_SHORT)
+                                .show()
+                        } else
+                            if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
+                                Toast.makeText(
+                                    context,
+                                    "Enter Loan Account No.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                getBill()
+                                hideKeyboard(binding.etAmount)
+                            }
+                    }
             else if (rechargeType == "Cable") {
-            if (selectedModel == "0") {
-                Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
+                if (selectedModel == "0") {
+                            Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
+                            Toast.makeText(context, "Enter Mobile / Acc No.", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            getBill()
+                            hideKeyboard(binding.etAmount)
+                        }
             }
-            else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
-                Toast.makeText(context, "Enter Mobile / Acc No.", Toast.LENGTH_SHORT).show()
-            } else {
-                getBill()
-                hideKeyboard(binding.etAmount)
-            }
-        } else
-            if (rechargeType == "Insurance") {
-            if (selectedModel == "0") {
-                Toast.makeText(context, "Please Select Insurance", Toast.LENGTH_SHORT).show()
-            } else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
-                Toast.makeText(context, "Enter Policy No.", Toast.LENGTH_SHORT).show()
-            } else {
-                getBill()
-                hideKeyboard(binding.etAmount)
-            }
-        } else if (rechargeType == "FastTag") {
-            if (TextUtils.isEmpty(binding.etMobileNumber2.text.toString())) {
-                Toast.makeText(context, "Please Select Vehicle Number", Toast.LENGTH_SHORT).show()
-            } else if (selectedFastTagModel.id == "0") {
-                Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
-            } else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
-                Toast.makeText(context, "Enter Amount.", Toast.LENGTH_SHORT).show()
-            } else {
-                var data = BillFetchDetails()
-                billFastTagRecharge(data)
-                hideKeyboard(binding.etAmount)
-            }
-        }
-        else {
-           /* if (TextUtils.isEmpty(binding.etMobileNumber.text.toString()) || binding.etMobileNumber.length() != 10) {
-                binding.llViewPlan.visibility = View.GONE
-                binding.llTransactionHistory.visibility = View.GONE
-                Toast.makeText(context, "Enter Valid Mobile Number", Toast.LENGTH_SHORT).show()
-            } else if (selectedAllOperator == "0") {
-                Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
-            } else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
-                Toast.makeText(context, "Enter Valid Amount", Toast.LENGTH_SHORT).show()
-            } else {
-//                getTransferAmountToAgentWithCal(binding.etMobileNumber.text.toString())
-                getAllWalletBalance()
-                hideKeyboard(binding.etAmount)
-            }*/
+            else if (rechargeType == "Insurance") {
+                            if (selectedModel == "0") {
+                                Toast.makeText(
+                                    context,
+                                    "Please Select Insurance",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
+                                Toast.makeText(context, "Enter Policy No.", Toast.LENGTH_SHORT)
+                                    .show()
+                            } else {
+                                getBill()
+                                hideKeyboard(binding.etAmount)
+                            }
+                        }
+            else if (rechargeType == "FastTag") {
+                            if (TextUtils.isEmpty(binding.etMobileNumber2.text.toString())) {
+                                Toast.makeText(
+                                    context,
+                                    "Please Select Vehicle Number",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else if (selectedFastTagModel.id == "0") {
+                                Toast.makeText(
+                                    context,
+                                    "Please Select Operator",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else if (TextUtils.isEmpty(binding.etAmount.text.toString())) {
+                                Toast.makeText(context, "Enter Amount.", Toast.LENGTH_SHORT).show()
+                            } else {
+                                var data = BillFetchDetails()
+                                billFastTagRecharge(data)
+                                hideKeyboard(binding.etAmount)
+                            }
+                        }
+            else
+            {
 
+                // mobile recharge
                 val amount = binding.rechargeAmount.text.toString().trim()
                 val mobile = binding.etMobileNumber.text.toString().trim()
                 val operatorId = mStash!!.getStringValue(Constants.OperatorId.toString(), "")
 
-                    // schedule a new one after delay (e.g., 800ms)
+                // schedule a new one after delay (e.g., 800ms)
 
-                    if (amount.isEmpty()) {
-                        Toast.makeText(context, "Enter Valid Amount", Toast.LENGTH_SHORT).show()
-                        return
-                    }
-                    if (mobile.length != 10) {
-                        Toast.makeText(context, "Enter Valid Mobile Number", Toast.LENGTH_SHORT).show()
-                        return
-                    }
-                    if (operatorId!!.isEmpty()) {
-                        Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
-                        return
-                    }
+                if (amount.isEmpty()) {
+                    Toast.makeText(context, "Enter Valid Amount", Toast.LENGTH_SHORT).show()
+                    return
+                }
+                if (mobile.length != 10) {
+                    Toast.makeText(context, "Enter Valid Mobile Number", Toast.LENGTH_SHORT).show()
+                    return
+                }
 
-                    // ✅ Trigger popup only after typing stopped
-                    getAllServiceChargeRetailer(amount)
+                if (operatorId!!.isEmpty()) {
+                    Toast.makeText(context, "Please Select Operator", Toast.LENGTH_SHORT).show()
+                    return
+                }
 
+                // ✅ Trigger popup only after typing stopped
+                getAllServiceChargeRetailer(amount)
 
-        }
+            }
     }
 
 
@@ -854,7 +830,6 @@ class RechargeFragment : Fragment() {
                     resource?.let {
                         when (it.apiStatus) {
                             ApiStatus.SUCCESS -> {
-//                        pd.dismiss()
                                 it.data?.let { users ->
                                     users.body()?.let { response ->
                                         getAllWalletBalanceRes(response)
@@ -876,6 +851,7 @@ class RechargeFragment : Fragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n", "DefaultLocale")
     private fun getAllWalletBalanceRes(response: GetBalanceRes) {
         if (response.isSuccess == true) {
@@ -884,7 +860,8 @@ class RechargeFragment : Fragment() {
 
             Log.d("actualBalance", "main = $mainBalance")
 
-            val totalAmount = mStash!!.getStringValue(Constants.totalTransaction, "")?.toDoubleOrNull() ?: 0.0
+            val totalAmount =
+                mStash!!.getStringValue(Constants.totalTransaction, "")?.toDoubleOrNull() ?: 0.0
 
         } else {
             toast(response.returnMessage.toString())
@@ -892,6 +869,7 @@ class RechargeFragment : Fragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getMerchantBalance(mainBalance: Double) {
         val getMerchantBalanceReq = GetMerchantBalanceReq(
             parmUser = mStash!!.getStringValue(Constants.MerchantId, "")/*"AOP-554"*/,
@@ -902,7 +880,6 @@ class RechargeFragment : Fragment() {
                 resource?.let {
                     when (it.apiStatus) {
                         ApiStatus.SUCCESS -> {
-//                        pd.dismiss()
                             it.data?.let { users ->
                                 users.body()?.let { response ->
                                     getAllMerchantBalanceRes(response, mainBalance)
@@ -923,105 +900,58 @@ class RechargeFragment : Fragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getAllMerchantBalanceRes(response: GetMerchantBalanceRes, mainBalance: Double) {
         if (response.isSuccess == true) {
             Log.d(TAG, "getAllMerchantBalanceRes: ${response.data[0].debitBalance}")
             mStash!!.setStringValue(Constants.merchantBalance, response.data[0].debitBalance)
 
-            val totalAmount = mStash!!.getStringValue(Constants.totalTransaction, "")?.toDoubleOrNull() ?: 0.0
+            val totalAmount =
+                mStash!!.getStringValue(Constants.totalTransaction, "")?.toDoubleOrNull() ?: 0.0
             val merchantBalance = response.data[0].debitBalance?.toDoubleOrNull() ?: 0.0
 
-            Log.d("balanceCheck", "MainBal = $mainBalance, merchantBal = $merchantBalance,totalAmount = $totalAmount, Status = ${totalAmount <= mainBalance && totalAmount <= merchantBalance}")
+            Log.d(
+                "balanceCheck",
+                "MainBal = $mainBalance, merchantBal = $merchantBalance,totalAmount = $totalAmount, Status = ${totalAmount <= mainBalance && totalAmount <= merchantBalance}"
+            )
 
             if (totalAmount <= mainBalance && totalAmount <= merchantBalance) {
 
-                if(rechargeType=="mobile"){
-                    var  mobileNo  = binding.etMobileNumber.text.toString()
-                    hitApiForMobileRecharge(binding.rechargeAmount.text.toString(),mobileNo)
-                    //getTransferAmountToAgentWithCal(binding.rechargeAmount.text.toString())
+                if (rechargeType == "mobile") {
+                    var mobileNo = binding.etMobileNumber.text.toString()
+                    hitApiForMobileRecharge(
+                        binding.rechargeAmount.text.toString(),
+                        mobileNo,
+                        binding.spOperator.selectedItem.toString().trim(),
+                        "Mobile Api",
+                        "Mobile Recharge"
+                    )
+
                 }
 
-                if(rechargeType=="dth"){
+                if (rechargeType == "dth") {
                     var CANumber = binding.etDTHBillNumber.text.toString()
-                    hitApiForMobileRecharge(binding.etAmount.text.toString(),CANumber)
+                    hitApiForMobileRecharge(
+                        binding.etAmount.text.toString(),
+                        CANumber,
+                        binding.spOperator.selectedItem.toString().trim(),
+                        "DTH Api",
+                        "DTH Recharge"
+                    )
                 }
 
-            }
-            else {
+            } else {
                 pd.dismiss()
-                Toast.makeText(requireContext(), "Wallet balance is low. VBal = $mainBalance, MBal = $merchantBalance, totalAmt = $totalAmount", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Wallet balance is low. VBal = $mainBalance, MBal = $merchantBalance, totalAmt = $totalAmount",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         } else {
             pd.dismiss()
             Toast.makeText(requireContext(), response.returnMessage.toString(), Toast.LENGTH_SHORT)
                 .show()
-        }
-    }
-
-    private fun getTransferAmountToAgentWithCal(rechargeAmount: String) {
-        val currentDateTime = getCurrentDateTime()
-        val transferAmountToAgentsReq = TransferAmountToAgentsReq(
-            transferFrom = mStash!!.getStringValue(Constants.RegistrationId, ""),
-            transferTo = "Admin",
-            transferAmt = mStash!!.getStringValue(Constants.totalTransaction, "0.00") ?: "0.00",
-            remark = "RECH",
-            transferFromMsg = "Your Account is debited by $rechargeAmount Rs. Due to RECH on number ${binding.rechargeAmount.text.toString().trim()}.",
-            transferToMsg = "Your Account is credited by $rechargeAmount Rs. Due to RECH on number ${binding.rechargeAmount.text.toString().trim()}.",
-            amountType = "Payout",
-            actualTransactionAmount = rechargeAmount,
-            transIpAddress = mStash!!.getStringValue(Constants.deviceIPAddress, ""),
-            parmUserName = mStash!!.getStringValue(Constants.RegistrationId, ""),
-            merchantCode = mStash!!.getStringValue(Constants.MerchantId, ""),
-            servicesChargeAmt = mStash!!.getStringValue(Constants.serviceCharge, "0.00") ?: "0.00",
-            servicesChargeGSTAmt = mStash!!.getStringValue(Constants.serviceChargeWithGST, "0.00") ?: "0.00",
-            servicesChargeWithoutGST = mStash!!.getStringValue(Constants.serviceCharge, "0.00") ?: "0.00",
-            customerVirtualAddress = "",
-            retailerCommissionAmt = mStash!!.getStringValue(Constants.retailerCommissionWithoutTDS, "0.00") ?: "0.00",
-            retailerId = "",
-            paymentMode = "IMPS",
-            depositBankName = "",
-            branchCodeChecqueNo = "",
-            apporvedStatus = "Approved",
-            registrationId = mStash!!.getStringValue(Constants.RegistrationId, ""),
-            benfiid = "",
-            accountHolder = "",
-            flag = "Y"
-        )
-        Log.d("transferAmountToAgent", Gson().toJson(transferAmountToAgentsReq))
-        getAllApiServiceViewModel.getTransferAmountToAgents(transferAmountToAgentsReq)
-            .observe(viewLifecycleOwner) { resource ->
-                resource?.let {
-                    when (it.apiStatus) {
-                        ApiStatus.SUCCESS -> {
-                           pd.dismiss()
-                            it.data?.let { users ->
-                                users.body()?.let { response ->
-                                    getTransferAmountToAgentWithCalRes(response)
-                                }
-                            }
-                        }
-
-                        ApiStatus.ERROR -> {
-                            pd.dismiss()
-                            Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-
-                        ApiStatus.LOADING -> {
-                            pd.show()
-                        }
-                    }
-                }
-            }
-    }
-
-
-    private fun getTransferAmountToAgentWithCalRes(response: TransferAmountToAgentsRes) {
-        if (response.isSuccess == true) {
-            recharge()
-        } else {
-            pd.dismiss()
-            toast(response.returnMessage.toString())
         }
     }
 
@@ -1102,53 +1032,6 @@ class RechargeFragment : Fragment() {
                     toast(it.message.toString())
                 }
             }
-    }
-
-    // TODO for the recharge API
-    private fun recharge() {
-        requireContext().runIfConnected {
-            val referenceID: String = ConstantClass.generateRandomNumber()
-            val mobileRechargeReq = MobileRechargeReq(
-                operator = if (rechargeType == "mobile") selectedAllOperator else selectedModel,
-                canumber = binding.etMobileNumber.text.toString(),
-                amount = binding.etAmount.text.toString().trim(),
-                referenceid = referenceID,
-                RegisterID = mStash!!.getStringValue(Constants.MerchantId, "")
-            )
-            Log.d("mobileRechargeReq", Gson().toJson(mobileRechargeReq))
-            pd.show()
-            viewModel.doRecharge(mobileRechargeReq).observe(viewLifecycleOwner) { resource ->
-                resource?.let {
-                    when (it.apiStatus) {
-                        ApiStatus.SUCCESS -> {
-//                        pd.dismiss()
-                            it.data?.let { response ->
-                                rechargeApi(response)
-                            }
-                        }
-
-                        ApiStatus.ERROR -> {
-                            pd.dismiss()
-                            toast(it.message.toString())
-                        }
-
-                        ApiStatus.LOADING -> {
-                            pd.show()
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun rechargeApi(response: Response<MobileRechargeRes>) {
-        if (response.body()!!.status == true) {
-            val refId = response.body()!!.refid.toString()
-            rechargeStatusCheck(refId)
-        } else {
-            pd.dismiss()
-            toast(response.message().toString())
-        }
     }
 
     private fun getBill() {
@@ -1355,107 +1238,159 @@ class RechargeFragment : Fragment() {
 
     }
 
-      private fun rechargeStatusCheck(referenceID: String) {
-          val rechargeStatusReq = RechargeStatusReq(
-              registrationID = mStash!!.getStringValue(Constants.MerchantId, ""),
-              referenceid = referenceID
-          )
-          Log.d("rechargeStatusReq", Gson().toJson(rechargeStatusReq))
-          viewModel.rechargeStatus(rechargeStatusReq).observe(viewLifecycleOwner) { resource ->
-              resource?.let {
-                  when (it.apiStatus) {
-                      ApiStatus.SUCCESS -> {
-                          pd.dismiss()
-                          it.data?.let { response ->
-                              rechargeStatusRes(response)
-                          }
-                      }
 
-                      ApiStatus.ERROR -> {
-                          pd.dismiss()
-                          toast(it.message.toString())
-                      }
+    /*
 
-                      ApiStatus.LOADING -> {
-                          pd.show()
-                      }
-                  }
-              }
-          }
+      // TODO for the recharge API
+   private fun recharge() {
+       requireContext().runIfConnected {
+           val referenceID: String = ConstantClass.generateRandomNumber()
+           val mobileRechargeReq = MobileRechargeReq(
+               operator = if (rechargeType == "mobile") selectedAllOperator else selectedModel,
+               canumber = binding.etMobileNumber.text.toString(),
+               amount = binding.etAmount.text.toString().trim(),
+               referenceid = referenceID,
+               RegisterID = mStash!!.getStringValue(Constants.MerchantId, "")
+           )
+           Log.d("mobileRechargeReq", Gson().toJson(mobileRechargeReq))
+           pd.show()
+           viewModel.doRecharge(mobileRechargeReq).observe(viewLifecycleOwner) { resource ->
+               resource?.let {
+                   when (it.apiStatus) {
+                       ApiStatus.SUCCESS -> {
+//                        pd.dismiss()
+                           it.data?.let { response ->
+                               rechargeApi(response)
+                           }
+                       }
 
-      }
+                       ApiStatus.ERROR -> {
+                           pd.dismiss()
+                           toast(it.message.toString())
+                       }
 
-      @SuppressLint("SetTextI18n")
-      private fun rechargeStatusRes(response: Response<RechargeStatusRes>) {
-          try {
-              response.body()?.let { body ->
-                  if (body.status == true) {
-                      pd.dismiss()
-                      toast(response.message().toString())
-                      // Clear input fields
-                      binding.etMobileNumber.setText("")
-                     // binding.etCircle.setText("")
-                      binding.etAmount.setText("")
-                      binding.spOperator.setSelection(0)
-                      binding.llViewPlan.visibility = View.GONE
-                      binding.llTransactionHistory.visibility = View.GONE
+                       ApiStatus.LOADING -> {
+                           pd.show()
+                       }
+                   }
+               }
+           }
+       }
+   }
 
-                      // Determine operator image based on selected operator ID
-                      val operatorImage = when (selectedAllOperator) {
-                          "11" -> R.drawable.airtel to Constants.airtel
-                          "13" -> R.drawable.bsnl to Constants.bsnl
-                          "4" -> R.drawable.idea to Constants.idea
-                          "18" -> R.drawable.jio to Constants.jio
-                          "22" -> R.drawable.vodafone to Constants.vodafone
-                          else -> R.drawable.no_image to Constants.noImage
-                      }
+   private fun rechargeApi(response: Response<MobileRechargeRes>) {
+       if (response.body()!!.status == true) {
+           val refId = response.body()!!.refid.toString()
+           rechargeStatusCheck(refId)
+       } else {
+           pd.dismiss()
+           toast(response.message().toString())
+       }
+   }
 
-                      // Store the image resource name in shared preferences
-                      mStash?.setStringValue(
-                          operatorImage.second,
-                          resources.getResourceName(operatorImage.first)
-                      )
 
-                      // Create and start the intent for RechargeActivity
-                      val intent =
-                          Intent(requireContext(), RechargeSuccessfulPageActivity::class.java).apply {
-                              putExtra("transactionId", body.data?.txnid.toString())
-                              putExtra("operatorName", body.data?.operatorname.toString())
-                              putExtra("mobileNumber", body.data?.canumber.toString())
-                              putExtra("amount", body.data?.amount.toString())
-                              putExtra("referenceId", body.data?.refid.toString())
-                              putExtra("operationId", body.data?.operatorid.toString())
-                              putExtra("dateAndTime", body.data?.dateadded.toString())
-                              putExtra("message", response.message().toString())
-                              putExtra(
-                                  "serviceCharge",
-                                  mStash!!.getStringValue(Constants.serviceCharge, "")
-                              )
-                              putExtra(
-                                  "serviceChargeWithGST",
-                                  mStash!!.getStringValue(Constants.serviceChargeWithGST, "")
-                              )
-                              putExtra(
-                                  "totalTransaction",
-                                  mStash!!.getStringValue(Constants.totalTransaction, "")
-                              )
-                              putExtra("Status", body.status.toString())
-                              putExtra(
-                                  operatorImage.second,
-                                  resources.getResourceName(operatorImage.first)
-                              )
-                              putExtra("image", operatorImage.second)
-                          }
-                      startActivity(intent)
-                  }
-              } ?: run {
-                  Toast.makeText(requireContext(), "Response body is null", Toast.LENGTH_SHORT).show()
-              }
-          } catch (e: JSONException) {
-              Toast.makeText(requireContext(), "JSONException: ${e.message}", Toast.LENGTH_SHORT)
-                  .show()
-          }
-      }
+     private fun rechargeStatusCheck(referenceID: String) {
+         val rechargeStatusReq = RechargeStatusReq(
+             registrationID = mStash!!.getStringValue(Constants.MerchantId, ""),
+             referenceid = referenceID
+         )
+         Log.d("rechargeStatusReq", Gson().toJson(rechargeStatusReq))
+
+         viewModel.rechargeStatus(rechargeStatusReq).observe(viewLifecycleOwner) { resource ->
+             resource?.let {
+                 when (it.apiStatus) {
+                     ApiStatus.SUCCESS -> {
+                         pd.dismiss()
+                         it.data?.let { response ->
+                             rechargeStatusRes(response)
+                         }
+                     }
+
+                     ApiStatus.ERROR -> {
+                         pd.dismiss()
+                         toast(it.message.toString())
+                     }
+
+                     ApiStatus.LOADING -> {
+                         pd.show()
+                     }
+                 }
+             }
+         }
+
+     }
+
+    @SuppressLint("SetTextI18n")
+     private fun rechargeStatusRes(response: Response<RechargeStatusRes>) {
+         try {
+             response.body()?.let { body ->
+                 if (body.status == true) {
+                     pd.dismiss()
+                     toast(response.message().toString())
+                     // Clear input fields
+                     binding.etMobileNumber.setText("")
+                    // binding.etCircle.setText("")
+                     binding.etAmount.setText("")
+                     binding.spOperator.setSelection(0)
+                     binding.llViewPlan.visibility = View.GONE
+                     binding.llTransactionHistory.visibility = View.GONE
+
+                     // Determine operator image based on selected operator ID
+                     val operatorImage = when (selectedAllOperator) {
+                         "11" -> R.drawable.airtel to Constants.airtel
+                         "13" -> R.drawable.bsnl to Constants.bsnl
+                         "4" -> R.drawable.idea to Constants.idea
+                         "18" -> R.drawable.jio to Constants.jio
+                         "22" -> R.drawable.vodafone to Constants.vodafone
+                         else -> R.drawable.no_image to Constants.noImage
+                     }
+
+                     // Store the image resource name in shared preferences
+                     mStash?.setStringValue(
+                         operatorImage.second,
+                         resources.getResourceName(operatorImage.first)
+                     )
+
+                     // Create and start the intent for RechargeActivity
+                     val intent =
+                         Intent(requireContext(), RechargeSuccessfulPageActivity::class.java).apply {
+                             putExtra("transactionId", body.data?.txnid.toString())
+                             putExtra("operatorName", body.data?.operatorname.toString())
+                             putExtra("mobileNumber", body.data?.canumber.toString())
+                             putExtra("amount", body.data?.amount.toString())
+                             putExtra("referenceId", body.data?.refid.toString())
+                             putExtra("operationId", body.data?.operatorid.toString())
+                             putExtra("dateAndTime", body.data?.dateadded.toString())
+                             putExtra("message", response.message().toString())
+                             putExtra(
+                                 "serviceCharge",
+                                 mStash!!.getStringValue(Constants.serviceCharge, "")
+                             )
+                             putExtra(
+                                 "serviceChargeWithGST",
+                                 mStash!!.getStringValue(Constants.serviceChargeWithGST, "")
+                             )
+                             putExtra(
+                                 "totalTransaction",
+                                 mStash!!.getStringValue(Constants.totalTransaction, "")
+                             )
+                             putExtra("Status", body.status.toString())
+                             putExtra(
+                                 operatorImage.second,
+                                 resources.getResourceName(operatorImage.first)
+                             )
+                             putExtra("image", operatorImage.second)
+                         }
+                     startActivity(intent)
+                 }
+             } ?: run {
+                 Toast.makeText(requireContext(), "Response body is null", Toast.LENGTH_SHORT).show()
+             }
+         } catch (e: JSONException) {
+             Toast.makeText(requireContext(), "JSONException: ${e.message}", Toast.LENGTH_SHORT)
+                 .show()
+         }
+     }*/
 
     private fun getOperatorName(number: String, type: String) {
         requireContext().runIfConnected {
@@ -1495,6 +1430,7 @@ class RechargeFragment : Fragment() {
             }
         }
     }
+
 
     /* private fun getAllOperatorRes(response: MobileCheckRes?) {
          if (response!!.status == true) {
@@ -1602,7 +1538,11 @@ class RechargeFragment : Fragment() {
         }
     }
 
-    private fun getAllOperatorDropDown(list: java.util.ArrayList<Data>, response: Response<BillOperationPaymentRes>, apiName: String) {
+    private fun getAllOperatorDropDown(
+        list: java.util.ArrayList<Data>,
+        response: Response<BillOperationPaymentRes>,
+        apiName: String
+    ) {
         mStash!!.setStringValue(Constants.AllAPIName, apiName.toString())
         if (response.body()!!.status == true) {
             for (singleObject in list) {
@@ -1700,7 +1640,8 @@ class RechargeFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun getAllOperatorList(apiName: String) {
-        requireContext().runIfConnected { val rechargeOperatorsListReq = RechargeOperatorsListReq(
+        requireContext().runIfConnected {
+            val rechargeOperatorsListReq = RechargeOperatorsListReq(
                 registrationID = mStash!!.getStringValue(Constants.MerchantId, ""),
                 RechargeType = "Online"
             )
@@ -1730,7 +1671,11 @@ class RechargeFragment : Fragment() {
         }
     }
 
-    private fun populateDropDowns(list: ArrayList<com.bos.payment.appName.data.model.recharge.operator.Data>, response: Response<RechargeOperatorsListRes>, apiName: String) {
+    private fun populateDropDowns(
+        list: ArrayList<com.bos.payment.appName.data.model.recharge.operator.Data>,
+        response: Response<RechargeOperatorsListRes>,
+        apiName: String
+    ) {
         mStash!!.setStringValue(Constants.APIName, apiName.toString())
         if (response.body()!!.status == true) {
             for (singleObject in list) {
@@ -1765,7 +1710,11 @@ class RechargeFragment : Fragment() {
 
     private fun setAllDropDownMobile(singleObject: com.bos.payment.appName.data.model.recharge.operator.Data) {
         if (rechargeType == "mobile") {
-            Constants.getAllOperatorAdapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_right_aligned, Constants.operatorName!!)
+            Constants.getAllOperatorAdapter = ArrayAdapter<String>(
+                requireContext(),
+                R.layout.spinner_right_aligned,
+                Constants.operatorName!!
+            )
             Constants.getAllOperatorAdapter!!.setDropDownViewResource(R.layout.spinner_right_aligned)
             binding.spOperator.adapter = Constants.getAllOperatorAdapter
             binding.spOperator.onItemSelectedListener =
@@ -1778,13 +1727,25 @@ class RechargeFragment : Fragment() {
                     ) {
                         if (pos > 0) {
                             try {
-                                selectedAllOperator = java.lang.String.valueOf(Constants.operatorNameMap!![parent.getItemAtPosition(pos)])
+                                selectedAllOperator = java.lang.String.valueOf(
+                                    Constants.operatorNameMap!![parent.getItemAtPosition(pos)]
+                                )
 
-                                mStash!!.setStringValue(Constants.OperatorCategory, singleObject.category.toString())
+                                mStash!!.setStringValue(
+                                    Constants.OperatorCategory,
+                                    singleObject.category.toString()
+                                )
 
-                                mStash!!.setStringValue(Constants.OperatorId.toString(), selectedAllOperator)
+                                mStash!!.setStringValue(
+                                    Constants.OperatorId.toString(),
+                                    selectedAllOperator
+                                )
 
-//                        Log.d("dthName",mStash!!.getStringValue(Constants.OperatorCategory, "").toString())
+                                Log.d(
+                                    "contenttype",
+                                    mStash!!.getStringValue(Constants.OperatorCategory, "")
+                                        .toString()
+                                )
 
                                 // If you need to perform further actions with selectedAllOperator, do it here.
                             } catch (e: Exception) {
@@ -1806,7 +1767,11 @@ class RechargeFragment : Fragment() {
             if (rechargeType == "dth") {
                 //********************************* DTH Spinner ******************************//
 
-                Constants.getAllDTHOperatorAdapter = ArrayAdapter<String>(requireContext(), R.layout.support_simple_spinner_dropdown_item, Constants.dthName!!)
+                Constants.getAllDTHOperatorAdapter = ArrayAdapter<String>(
+                    requireContext(),
+                    R.layout.support_simple_spinner_dropdown_item,
+                    Constants.dthName!!
+                )
                 Constants.getAllDTHOperatorAdapter!!.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
                 binding.spOperator.adapter = Constants.getAllDTHOperatorAdapter
                 binding.spOperator.onItemSelectedListener =
@@ -1819,12 +1784,27 @@ class RechargeFragment : Fragment() {
                         ) {
                             if (pos > 0) {
                                 try {
-                                    selectedAllOperator = java.lang.String.valueOf(Constants.dthNameMap!!.get(parent.getItemAtPosition(pos)))
+                                    selectedAllOperator = java.lang.String.valueOf(
+                                        Constants.dthNameMap!!.get(
+                                            parent.getItemAtPosition(pos)
+                                        )
+                                    )
                                     mStash!!.setStringValue(Constants.OperatorCategory, "DTH")
-                                    mStash!!.setStringValue(Constants.OperatorId.toString(), selectedAllOperator)
+                                    mStash!!.setStringValue(
+                                        Constants.OperatorId.toString(),
+                                        selectedAllOperator
+                                    )
 
-                                    Log.d("dthName", mStash!!.getStringValue(Constants.OperatorCategory, "").toString())
-                                    Log.d("dthName", mStash!!.getStringValue(Constants.OperatorId.toString(), "").toString())
+                                    Log.d(
+                                        "dthName",
+                                        mStash!!.getStringValue(Constants.OperatorCategory, "")
+                                            .toString()
+                                    )
+                                    Log.d(
+                                        "dthName",
+                                        mStash!!.getStringValue(Constants.OperatorId.toString(), "")
+                                            .toString()
+                                    )
 
                                     // If you need to perform further actions with selectedAllOperator, do it here.
                                 } catch (e: Exception) {
@@ -2522,7 +2502,10 @@ class RechargeFragment : Fragment() {
         }
     }
 
-    private fun populateDropDown(list: java.util.ArrayList<com.bos.payment.appName.data.model.fastTag.fastTagOperator.Data>, response: Response<FastTagOperatorsListRes?>) {
+    private fun populateDropDown(
+        list: java.util.ArrayList<com.bos.payment.appName.data.model.fastTag.fastTagOperator.Data>,
+        response: Response<FastTagOperatorsListRes?>
+    ) {
         if (response.body()!!.status == true) {
             for (singleObject in list) {
                 when (singleObject.category) {
@@ -2551,7 +2534,7 @@ class RechargeFragment : Fragment() {
     }
 
 
-    private fun getAllPlanList(operatorName:String, circleName:String){
+    private fun getAllPlanList(operatorName: String, circleName: String) {
         val apiService = RetrofitClient.apiRechargeInterface
 
         val jsonObject = JSONObject().apply {
@@ -2567,7 +2550,7 @@ class RechargeFragment : Fragment() {
 
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                try{
+                try {
                     if (response.isSuccessful) {
 
                         pd.dismiss()
@@ -2577,12 +2560,24 @@ class RechargeFragment : Fragment() {
                         try {
                             if (rootObject.has("statusCode")) {
                                 val errorCode = rootObject.getInt("statusCode")
-                                uploadDataOnFirebaseConsole("Error code $errorCode  $responseString", "RechargeFragmentRechargePlanReq",requireContext())
+                                uploadDataOnFirebaseConsole(
+                                    "Error code $errorCode  $responseString",
+                                    "RechargeFragmentRechargePlanReq",
+                                    requireContext()
+                                )
                             } else {
-                                uploadDataOnFirebaseConsole("No statusCode found: $responseString", "RechargeFragmentRechargePlanReq",requireContext())
+                                uploadDataOnFirebaseConsole(
+                                    "No statusCode found: $responseString",
+                                    "RechargeFragmentRechargePlanReq",
+                                    requireContext()
+                                )
                             }
                         } catch (e: Exception) {
-                            uploadDataOnFirebaseConsole("Parsing Exception: ${e.message}", "RechargeFragmentRechargePlanReq",requireContext())
+                            uploadDataOnFirebaseConsole(
+                                "Parsing Exception: ${e.message}",
+                                "RechargeFragmentRechargePlanReq",
+                                requireContext()
+                            )
                         }
 
 
@@ -2598,7 +2593,8 @@ class RechargeFragment : Fragment() {
                                 if (value is JSONArray) {
                                     Log.d("APIArrayName", "Array Name: $key")
 
-                                    val mobilePlan = mutableListOf<Plan>()  // 👈 create new list for each array
+                                    val mobilePlan =
+                                        mutableListOf<Plan>()  // 👈 create new list for each array
                                     val array = value
 
                                     for (i in 0 until array.length()) {
@@ -2608,23 +2604,33 @@ class RechargeFragment : Fragment() {
                                         val desc = item.optString("desc", "")
 
                                         mobilePlan.add(Plan(rs, validity, desc))
-                                        Log.d("API", " → Plan: Rs.$rs | Validity: $validity | Desc: $desc")
+                                        Log.d(
+                                            "API",
+                                            " → Plan: Rs.$rs | Validity: $validity | Desc: $desc"
+                                        )
                                     }
 
-                                    mobileRechargePlanList.add(MobileRechargePlanModel(key, mobilePlan))
+                                    mobileRechargePlanList.add(
+                                        MobileRechargePlanModel(
+                                            key,
+                                            mobilePlan
+                                        )
+                                    )
                                 }
 
                             }
 
                             if (mobileRechargePlanList.isNotEmpty()) {
                                 Log.d("PlanList", Gson().toJson(mobileRechargePlanList))
-                                binding.llViewPlan.visibility=View.VISIBLE
+                                binding.llViewPlan.visibility = View.VISIBLE
                                 RechargePlanNameAdapter = RechargePlanNameAdapter(
                                     requireContext(),
                                     mobileRechargePlanList,
                                     clickListener = object : RechargePlanNameAdapter.ClickListener {
                                         override fun itemClick(item: String) {
-                                            val mobilePlan = mobileRechargePlanList.find { it.arrayName == item }?.plans ?: emptyList()
+                                            val mobilePlan =
+                                                mobileRechargePlanList.find { it.arrayName == item }?.plans
+                                                    ?: emptyList()
                                             getAllPlanListRes(mobilePlan)
                                         }
                                     }
@@ -2637,17 +2643,27 @@ class RechargeFragment : Fragment() {
                         }
 
                         Log.d("SuccessApiRespo", "Success: $responseString")
-                    }
-                    else {
+                    } else {
                         pd.dismiss()
-                        Log.e("ErrorApiRespo", "Error: ${response.code()} - ${response.errorBody()?.string()}")
-                        binding.llViewPlan.visibility=View.GONE
-                        uploadDataOnFirebaseConsole("Error: ${response.code()} - ${response.errorBody()?.string()}", "RechargeFragmentRechargePlanReq",requireContext())
+                        Log.e(
+                            "ErrorApiRespo",
+                            "Error: ${response.code()} - ${response.errorBody()?.string()}"
+                        )
+                        binding.llViewPlan.visibility = View.GONE
+                        uploadDataOnFirebaseConsole(
+                            "Error: ${response.code()} - ${
+                                response.errorBody()?.string()
+                            }", "RechargeFragmentRechargePlanReq", requireContext()
+                        )
                     }
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     pd.dismiss()
-                    val rechargeplanview ="TryException " .plus(e.printStackTrace().toString())
-                    uploadDataOnFirebaseConsole(rechargeplanview,"RechargeFragmentRechargePlanReq",requireContext())
+                    val rechargeplanview = "TryException ".plus(e.printStackTrace().toString())
+                    uploadDataOnFirebaseConsole(
+                        rechargeplanview,
+                        "RechargeFragmentRechargePlanReq",
+                        requireContext()
+                    )
                 }
 
 
@@ -2664,177 +2680,178 @@ class RechargeFragment : Fragment() {
     }
 
 
+
     @SuppressLint("NotifyDataSetChanged")
-    private fun getAllPlanListRes(popularPlans:List<Plan>) {
+    private fun getAllPlanListRes(popularPlans: List<Plan>) {
         try {
-                binding.llViewPlan.visibility = View.VISIBLE
-                binding.llTransactionHistory.visibility = View.GONE
-                // Set up RecyclerView
-                val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                binding.rvViewPlan.layoutManager = layoutManager
-                val layoutAnimationController = AnimationUtils.loadLayoutAnimation(context, R.anim.recyclerview_anim_layout)
-                binding.rvViewPlan.layoutAnimation = layoutAnimationController
-                binding.rvViewPlan.setHasFixedSize(true)
+            binding.llViewPlan.visibility = View.VISIBLE
+            binding.llTransactionHistory.visibility = View.GONE
+            // Set up RecyclerView
+            val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            binding.rvViewPlan.layoutManager = layoutManager
+            val layoutAnimationController =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.recyclerview_anim_layout)
+            binding.rvViewPlan.layoutAnimation = layoutAnimationController
+            binding.rvViewPlan.setHasFixedSize(true)
 
-                // Initialize and set adapter
-                val adapter = ViewPlanListLatestAdapter(mContext = requireContext(),
-                    popularPlan = popularPlans ?: emptyList(),
-                    clickListener = object : ViewPlanListLatestAdapter.ClickListener {
-                        override fun itemClick(rechargeprice: Int) {
-                            binding.rechargeAmount.setText(rechargeprice.toString())
-                            binding.serviceChargeLayout.visibility = View.VISIBLE
-                            binding.nestedview.scrollTo(0,0)
-                            // hold at this time by Naim Sir discussion...................................................
-                            // getAllServiceCharge(rechargeprice.toString())
-                            //........................................................................
-                            /*     when (item) {
-                                is PopularPlansItem -> {
+            // Initialize and set adapter
+            val adapter = ViewPlanListLatestAdapter(mContext = requireContext(),
+                popularPlan = popularPlans ?: emptyList(),
+                clickListener = object : ViewPlanListLatestAdapter.ClickListener {
+                    override fun itemClick(rechargeprice: Int) {
+                        binding.rechargeAmount.setText(rechargeprice.toString())
+                        // binding.serviceChargeLayout.visibility = View.VISIBLE
+                        binding.nestedview.scrollTo(0, 0)
+                        // hold at this time by Naim Sir discussion...................................................
+                        // getAllServiceCharge(rechargeprice.toString())
+                        //........................................................................
+                        /*     when (item) {
+                            is PopularPlansItem -> {
 
-                                }
-
-                                is True5GUnlimitedPlansItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is GamingItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is TopUpItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is EntertainmentPlansItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is AnnualPlansItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is InFlightPacksItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is TrueUnlimitedUpgradeItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is InternationalRoamingItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is IRWiFiCallingItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is JioPhoneDataAddOnItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is JioSaavnProItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is ISDItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is JioPhonePrimaItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is DataPacksItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is JioBharatPhoneItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is JioLinkItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is JioPhoneItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-                                is ValueItem -> {
-                                    binding.rechargeAmount.setText(item.rs.toString())
-                                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                                    getAllServiceCharge(item.rs.toString())
-                                }
-
-
-                                else -> {
-                                }
-                                // Add handling for other types if needed
                             }
-                            //binding.etAmount.requestFocus()
-                            binding.etMobileNumber.requestFocus()*/
+
+                            is True5GUnlimitedPlansItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is GamingItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is TopUpItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is EntertainmentPlansItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is AnnualPlansItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is InFlightPacksItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is TrueUnlimitedUpgradeItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is InternationalRoamingItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is IRWiFiCallingItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is JioPhoneDataAddOnItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is JioSaavnProItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is ISDItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is JioPhonePrimaItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is DataPacksItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is JioBharatPhoneItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is JioLinkItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is JioPhoneItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+                            is ValueItem -> {
+                                binding.rechargeAmount.setText(item.rs.toString())
+                                binding.serviceChargeLayout.visibility = View.VISIBLE
+                                getAllServiceCharge(item.rs.toString())
+                            }
+
+
+                            else -> {
+                            }
+                            // Add handling for other types if needed
                         }
+                        //binding.etAmount.requestFocus()
+                        binding.etMobileNumber.requestFocus()*/
                     }
-                )
-                binding.rvViewPlan.layoutManager = LinearLayoutManager(requireContext())
-                binding.rvViewPlan.adapter = adapter
-                binding.rvViewPlan.setHasFixedSize(true)
-                adapter.notifyDataSetChanged()
+                }
+            )
+            binding.rvViewPlan.layoutManager = LinearLayoutManager(requireContext())
+            binding.rvViewPlan.adapter = adapter
+            binding.rvViewPlan.setHasFixedSize(true)
+            adapter.notifyDataSetChanged()
 
-                // Set up the SearchView
-                binding.searchView.setOnQueryTextListener(object :
-                    SearchView.OnQueryTextListener,
-                    androidx.appcompat.widget.SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        // Filter the adapter when query is submitted
-                        query?.let { adapter.filter(it) }
-                        return false
-                    }
+            // Set up the SearchView
+            binding.searchView.setOnQueryTextListener(object :
+                SearchView.OnQueryTextListener,
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    // Filter the adapter when query is submitted
+                    query?.let { adapter.filter(it) }
+                    return false
+                }
 
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        // Filter the adapter as the user types
-                        newText?.let { adapter.filter(it) }
-                        return false
-                    }
-                })
-                binding.rvViewPlan.adapter = adapter
-                adapter.notifyDataSetChanged()
-             }
-            catch (e: Exception) {
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    // Filter the adapter as the user types
+                    newText?.let { adapter.filter(it) }
+                    return false
+                }
+            })
+            binding.rvViewPlan.adapter = adapter
+            adapter.notifyDataSetChanged()
+        } catch (e: Exception) {
             pd.dismiss()
             e.printStackTrace()
         }
@@ -2873,7 +2890,7 @@ class RechargeFragment : Fragment() {
                         }
                     }
                 }
-         }
+        }
     }
 
 
@@ -2917,23 +2934,11 @@ class RechargeFragment : Fragment() {
     private fun getAllServiceChargeApiResRetailer(response: GetCommercialRes, rechargeAmount: String) {
         response.let {
             if (it.isSuccess == true) {
-                // Update visibility based on service type
-                binding.serviceChargeCommissionLayout.visibility = if (response.data[0].serviceType != "Not Applicable") View.VISIBLE else View.GONE
-                binding.tvAmount.visibility = View.VISIBLE
-                binding.etAmount.visibility = View.VISIBLE
-
-                // Save commission types in shared preferences
-                with(mStash!!) { setStringValue(Constants.admin_CommissionType, response.data[0].adminCommissionType.toString())
-                    setStringValue(Constants.retailer_CommissionType, response.data[0].retailerCommissionType.toString())
-                    setStringValue(Constants.customer_CommissionType, response.data[0].customerCommissionType.toString())
-                    setStringValue(Constants.serviceType, response.data[0].serviceType.toString())
-                }
-
                 // Parse values safely
                 val rechargeAmountValue = rechargeAmount.toDoubleOrNull() ?: 0.0
-                val retailerCommission = response.data[0].retailerCommission?.toDoubleOrNull() ?: 0.0
-                val customerCommission = response.data[0].customerCommission?.toDoubleOrNull() ?: 0.0
-                val adminCommission = response.data[0].adminCommission?.toDoubleOrNull() ?: 0.0
+                val retailerCommission =
+                    response.data[0].retailerCommission?.toDoubleOrNull() ?: 0.0
+
                 val TDSTax = 5.0 // Fixed TDS rate
 
                 // Function to calculate commission with TDS
@@ -2941,64 +2946,93 @@ class RechargeFragment : Fragment() {
                     return when (type) {
                         "Percentage" -> {
                             val commissionAmount = rechargeAmountValue * (amount / 100)
+                            val tdsAmount = commissionAmount * (tdsRate / 100)
+                            mStash!!.setStringValue(
+                                Constants.retailerCommission,
+                                String.format("%.2f", commissionAmount)
+                            )
+                            mStash!!.setStringValue(Constants.tds, String.format("%.2f", tdsAmount))
                             commissionAmount - (commissionAmount * (tdsRate / 100))
                         }
 
                         "Amount" -> {
+                            val tdsAmount = amount * (tdsRate / 100)
+                            mStash!!.setStringValue(
+                                Constants.retailerCommission,
+                                String.format("%.2f", amount)
+                            )
+                            mStash!!.setStringValue(Constants.tds, String.format("%.2f", tdsAmount))
                             amount - (amount * (tdsRate / 100))
                         }
 
-                        else -> 0.0
+                        else -> {
+                            mStash!!.setStringValue(Constants.retailerCommission, "0.0")
+                            mStash!!.setStringValue(Constants.tds, "0.0")
+                            0.0
+
+                        }
                     }
                 }
 
-
-                // calculate admin commission
-                val finalAdminCommission = calculateCommission(adminCommission, response.data[0].adminCommissionType, TDSTax)
-
-                mStash!!.setStringValue(Constants.adminCommissionWithoutTDS, String.format("%.2f", finalAdminCommission))
-
                 // Calculate retailer commission
-                val finalRetailerCommission = calculateCommission(retailerCommission, response.data[0].retailerCommissionType, TDSTax)
-
-                mStash!!.setStringValue(Constants.retailerCommissionWithoutTDS, String.format("%.2f", finalRetailerCommission))
-
-                // Calculate customer commission
-                val finalCustomerCommission = calculateCommission(customerCommission, response.data[0].customerCommissionType, TDSTax)
-
-                mStash!!.setStringValue(Constants.tds, String.format("%.2f", customerCommission * (TDSTax / 100)))
-
-                mStash!!.setStringValue(Constants.customerCommissionWithoutTDS, String.format("%.2f", finalCustomerCommission))
-
+                val finalRetailerCommission = calculateCommission(
+                    retailerCommission,
+                    response.data[0].retailerCommissionType,
+                    TDSTax
+                )
                 // Log results
                 Log.d("FinalRetailerCommission", String.format("%.2f", finalRetailerCommission))
-                Log.d("FinalCustomerCommission", String.format("%.2f", finalCustomerCommission))
-                Log.d("FinalAdminCommission", String.format("%.2f", finalAdminCommission))
 
-
-                // Display service charge
-                binding.serviceCharge.text = response.data[0].serviceCharge.toString()
 
                 // Service charge calculation
                 val gst = 18.0 // Fixed GST rate of 18%
                 val serviceCharge = response.data[0].serviceCharge?.toDoubleOrNull() ?: 0.0
 
-//                if (!response.data[0].serviceType.equals("Not Applicable")){
-                val totalServiceChargeWithGst = serviceChargeCalculation(serviceCharge, gst, rechargeAmount, response)
+                val totalServiceChargeWithGst =
+                    serviceChargeCalculation(serviceCharge, gst, rechargeAmount, response)
+                Log.d("servicechargewithgst", String.format("%.2f", totalServiceChargeWithGst))
 
-//                 Calculating the total recharge amount
-                val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + totalServiceChargeWithGst
-
-
-                mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
-
-                binding.totalTrnasaction.text = String.format("%.2f", totalRechargeAmount)
+//              Calculating the total recharge amount
+                val totalRechargeAmount =
+                    (rechargeAmount.toDoubleOrNull() ?: 0.0) + totalServiceChargeWithGst
                 Log.d("rechargeAmount", String.format("%.2f", totalRechargeAmount))
 
-                openDialogForPayout(serviceCharge,rechargeAmount.toDoubleOrNull() ?: 0.0,totalServiceChargeWithGst,totalRechargeAmount,retailerCommission,"")
+                // Save commission types in shared preferences
+                with(mStash!!) {
+                    setStringValue(
+                        Constants.admin_CommissionType,
+                        response.data[0].adminCommissionType.toString()
+                    )
+                    setStringValue(
+                        Constants.retailer_CommissionType,
+                        response.data[0].retailerCommissionType.toString()
+                    )
+                    setStringValue(
+                        Constants.customer_CommissionType,
+                        response.data[0].customerCommissionType.toString()
+                    )
+                    setStringValue(Constants.serviceType, response.data[0].serviceType.toString())
+                }
 
-            } else
-            {
+                mStash!!.setStringValue(
+                    Constants.retailerCommissionWithoutTDS,
+                    String.format("%.2f", finalRetailerCommission)
+                )
+
+                mStash!!.setStringValue(
+                    Constants.totalTransaction,
+                    String.format("%.2f", totalRechargeAmount)
+                )
+
+                openDialogForPayout(
+                    rechargeAmount.toDoubleOrNull() ?: 0.0,
+                    totalServiceChargeWithGst,
+                    totalRechargeAmount,
+                    mStash!!.getStringValue(Constants.retailerCommission, "")!!.toDoubleOrNull()!!,
+                    ""
+                )
+
+            } else {
                 getAllServiceChargeAdmin(rechargeAmount)
 
             }
@@ -3010,101 +3044,139 @@ class RechargeFragment : Fragment() {
     private fun getAllServiceChargeApiResAdmin(response: GetCommercialRes, rechargeAmount: String) {
         response.let {
             if (it.isSuccess == true) {
-                // Update visibility based on service type
-                binding.serviceChargeCommissionLayout.visibility = if (response.data[0].serviceType != "Not Applicable") View.VISIBLE else View.GONE
-                binding.tvAmount.visibility = View.VISIBLE
-                binding.etAmount.visibility = View.VISIBLE
-
-                // Save commission types in shared preferences
-                with(mStash!!) { setStringValue(Constants.admin_CommissionType, response.data[0].adminCommissionType.toString())
-                    setStringValue(Constants.retailer_CommissionType, response.data[0].retailerCommissionType.toString())
-                    setStringValue(Constants.customer_CommissionType, response.data[0].customerCommissionType.toString())
-                    setStringValue(Constants.serviceType, response.data[0].serviceType.toString())
-                }
-
                 // Parse values safely
                 val rechargeAmountValue = rechargeAmount.toDoubleOrNull() ?: 0.0
-                val retailerCommission = response.data[0].retailerCommission?.toDoubleOrNull() ?: 0.0
-                val customerCommission = response.data[0].customerCommission?.toDoubleOrNull() ?: 0.0
-                val adminCommission = response.data[0].adminCommission?.toDoubleOrNull() ?: 0.0
+                val retailerCommission =
+                    response.data[0].retailerCommission?.toDoubleOrNull() ?: 0.0
+
                 val TDSTax = 5.0 // Fixed TDS rate
+
 
                 // Function to calculate commission with TDS
                 fun calculateCommission(amount: Double, type: String?, tdsRate: Double): Double {
                     return when (type) {
                         "Percentage" -> {
                             val commissionAmount = rechargeAmountValue * (amount / 100)
+                            val tdsAmount = commissionAmount * (tdsRate / 100)
+                            mStash!!.setStringValue(
+                                Constants.retailerCommission,
+                                String.format("%.2f", commissionAmount)
+                            )
+                            mStash!!.setStringValue(Constants.tds, String.format("%.2f", tdsAmount))
                             commissionAmount - (commissionAmount * (tdsRate / 100))
                         }
 
                         "Amount" -> {
+                            val tdsAmount = amount * (tdsRate / 100)
+                            mStash!!.setStringValue(
+                                Constants.retailerCommission,
+                                String.format("%.2f", amount)
+                            )
+                            mStash!!.setStringValue(Constants.tds, String.format("%.2f", tdsAmount))
                             amount - (amount * (tdsRate / 100))
                         }
 
-                        else -> 0.0
+                        else -> {
+                            mStash!!.setStringValue(Constants.retailerCommission, "0.0")
+                            mStash!!.setStringValue(Constants.tds, "0.0")
+                            0.0
+
+                        }
                     }
                 }
 
-
-                // calculate admin commission
-                val finalAdminCommission = calculateCommission(adminCommission, response.data[0].adminCommissionType, TDSTax)
-
-                mStash!!.setStringValue(Constants.adminCommissionWithoutTDS, String.format("%.2f", finalAdminCommission))
-
                 // Calculate retailer commission
-                val finalRetailerCommission = calculateCommission(retailerCommission, response.data[0].retailerCommissionType, TDSTax)
-
-                mStash!!.setStringValue(Constants.retailerCommissionWithoutTDS, String.format("%.2f", finalRetailerCommission))
-
-                // Calculate customer commission
-                val finalCustomerCommission = calculateCommission(customerCommission, response.data[0].customerCommissionType, TDSTax)
-
-                mStash!!.setStringValue(Constants.tds, String.format("%.2f", customerCommission * (TDSTax / 100)))
-
-                mStash!!.setStringValue(Constants.customerCommissionWithoutTDS, String.format("%.2f", finalCustomerCommission))
+                val finalRetailerCommission = calculateCommission(
+                    retailerCommission,
+                    response.data[0].retailerCommissionType,
+                    TDSTax
+                )
 
                 // Log results
                 Log.d("FinalRetailerCommission", String.format("%.2f", finalRetailerCommission))
-                Log.d("FinalCustomerCommission", String.format("%.2f", finalCustomerCommission))
-                Log.d("FinalAdminCommission", String.format("%.2f", finalAdminCommission))
-
-
-                // Display service charge
-                binding.serviceCharge.text = response.data[0].serviceCharge.toString()
 
                 // Service charge calculation
                 val gst = 18.0 // Fixed GST rate of 18%
                 val serviceCharge = response.data[0].serviceCharge?.toDoubleOrNull() ?: 0.0
 
-//                if (!response.data[0].serviceType.equals("Not Applicable")){
-                val totalServiceChargeWithGst = serviceChargeCalculation(serviceCharge, gst, rechargeAmount, response)
+                val totalServiceChargeWithGst =
+                    serviceChargeCalculation(serviceCharge, gst, rechargeAmount, response)
+                Log.d("servicechargewithgst", String.format("%.2f", totalServiceChargeWithGst))
 
-//                 Calculating the total recharge amount
-                val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + totalServiceChargeWithGst
-
-
-                mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
-
-                binding.totalTrnasaction.text = String.format("%.2f", totalRechargeAmount)
+//              Calculating the total recharge amount
+                val totalRechargeAmount =
+                    (rechargeAmount.toDoubleOrNull() ?: 0.0) + totalServiceChargeWithGst
                 Log.d("rechargeAmount", String.format("%.2f", totalRechargeAmount))
 
-                openDialogForPayout(serviceCharge,rechargeAmount.toDoubleOrNull() ?: 0.0,totalServiceChargeWithGst,totalRechargeAmount,retailerCommission,"")
+                // Save commission types in shared preferences
+                with(mStash!!) {
+                    setStringValue(
+                        Constants.admin_CommissionType,
+                        response.data[0].adminCommissionType.toString()
+                    )
+                    setStringValue(
+                        Constants.retailer_CommissionType,
+                        response.data[0].retailerCommissionType.toString()
+                    )
+                    setStringValue(
+                        Constants.customer_CommissionType,
+                        response.data[0].customerCommissionType.toString()
+                    )
+                    setStringValue(Constants.serviceType, response.data[0].serviceType.toString())
+                }
 
-            } else
-            {
+                mStash!!.setStringValue(
+                    Constants.retailerCommissionWithoutTDS,
+                    String.format("%.2f", finalRetailerCommission)
+                )
 
-                /*Toast.makeText(requireContext(), response.returnMessage.toString(), Toast.LENGTH_SHORT).show()*/
+                mStash!!.setStringValue(
+                    Constants.totalTransaction,
+                    String.format("%.2f", totalRechargeAmount)
+                )
+
+                openDialogForPayout(
+                    rechargeAmount.toDoubleOrNull() ?: 0.0,
+                    totalServiceChargeWithGst,
+                    totalRechargeAmount,
+                    mStash!!.getStringValue(Constants.retailerCommission, "")!!.toDoubleOrNull()!!,
+                    ""
+                )
+
+            }
+            else {
+
+                // Save commission types in shared preferences
+                with(mStash!!) {
+                    setStringValue(Constants.admin_CommissionType, "")
+                    setStringValue(Constants.retailer_CommissionType, "")
+                    setStringValue(Constants.customer_CommissionType, "")
+                    setStringValue(Constants.serviceType, "")
+                }
+
+                mStash!!.setStringValue(Constants.retailerCommissionWithoutTDS, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.tds, String.format("%.2f", 0.0))
+
                 val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + 0.0
+                mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
+
+                serviceChargeWithGST = mStash!!.getStringValue(Constants.serviceChargeWithGST, "")!!
+                mStash!!.setStringValue(Constants.gst, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.tds, String.format("%.2f", 0.0))
+
                 var msg = "Warning : Slab structure not found. This transaction will proceed without any commission being credited."
-                openDialogForPayout(0.0,rechargeAmount.toDoubleOrNull() ?: 0.0,0.0,totalRechargeAmount,0.0,msg)
+                openDialogForPayout(rechargeAmount.toDoubleOrNull() ?: 0.0, 0.0, totalRechargeAmount, 0.0, msg)
+
             }
         }
     }
 
-    // showing pop up for showing services and commission during mobile recharge
 
     @SuppressLint("SetTextI18n")
-    fun openDialogForPayout(serviceCharge: Double, transferAmount: Double , servicechargeGst:Double,totalRechargeAmount:Double,retailerCommission:Double ,msg:String) {
+    fun openDialogForPayout(transferAmount: Double, servicechargeGst: Double, totalRechargeAmount: Double, retailerCommission: Double, msg: String) {
         dialog = Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.mobilerechargecommissionlayout)
@@ -3118,7 +3190,7 @@ class RechargeFragment : Fragment() {
         dialog.setCanceledOnTouchOutside(false)
 
         val transferamttxt = dialog.findViewById<TextView>(R.id.actualamt)
-        val serviceChargetxt = dialog.findViewById<TextView>(R.id.servicecharge)
+        val servicechargewithgst = dialog.findViewById<TextView>(R.id.servicechargewithgst)
         val warningmsg = dialog.findViewById<TextView>(R.id.warningmsg)
         val transferamt = dialog.findViewById<TextView>(R.id.transferamt)
         val serviceChargeamount = dialog.findViewById<TextView>(R.id.servicescharge)
@@ -3127,52 +3199,81 @@ class RechargeFragment : Fragment() {
         val cancel = dialog.findViewById<ImageView>(R.id.cancel)
         val done = dialog.findViewById<LinearLayout>(R.id.Proceedbtn)
         val viewBreakLayout = dialog.findViewById<LinearLayout>(R.id.viewbreaklayout)
+        val servicechargelayout = dialog.findViewById<LinearLayout>(R.id.servicechargelayout)
         val detailsgstserviceslayout = dialog.findViewById<LinearLayout>(R.id.chargesdetailslayout)
+        val retailercommissionlayout = dialog.findViewById<LinearLayout>(R.id.retailercommissionlayout)
 
-        if(msg.isNotEmpty()){
-            warningmsg.visibility=View.VISIBLE
-            warningmsg.text= msg
-        }else{
-            warningmsg.visibility=View.GONE
+        if (msg.isNotEmpty()) {
+            warningmsg.visibility = View.VISIBLE
+            warningmsg.text = msg
+        }
+        else {
+            warningmsg.visibility = View.GONE
         }
 
+        val gst = mStash!!.getStringValue(Constants.gst, "")
+        mStash!!.setStringValue(Constants.serviceChargewithgst, String.format("%.2f", servicechargeGst)).toString()
+
         transferamttxt.text = "$transferAmount"
-        serviceChargetxt.text = "$serviceCharge"
-        retailercommission.text = "$retailerCommission"
-
-
-        serviceChargeamount.text = "$serviceCharge"
-        gstamount.text = "$servicechargeGst"
-
+        servicechargewithgst.text = String.format("%.2f", servicechargeGst)
+        retailercommission.text = String.format("%.2f", retailerCommission)
+        serviceChargeamount.text = mStash!!.getStringValue(Constants.serviceCharge, "").toString()
+        gstamount.text = "$gst"
         transferamt.text = String.format("%.2f", totalRechargeAmount)
 
-        var checkView : Boolean = false
+        if(servicechargeGst==0.0){
+            servicechargelayout.visibility=View.GONE
+        }else{
+            servicechargelayout.visibility=View.VISIBLE
+        }
+
+        if(retailerCommission==0.0){
+            retailercommissionlayout.visibility = View.GONE
+        }
+        else{
+            retailercommissionlayout.visibility = View.VISIBLE
+        }
+
+        var checkView: Boolean = false
 
 
         viewBreakLayout.setOnClickListener {
-            if(checkView){
+            if (checkView) {
                 detailsgstserviceslayout.visibility = View.GONE
-                checkView= false
-            }else{
+                checkView = false
+            } else {
                 detailsgstserviceslayout.visibility = View.VISIBLE
-                checkView= true
+                checkView = true
             }
         }
 
         done.setOnClickListener {
-            if(totalRechargeAmount>0){
-                mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
-                mStash!!.setStringValue(Constants.serviceChargeWithGST, String.format("%.2f", servicechargeGst))
+            if (totalRechargeAmount > 0) {
+                mStash!!.setStringValue(
+                    Constants.totalTransaction,
+                    String.format("%.2f", totalRechargeAmount)
+                )
+                mStash!!.setStringValue(
+                    Constants.serviceChargeWithGST,
+                    String.format("%.2f", servicechargeGst)
+                )
+                mStash!!.setStringValue(
+                    Constants.actualRechargeAmount,
+                    String.format("%.2f", transferAmount)
+                )
                 getAllWalletBalance()
-            }
-            else{
-                Toast.makeText(requireContext(), "Transfer amount must be greater than the service charge.", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Transfer amount must be greater than the service charge.",
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
         }
 
         cancel.setOnClickListener {
-            if(dialog!=null && dialog.isShowing){
+            if (dialog != null && dialog.isShowing) {
                 dialog.dismiss()
             }
 
@@ -3186,17 +3287,6 @@ class RechargeFragment : Fragment() {
     }
 
 
-    private fun getAgentReferenceIdRes(response: AgentRefrenceidRes) {
-        if (response.Status == true) {
-            mStash!!.setStringValue(Constants.dIS_RegistrationId, response.DISRegistrationId.toString())
-            mStash!!.setStringValue(Constants.mD_RegistrationId, response.MDRegistrationId.toString())
-        }
-        else {
-            toast(response.message.toString())
-        }
-
-    }
-
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun serviceChargeCalculation(serviceCharge: Double, gstRate: Double, rechargeAmount: String, response: GetCommercialRes): Double {
@@ -3206,159 +3296,52 @@ class RechargeFragment : Fragment() {
         val totalAmountWithGst = when (response.data[0].serviceType) {
             "Amount" -> {
                 // Service charge is a fixed amount
-                binding.serviceChargeText.text = "Service Charge Rs"
+                //binding.serviceChargeText.text = "Service Charge Rs"
                 val serviceChargeWithGst = serviceCharge * (gstRate / 100)
-
-                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", serviceCharge))
+                mStash!!.setStringValue(Constants.gst, String.format("%.2f", serviceChargeWithGst))
+                mStash!!.setStringValue(
+                    Constants.serviceCharge,
+                    String.format("%.2f", serviceCharge)
+                )
                 serviceCharge + serviceChargeWithGst
             }
 
             "Percentage" -> {
                 // Service charge is a percentage of the recharge amount
-                binding.serviceChargeText.text = "Service Charge %"
+                //binding.serviceChargeText.text = "Service Charge %"
                 val serviceInAmount = rechargeAmountValue * (serviceCharge / 100)
                 val serviceWithGst = serviceInAmount * (gstRate / 100)
-                binding.serviceChargeWithGST.text = String.format("%.2f", serviceWithGst)
-
-                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", serviceInAmount))
+                mStash!!.setStringValue(Constants.gst, String.format("%.2f", serviceWithGst))
+                // binding.serviceChargeWithGST.text = String.format("%.2f", serviceWithGst)
+                mStash!!.setStringValue(
+                    Constants.serviceCharge,
+                    String.format("%.2f", serviceInAmount)
+                )
                 serviceInAmount + serviceWithGst
 
             }
 
-            else -> 0.0
+            else -> {
+                mStash!!.setStringValue(Constants.gst, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", 0.0))
+                0.0
+            }
         }
 
-        // Display service charge and total amount with GST in the UI
-        binding.serviceCharge.text = String.format("%.2f", serviceCharge)
-        binding.serviceChargeWithGST.text = String.format("%.2f", totalAmountWithGst)
+        mStash!!.setStringValue(
+            Constants.serviceChargeWithGST,
+            String.format("%.2f", totalAmountWithGst)
+        )
 
-        mStash!!.setStringValue(Constants.serviceChargeWithGST, String.format("%.2f", totalAmountWithGst))
-
-
-        Log.d("totalAmountWithGst", mStash!!.getStringValue(Constants.serviceCharge, "").toString())
-        Log.d("totalAmountWithGst", mStash!!.getStringValue(Constants.serviceChargeWithGST, "").toString())
+        Log.d("gstamount", mStash!!.getStringValue(Constants.gst, "").toString())
+        Log.d("servicecharge", mStash!!.getStringValue(Constants.serviceCharge, "").toString())
+        Log.d(
+            "totalAmountWithGst",
+            mStash!!.getStringValue(Constants.serviceChargeWithGST, "").toString()
+        )
 
         // Return the total service charge (with GST) to include in the final transaction
         return totalAmountWithGst
-    }
-
-
-    private fun handleVisibilityShowingWithCommissionType(response: GetAPIServiceChargeRes) {
-        if (mStash!!.getStringValue(Constants.AgentType, "") == "Retailer") {
-            Log.d("getStringValue", mStash!!.getStringValue(Constants.AgentType, "").toString())
-            binding.serviceChargeCommissionLayout.visibility = View.VISIBLE
-            // Retailer logic: Handle "Percentage" and "Amount" cases
-            if (!response.RetailerCommission.isNullOrEmpty()) {
-                if (response.RetailerCommissionType == "Percentage") {
-                    Log.d("RetailerCommission", "Percentage ${response.RetailerCommissionType}")
-                    binding.commissionName.text = "Retailer Commission with % Charge"
-//                    binding.customerCommissionLayout.visibility = View.GONE
-                    binding.serviceChargeLayout.visibility = View.GONE
-                    binding.serviceGStLayout.visibility = View.GONE
-//                    binding.customerCommissionWithoutTDSLayout.visibility = View.GONE
-//                    binding.retailerCommissionWithoutTDSLayout.visibility = View.VISIBLE
-//                    binding.tdsLayout.visibility = View.VISIBLE
-                    binding.totalTransactionLayout.visibility = View.VISIBLE
-//                    binding.retailerCommissionLayout.visibility = View.VISIBLE
-                } else if (response.RetailerCommissionType == "Amount") {
-                    Log.d("RetailerCommission", "Amount ${response.RetailerCommissionType}")
-                    binding.commissionName.text = "Retailer Commission with Rs Charge"
-                    // Show retailer commission for "Amount" type
-//                    binding.customerCommissionLayout.visibility = View.GONE
-                    binding.serviceChargeLayout.visibility = View.GONE
-                    binding.serviceGStLayout.visibility = View.GONE
-//                    binding.customerCommissionWithoutTDSLayout.visibility = View.GONE
-//                    binding.retailerCommissionWithoutTDSLayout.visibility = View.VISIBLE
-//                    binding.tdsLayout.visibility = View.VISIBLE
-                    binding.totalTransactionLayout.visibility = View.VISIBLE
-//                    binding.retailerCommissionLayout.visibility = View.VISIBLE
-                }
-//            } else if (!response.ServiceCharge.isNullOrEmpty()) {
-                // Service charge exists, show service charge layout
-                if (response.ServiceType == "Percentage") {
-                    Log.d("ServiceCharge111222", "Percentage ${response.ServiceType}")
-                    binding.commissionName.text = "Service Charge with % "
-//                    binding.customerCommissionLayout.visibility = View.GONE
-//                    binding.retailerCommissionLayout.visibility = View.GONE
-//                    binding.customerCommissionWithoutTDSLayout.visibility = View.GONE
-//                    binding.retailerCommissionWithoutTDSLayout.visibility = View.GONE
-//                    binding.tdsLayout.visibility = View.GONE
-                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                    binding.serviceGStLayout.visibility = View.VISIBLE
-                    binding.totalTransactionLayout.visibility = View.VISIBLE
-                } else if (response.ServiceType == "Amount") {
-                    Log.d("ServiceCharge111222", "Amount ${response.ServiceType}")
-                    binding.commissionName.text = "Service Charge with Rs "
-                    // Show service charge for "Amount" type
-//                    binding.customerCommissionLayout.visibility = View.GONE
-//                    binding.retailerCommissionLayout.visibility = View.GONE
-//                    binding.customerCommissionWithoutTDSLayout.visibility = View.GONE
-//                    binding.retailerCommissionWithoutTDSLayout.visibility = View.GONE
-//                    binding.tdsLayout.visibility = View.GONE
-                    binding.serviceChargeLayout.visibility = View.VISIBLE
-                    binding.serviceGStLayout.visibility = View.VISIBLE
-                    binding.totalTransactionLayout.visibility = View.VISIBLE
-                }
-            } else {
-                // Hide everything if neither RetailerCommission nor ServiceCharge is present
-                binding.serviceChargeCommissionLayout.visibility = View.GONE
-            }
-
-        } else { // Customer logic
-            binding.serviceChargeCommissionLayout.visibility = View.VISIBLE
-//            if (!response.CustomerCommission.isNullOrEmpty()) {
-            if (response.CustomerCommissionType == "Percentage") {
-                binding.commissionName.text = "Customer Commission with % "
-//                binding.retailerCommissionLayout.visibility = View.GONE
-                binding.serviceChargeLayout.visibility = View.GONE
-                binding.serviceGStLayout.visibility = View.GONE
-                binding.totalTransactionLayout.visibility = View.GONE
-//                binding.retailerCommissionWithoutTDSLayout.visibility = View.GONE
-//                binding.tdsLayout.visibility = View.VISIBLE
-//                binding.customerCommissionWithoutTDSLayout.visibility = View.VISIBLE
-//                binding.customerCommissionLayout.visibility = View.VISIBLE
-            } else if (response.CustomerCommissionType == "Amount") {
-                binding.commissionName.text = "Customer Commission with Rs "
-                // Show customer commission for "Amount" type
-//                binding.retailerCommissionLayout.visibility = View.GONE
-                binding.serviceChargeLayout.visibility = View.GONE
-                binding.serviceGStLayout.visibility = View.GONE
-                binding.totalTransactionLayout.visibility = View.GONE
-//                binding.retailerCommissionWithoutTDSLayout.visibility = View.GONE
-//                binding.tdsLayout.visibility = View.VISIBLE
-//                binding.customerCommissionWithoutTDSLayout.visibility = View.VISIBLE
-//                binding.customerCommissionLayout.visibility = View.VISIBLE
-            }
-//            } else if (!response.ServiceCharge.isNullOrEmpty()) {
-            // Service charge exists, show service charge layout
-            if (response.ServiceType == "Percentage") {
-                binding.commissionName.text = "Service Charge with % "
-//                binding.retailerCommissionLayout.visibility = View.GONE
-//                binding.customerCommissionLayout.visibility = View.GONE
-//                binding.retailerCommissionWithoutTDSLayout.visibility = View.GONE
-//                binding.tdsLayout.visibility = View.GONE
-//                binding.customerCommissionWithoutTDSLayout.visibility = View.GONE
-                binding.serviceChargeLayout.visibility = View.VISIBLE
-                binding.serviceGStLayout.visibility = View.VISIBLE
-                binding.totalTransactionLayout.visibility = View.VISIBLE
-            } else if (response.ServiceType == "Amount") {
-                binding.commissionName.text = "Service Charge with Rs "
-                // Show service charge for "Amount" type
-//                binding.retailerCommissionLayout.visibility = View.GONE
-//                binding.customerCommissionLayout.visibility = View.GONE
-//                binding.retailerCommissionWithoutTDSLayout.visibility = View.GONE
-//                binding.tdsLayout.visibility = View.GONE
-//                binding.customerCommissionWithoutTDSLayout.visibility = View.GONE
-                binding.serviceChargeLayout.visibility = View.VISIBLE
-                binding.serviceGStLayout.visibility = View.VISIBLE
-                binding.totalTransactionLayout.visibility = View.VISIBLE
-//                }
-            } else {
-                // Hide everything if neither CustomerCommission nor ServiceCharge is present
-                binding.serviceChargeCommissionLayout.visibility = View.GONE
-            }
-        }
-
     }
 
 
@@ -3390,11 +3373,15 @@ class RechargeFragment : Fragment() {
 
     private fun getFuseLocation() {
 
-        customFuseLocation = CustomFuseLocationActivity(requireActivity(), requireContext()) { mCurrentLocation ->
-            ConstantClass.latdouble = mCurrentLocation.latitude
-            ConstantClass.longdouble = mCurrentLocation.longitude
-            Log.d("Lat Long", "Lat: ${ConstantClass.latdouble} : Long: ${ConstantClass.longdouble}")
-        }
+        customFuseLocation =
+            CustomFuseLocationActivity(requireActivity(), requireContext()) { mCurrentLocation ->
+                ConstantClass.latdouble = mCurrentLocation.latitude
+                ConstantClass.longdouble = mCurrentLocation.longitude
+                Log.d(
+                    "Lat Long",
+                    "Lat: ${ConstantClass.latdouble} : Long: ${ConstantClass.longdouble}"
+                )
+            }
     }
 
 
@@ -3439,7 +3426,6 @@ class RechargeFragment : Fragment() {
         builder.show()
     }
 
-
     // operators name.......................................................................
     fun hitApiForRechargeOperatorNameList(displayName: String) {
 
@@ -3458,7 +3444,11 @@ class RechargeFragment : Fragment() {
                             it.data?.let { users ->
                                 users.body()?.let { response ->
                                     pd.dismiss()
-                                    uploadDataOnFirebaseConsole(Gson().toJson(response),"RechargeFragmentOperatorsRequest",requireContext())
+                                    uploadDataOnFirebaseConsole(
+                                        Gson().toJson(response),
+                                        "RechargeFragmentOperatorsRequest",
+                                        requireContext()
+                                    )
                                     Log.d("operatorRespo", Gson().toJson(response))
                                     if (response.data!!.size > 0) {
                                         var getdata = response.data
@@ -3493,41 +3483,54 @@ class RechargeFragment : Fragment() {
 
     }
 
-
     private fun setDropDownMobileOperators() {
-        if(rechargeType=="mobile"){
+        if (rechargeType == "mobile") {
             Constants.operatorName!!.clear()
-            setMobileOperatorNameWithProductID().forEach { it->
+            setMobileOperatorNameWithProductID().forEach { it ->
                 Constants.operatorName!!.add(it.first)
             }
-            Constants.getAllOperatorAdapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_right_aligned, Constants.operatorName!!)
-        }
-        else{
-            Constants.getAllOperatorAdapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_right_aligned, Constants.operatorName!!)
+            Constants.getAllOperatorAdapter = ArrayAdapter<String>(
+                requireContext(),
+                R.layout.spinner_right_aligned,
+                Constants.operatorName!!
+            )
+        } else {
+            Constants.getAllOperatorAdapter = ArrayAdapter<String>(
+                requireContext(),
+                R.layout.spinner_right_aligned,
+                Constants.operatorName!!
+            )
         }
 
         Constants.getAllOperatorAdapter!!.setDropDownViewResource(R.layout.spinner_right_aligned)
         binding.spOperator.adapter = Constants.getAllOperatorAdapter
 
-        binding.spOperator.onItemSelectedListener=object :AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if(Constants.productIdList!!.isNotEmpty()){
-                    if(rechargeType=="mobile"){
+        binding.spOperator.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (Constants.productIdList!!.isNotEmpty()) {
+                    if (rechargeType == "mobile") {
                         var operatorName = binding.spOperator.selectedItem.toString()
                         OperatorID = getOperatorId(operatorName).toString()
-                        mStash!!.setStringValue(Constants.OperatorId.toString(),OperatorID)
+                        mStash!!.setStringValue(Constants.OperatorId.toString(), OperatorID)
                         Log.d("operatorID", OperatorID)
-                    }
-                    else{
+                    } else {
                         Log.d("SelectedPos", Constants.productIdList!![position].toString())
-                        OperatorID =  Constants.productIdList!![position].toString()
-                        mStash!!.setStringValue(Constants.OperatorId.toString(),Constants.productIdList!![position].toString())
+                        OperatorID = Constants.productIdList!![position].toString()
+                        mStash!!.setStringValue(
+                            Constants.OperatorId.toString(),
+                            Constants.productIdList!![position].toString()
+                        )
                     }
 
-                    binding.llViewPlan.visibility=View.GONE
-                    if(binding.etDTHBillNumber.text.length>=10)
+                    binding.llViewPlan.visibility = View.GONE
+                    if (binding.etDTHBillNumber.text.length >= 10)
                         lastTriggeredBy = "operator"
-                        CheckAndHitApi()
+                    CheckAndHitApi()
                 }
 
             }
@@ -3543,19 +3546,28 @@ class RechargeFragment : Fragment() {
 
 
         val circleArray = resources.getStringArray(R.array.recharge_circle)
-        Constants.getAllCircleAdapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_right_aligned, circleArray)
+        Constants.getAllCircleAdapter =
+            ArrayAdapter<String>(requireContext(), R.layout.spinner_right_aligned, circleArray)
         Constants.getAllCircleAdapter!!.setDropDownViewResource(R.layout.spinner_right_aligned)
         binding.etCircle.adapter = Constants.getAllCircleAdapter
 
         binding.etCircle.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if(circleArray!![position]!!.isNotEmpty()){
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (circleArray!![position]!!.isNotEmpty()) {
                     Log.d("circlename", circleArray!![position].toString())
-                    mStash!!.setStringValue(Constants.circleName.toString(),circleArray!![position].toString())
-                    binding.llViewPlan.visibility=View.GONE
+                    mStash!!.setStringValue(
+                        Constants.circleName.toString(),
+                        circleArray!![position].toString()
+                    )
+                    binding.llViewPlan.visibility = View.GONE
 
-                    if(binding.etDTHBillNumber.text.length>=10){
+                    if (binding.etDTHBillNumber.text.length >= 10) {
                         lastTriggeredBy = "circle"
                         CheckAndHitApi()
                     }
@@ -3573,24 +3585,47 @@ class RechargeFragment : Fragment() {
 
     }
 
-
     private fun getOperatorId(operatorName: String): Int? {
         val normalized = operatorName.lowercase()
 
         // Direct match
-        val directMatch = operatorNameMobileList.find { it.first.equals(operatorName, ignoreCase = true) }
+        val directMatch =
+            operatorNameMobileList.find { it.first.equals(operatorName, ignoreCase = true) }
         if (directMatch != null) return directMatch.second
 
         // Keyword mapping
         return when {
-            "airtel" in normalized -> operatorNameMobileList.find { it.first.contains("Airtel", true) }?.second
-            "jio" in normalized || "reliance" in normalized -> operatorNameMobileList.find { it.first.contains("Jio", true) }?.second
-            "vodafone" in normalized || "vi" in normalized -> operatorNameMobileList.find { it.first.contains("VI", true) }?.second
-            "bsnl" in normalized -> operatorNameMobileList.find { it.first.contains("BSNL", true) }?.second
+            "airtel" in normalized -> operatorNameMobileList.find {
+                it.first.contains(
+                    "Airtel",
+                    true
+                )
+            }?.second
+
+            "jio" in normalized || "reliance" in normalized -> operatorNameMobileList.find {
+                it.first.contains(
+                    "Jio",
+                    true
+                )
+            }?.second
+
+            "vodafone" in normalized || "vi" in normalized -> operatorNameMobileList.find {
+                it.first.contains(
+                    "VI",
+                    true
+                )
+            }?.second
+
+            "bsnl" in normalized -> operatorNameMobileList.find {
+                it.first.contains(
+                    "BSNL",
+                    true
+                )
+            }?.second
+
             else -> null // No match found
         }
     }
-
 
     // operators name.......................................................................
     fun hitApiForMobileWiseOperatorName(mob: String) {
@@ -3610,14 +3645,17 @@ class RechargeFragment : Fragment() {
                             it.data?.let { users ->
                                 users.body()?.let { response ->
                                     pd.dismiss()
-                                    uploadDataOnFirebaseConsole(Gson().toJson(response),"RechargeFragmentMobileWiseRequest",requireContext())
+                                    uploadDataOnFirebaseConsole(
+                                        Gson().toJson(response),
+                                        "RechargeFragmentMobileWiseRequest",
+                                        requireContext()
+                                    )
                                     Log.d("mobileNameRespo", Gson().toJson(response))
                                     if (response.statusCode == 200) {
                                         var operatorName = response.data!!.operator
                                         var circleName = response.data!!.circle
-                                        setdefaultDropDownList(operatorName!!,circleName!!)
-                                    }
-                                    else{
+                                        setdefaultDropDownList(operatorName!!, circleName!!)
+                                    } else {
                                         hitApiForRechargeOperatorNameList(DisplayName!!)
                                     }
                                 }
@@ -3638,8 +3676,7 @@ class RechargeFragment : Fragment() {
 
     }
 
-
-    fun setdefaultDropDownList( operatorName:String ,circleName :String){
+    fun setdefaultDropDownList(operatorName: String, circleName: String) {
         //..................................Operator Name.........................................................................................
 
         val position = Constants.operatorName!!.indexOf(operatorName)
@@ -3648,8 +3685,7 @@ class RechargeFragment : Fragment() {
             // Not found → add at top
             Constants.operatorName!!.clear()
             Constants.operatorName!!.add(0, operatorName)
-        }
-        else {
+        } else {
             // Found → move it to top (optional)
             if (position != 0) {
                 Constants.operatorName!!.removeAt(position)
@@ -3657,10 +3693,14 @@ class RechargeFragment : Fragment() {
             }
         }
 
-        Constants.getAllOperatorAdapter = ArrayAdapter(requireContext(), R.layout.spinner_right_aligned, Constants.operatorName!!).apply {
+        Constants.getAllOperatorAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.spinner_right_aligned,
+            Constants.operatorName!!
+        ).apply {
             setDropDownViewResource(R.layout.spinner_right_aligned)
         }
-         // Set to spinner
+        // Set to spinner
         binding.spOperator.adapter = Constants.getAllOperatorAdapter
         // Always select default at 0th position
         binding.spOperator.setSelection(0)
@@ -3686,24 +3726,24 @@ class RechargeFragment : Fragment() {
         binding.etCircle.setSelection(0)  // default always selected
 
         //....................................................................................................................................
+
     }
 
-
-    fun hitApiForMobileRecharge(rechargeAmt:String, mobileNo :String){
-        var registrationId =  mStash?.getStringValue(Constants.MerchantId, "") /*"AOP-554"*/
-        var productID =  mStash!!.getStringValue(Constants.OperatorId.toString(),"")
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun hitApiForMobileRecharge(rechargeAmt: String, mobileNo: String, operatorName: String, remarks: String, commissionremark: String) {
+        var registrationId = mStash?.getStringValue(Constants.MerchantId, "")
+        var productID = mStash!!.getStringValue(Constants.OperatorId.toString(), "")
 
         var latlong = ConstantClass.latdouble.toString().plus(",").plus(ConstantClass.longdouble)
         Log.d("Lat Long", ConstantClass.latdouble.toString().plus(",").plus(ConstantClass.longdouble))
 
-
         var MobileRechargeReq = com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.MobileRechargeReq(
-            registrationId = registrationId /*"AOP-554"*/,
-            productId = productID!!,
-            amount = rechargeAmt /*"10"*/,
-            geoCoder = latlong,
-            customerNumber = mobileNo
-        )
+                registrationId = registrationId,
+                productId = productID!!,
+                amount = rechargeAmt,
+                geoCoder = latlong,
+                customerNumber = mobileNo
+            )
         Log.d("rechargeReq", Gson().toJson(MobileRechargeReq).toString())
 
         MobileRechargeViewModel.getMobileRechargeRequest(MobileRechargeReq)
@@ -3711,43 +3751,80 @@ class RechargeFragment : Fragment() {
                 resource?.let {
                     when (it.apiStatus) {
                         ApiStatus.SUCCESS -> {
-                            pd.dismiss()
                             it.data?.let { users ->
                                 users.body()?.let { response ->
-                                    uploadDataOnFirebaseConsole(Gson().toJson(response),"RechargeFragmentRechargeRequest",requireContext())
+                                    uploadDataOnFirebaseConsole(
+                                        Gson().toJson(response),
+                                        "RechargeFragmentRechargeRequest",
+                                        requireContext()
+                                    )
                                     getFuseLocation()
                                     pd.dismiss()
                                     Log.d("rechargeResp", Gson().toJson(response))
 
+                                    if(commissionremark.contains("dth",ignoreCase = true)){
+                                        when (productID) {
+                                            "522" -> operatorlogo =
+                                                context.resources.getDrawable(R.drawable.airteldigital)
 
+                                            "525" -> operatorlogo =
+                                                context.resources.getDrawable(R.drawable.tatasky)
 
-                                    /*if (response.statusCode == 200) {*/
+                                            "526" -> operatorlogo =
+                                                context.resources.getDrawable(R.drawable.videocon)
 
-                                        when(productID){
-                                         "518"->  operatorlogo = context.resources.getDrawable(R.drawable.airtel)
-                                         "521" -> operatorlogo = context.resources.getDrawable(R.drawable.bsnl)
-                                         "519" -> operatorlogo = context.resources.getDrawable(R.drawable.jio)
-                                         "520" -> operatorlogo = context.resources.getDrawable(R.drawable.vodaphone)
-                                     }
+                                            "524" -> operatorlogo =
+                                                context.resources.getDrawable(R.drawable.sundirect)
 
+                                            "523" -> operatorlogo =
+                                                context.resources.getDrawable(R.drawable.dishtv)
+                                        }
                                         RechargeSuccessfulPageActivity.operatorName = binding.spOperator.selectedItem.toString().trim()
-                                        Log.d("operatorName",RechargeSuccessfulPageActivity.operatorName )
-                                        Log.d("productID", productID )
-                                        operatorLogo =  operatorlogo
-                                        rechargeStatus = response.data!!.status!!
-                                        Datetime = Constants.getCurrentDateTime()
+                                        Log.d("operatorName", RechargeSuccessfulPageActivity.operatorName)
+                                        Log.d("productID", productID)
+                                        operatorLogo = operatorlogo
+                                        planPrice = binding.etAmount.text.toString().trim()
+
+                                    }
+                                    else{
+                                        when (productID) {
+                                            "518" -> operatorlogo =
+                                                context.resources.getDrawable(R.drawable.airtel)
+
+                                            "521" -> operatorlogo =
+                                                context.resources.getDrawable(R.drawable.bsnl)
+
+                                            "519" -> operatorlogo =
+                                                context.resources.getDrawable(R.drawable.jio)
+
+                                            "520" -> operatorlogo =
+                                                context.resources.getDrawable(R.drawable.vodaphone)
+                                        }
+                                        RechargeSuccessfulPageActivity.operatorName = binding.spOperator.selectedItem.toString().trim()
+                                        Log.d("operatorName", RechargeSuccessfulPageActivity.operatorName)
+                                        Log.d("productID", productID)
+                                        operatorLogo = operatorlogo
                                         planPrice = binding.rechargeAmount.text.toString().trim()
-                                        transactionID = response.data.txnId!!
-                                        referenceId = response.referanceID ?: ""
-                                        mobileNumber = mobileNo
-                                        orderID = response.data.ackno!!
-                                        serviceChargeWithGST = mStash!!.getStringValue(Constants.serviceChargeWithGST, "")!!
-                                        totalTransaction =  mStash!!.getStringValue(Constants.totalTransaction,"")!!
+                                    }
 
-                                       /* var intent = Intent (requireContext(), RechargeSuccessfulPageActivity::class.java)
-                                        startActivity(intent)*/
+                                    rechargeStatus = response.data!!.status!!
+                                    Datetime = Constants.getCurrentDateTime()
+                                    transactionID = response.data.txnId!!
+                                    mobileNumber = mobileNo
+                                    orderID = response.referanceID ?: ""
 
-                                       hitApiForMobileRechargeReqUpload(rechargeAmt,mobileNo,response,Gson().toJson(MobileRechargeReq).toString())
+                                    serviceChargeWithGST = mStash!!.getStringValue(Constants.serviceChargeWithGST, "")!!
+                                    totalTransaction = mStash!!.getStringValue(Constants.totalTransaction, "")!!
+
+                                    hitApiForMobileRechargeReqUpload(
+                                        rechargeAmt,
+                                        mobileNo,
+                                        response,
+                                        Gson().toJson(MobileRechargeReq).toString(),
+                                        operatorName,
+                                        remarks,
+                                        commissionremark
+                                    )
 
                                 }
                             }
@@ -3768,23 +3845,22 @@ class RechargeFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun hitApiForMobileRechargeReqUpload(rechargeAmt: String, mobileNo: String, rechargeResponse: MobileRechargeRespo, rechargeresuqst: String, operatorName: String, remarks: String, commissionremark: String) {
 
-
-    fun hitApiForMobileRechargeReqUpload(rechargeAmt:String, mobileNo :String,rechargeResponse: MobileRechargeRespo, rechargeresuqst:String){
-
-        var mearchantId =  mStash?.getStringValue(Constants.MerchantId, "")
-        var registrationId =  mStash?.getStringValue(Constants.RegistrationId, "")
-        var productID =  mStash!!.getStringValue(Constants.OperatorId.toString(),"")
+        var mearchantId = mStash?.getStringValue(Constants.MerchantId, "")
+        var registrationId = mStash?.getStringValue(Constants.RegistrationId, "")
+        var productID = mStash!!.getStringValue(Constants.OperatorId.toString(), "")
 
         var MobileRechargeReq = UploadRechargeMobileRespReq(
-            amount = rechargeAmt ,
-            requestParam = rechargeresuqst ,
-            operators =  productID,
+            amount = rechargeAmt,
+            requestParam = rechargeresuqst,
+            operators = productID,
             registrationID = mearchantId,
             ipAddress = "",
             paramuser = registrationId,
             canumber = mobileNo,
-            referenceid = rechargeResponse.data!!.txnId ,
+            referenceid = rechargeResponse.data!!.txnId,
         )
         Log.d("rechargeReq", Gson().toJson(MobileRechargeReq).toString())
 
@@ -3793,11 +3869,15 @@ class RechargeFragment : Fragment() {
                 resource?.let {
                     when (it.apiStatus) {
                         ApiStatus.SUCCESS -> {
-                            pd.dismiss()
                             it.data?.let { users ->
                                 users.body()?.let { response ->
-                                    Log.d("RechargeReqResp",Gson().toJson(response))
-                                    hitApiForMobileRechargeRespUpload(rechargeResponse)
+                                    Log.d("RechargeReqResp", Gson().toJson(response))
+                                    hitApiForMobileRechargeRespUpload(
+                                        rechargeResponse,
+                                        operatorName,
+                                        remarks,
+                                        commissionremark
+                                    )
 
                                 }
                             }
@@ -3818,23 +3898,23 @@ class RechargeFragment : Fragment() {
 
     }
 
-
-    fun hitApiForMobileRechargeRespUpload(rechargeResponse: MobileRechargeRespo){
-        var mearchantId =  mStash?.getStringValue(Constants.MerchantId, "")
-        var registrationId =  mStash?.getStringValue(Constants.RegistrationId, "")
-        var productID =  mStash!!.getStringValue(Constants.OperatorId.toString(),"")
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun hitApiForMobileRechargeRespUpload(rechargeResponse: MobileRechargeRespo, operatorName: String, remarks: String, commissionremark: String) {
+        var mearchantId = mStash?.getStringValue(Constants.MerchantId, "")
+        var registrationId = mStash?.getStringValue(Constants.RegistrationId, "")
+        var productID = mStash!!.getStringValue(Constants.OperatorId.toString(), "")
 
         var MobileRechargeReq = UploadRechargeMobileRespRespReq(
-            status =  rechargeResponse.data!!.message ,
-            responsecode = rechargeResponse.statusCode ,
-            operators =  productID,
+            status = rechargeResponse.statusBos,
+            responsecode = rechargeResponse.statusCode.toString(),
+            operators = productID,
             ackno = rechargeResponse.data!!.ackno,
             refid = rechargeResponse.data!!.txnId,
-            message = registrationId,
+            message = rechargeResponse.data!!.message,
             registrationID = mearchantId,
-            ipAddress = "" ,
-            responseParam =Gson().toJson(rechargeResponse).toString(),
-            paramuser  = registrationId ,
+            ipAddress = "",
+            responseParam = Gson().toJson(rechargeResponse.data).toString(),
+            paramuser = registrationId,
         )
         Log.d("rechargeresponseReq", Gson().toJson(MobileRechargeReq).toString())
 
@@ -3843,11 +3923,15 @@ class RechargeFragment : Fragment() {
                 resource?.let {
                     when (it.apiStatus) {
                         ApiStatus.SUCCESS -> {
-                            pd.dismiss()
                             it.data?.let { users ->
                                 users.body()?.let { response ->
-                                    Log.d("RechargeRespResp",Gson().toJson(response))
-
+                                    Log.d("RechargeRespResp", Gson().toJson(response))
+                                    hitApiForRechargeApiResponse(
+                                        rechargeResponse,
+                                        operatorName,
+                                        remarks,
+                                        commissionremark
+                                    )
                                 }
                             }
                         }
@@ -3867,80 +3951,414 @@ class RechargeFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun hitApiForRechargeApiResponse(rechargeResponse: MobileRechargeRespo, operatorName: String, remarks: String, commissionremark: String) {
+        var registrationId = mStash?.getStringValue(Constants.RegistrationId, "")
+        var productID = mStash!!.getStringValue(Constants.OperatorId.toString(), "")
+        var totalamount = mStash!!.getStringValue(Constants.totalTransaction, "")
+
+        val req = RechargeapiresponseReq(
+            rechargePayableAmount = totalamount,
+            refundReqStatus = "",
+            apIBal = "0",
+            apITransId = rechargeResponse.referanceID,
+            transId = rechargeResponse.referanceID,
+            rechargeAmount = totalamount,
+            transIpAddress = "",
+            apIErrorCode = rechargeResponse.error,
+            rechargeMobileNoCaNo = binding.rechargeAmount.text.toString().trim(),
+            retailerID = registrationId,
+            apIService = "RECH",
+            apIResText = rechargeResponse.data!!.message,
+            mode = "Online",
+            rechargeOperator = binding.spOperator.selectedItem.toString().trim(),
+            apIUrid = "registrationId",
+            rechargeServiceType = "MOBILE",
+            apIAmount = totalamount,
+            apICommissionBal = "0",
+            companyCode = "",
+            apIOperatorId = productID,
+            updatedBy = registrationId,
+            rechargeDate = getCurrentIsoDate(),
+            refundStatus = "",
+            refundTransID = "",
+            updatedOn = getCurrentIsoDate(),
+            apIOrderId = rechargeResponse.referanceID,
+            apIStatus = rechargeResponse.statusBos,
+            apIBillName = "",
+            apIMobile = binding.rechargeAmount.text.toString().trim(),
+            apIBillAmount = "",
+            gateway = ""
+        )
+
+        Log.d("rechargeapiresponsereq", Gson().toJson(req).toString())
+
+        getAllApiServiceViewModel.putRechargeapiresponseReq(req)
+            .observe(requireActivity()) { resource ->
+                resource?.let {
+                    when (it.apiStatus) {
+                        ApiStatus.SUCCESS -> {
+                            it.data?.let { users ->
+                                users.body()?.let { response ->
+                                    Log.d("rechargeapiresponsersp", Gson().toJson(response))
+                                    getTransferAmountToAgentWithCal(
+                                        binding.rechargeAmount.text.toString(),
+                                        operatorName,
+                                        remarks,
+                                        commissionremark
+                                    )
+                                }
+                            }
+                        }
+
+                        ApiStatus.ERROR -> {
+                            pd.dismiss()
+                        }
+
+                        ApiStatus.LOADING -> {
+                            pd.show()
+                        }
+                    }
+                }
+
+            }
 
 
+    }
 
+    private fun getTransferAmountToAgentWithCal(rechargeAmount: String, operatorName: String, remarks: String, commissionremark: String) {
+        var totalamount = mStash!!.getStringValue(Constants.totalTransaction, "")
+        var status = ""
 
-    fun hitApiForRechargeCategory(){
+        if (rechargeStatus.equals("success", ignoreCase = true)) {
+            status = "Approved"
+        } else if (rechargeStatus.equals("failed", ignoreCase = true)) {
+            status = "Failed"
+        } else {
+            status = "Pending"
+        }
+
+        if(status.equals("Failed")){
+            val transferAmountToAgentsReq = TransferAmountToAgentsReq(
+                transferFrom = mStash!!.getStringValue(Constants.RegistrationId, ""),
+                transferTo = "Admin",
+                transferAmt = "0.00",
+                remark = "Recharge $remarks",
+                transferFromMsg = "Your recharge of ₹$rechargeAmount  on $operatorName number ${binding.etMobileNumber.text.toString().trim()}  has failed. No amount has been deducted",
+                transferToMsg = "Your recharge of ₹$rechargeAmount  on $operatorName number ${binding.etMobileNumber.text.toString().trim()}  has failed. No amount has been credited",
+                amountType = "Payout",
+                actualTransactionAmount = "0.00",
+                transIpAddress = mStash!!.getStringValue(Constants.deviceIPAddress, ""),
+                parmUserName = mStash!!.getStringValue(Constants.RegistrationId, ""),
+                merchantCode = mStash!!.getStringValue(Constants.MerchantId, ""),
+                servicesChargeAmt = "0.00",
+                servicesChargeGSTAmt = "0.00",
+                servicesChargeWithoutGST = "0.00",
+                customerVirtualAddress = "",
+                retailerCommissionAmt = "0.00",
+                retailerId = "",
+                paymentMode = "",
+                depositBankName = "",
+                branchCodeChecqueNo = "",
+                apporvedStatus = status,
+                registrationId = mStash!!.getStringValue(Constants.RegistrationId, ""),
+                benfiid = "",
+                accountHolder = "",
+                flag = "Y"
+            )
+
+            Log.d("transferAmountToAgent", Gson().toJson(transferAmountToAgentsReq))
+
+            getAllApiServiceViewModel.getTransferAmountToAgents(transferAmountToAgentsReq)
+                .observe(viewLifecycleOwner) { resource ->
+                    resource?.let {
+                        when (it.apiStatus) {
+                            ApiStatus.SUCCESS -> {
+                                it.data?.let { users ->
+                                    users.body()?.let { response ->
+                                             Log.d("transafertoagent", Gson().toJson(response))
+
+                                             Log.d("checkconditionforcommission", "CommissionMethodfailed")
+
+                                             getTransferAmountToAgentWithCalRes(response)
+                                    }
+                                }
+                            }
+
+                            ApiStatus.ERROR -> {
+                                pd.dismiss()
+                                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+
+                            ApiStatus.LOADING -> {
+                                pd.show()
+                            }
+                        }
+                    }
+                }
+
+        }
+        else{
+            val transferAmountToAgentsReq = TransferAmountToAgentsReq(
+                transferFrom = mStash!!.getStringValue(Constants.RegistrationId, ""),
+                transferTo = "Admin",
+                transferAmt = mStash!!.getStringValue(Constants.totalTransaction, "0.00") ?: "0.00",
+                remark = "Recharge $remarks",
+                transferFromMsg = "Your account has been debited by ₹$totalamount for a recharge on $operatorName number ${
+                    binding.etMobileNumber.text.toString().trim()
+                }.",
+                transferToMsg = "Your Account has been credited by ₹$totalamount for a recharge on $operatorName  number  ${
+                    binding.etMobileNumber.text.toString().trim()
+                }.",
+                amountType = "Payout",
+                actualTransactionAmount = rechargeAmount,
+                transIpAddress = mStash!!.getStringValue(Constants.deviceIPAddress, ""),
+                parmUserName = mStash!!.getStringValue(Constants.RegistrationId, ""),
+                merchantCode = mStash!!.getStringValue(Constants.MerchantId, ""),
+                servicesChargeAmt = mStash!!.getStringValue(Constants.serviceChargewithgst, "0.00")
+                    ?: "0.00",
+                servicesChargeGSTAmt = mStash!!.getStringValue(Constants.gst, "0.00") ?: "0.00",
+                servicesChargeWithoutGST = mStash!!.getStringValue(Constants.serviceCharge, "0.00")
+                    ?: "0.00",
+                customerVirtualAddress = "",
+                retailerCommissionAmt = mStash!!.getStringValue(Constants.retailerCommission, "0.00") ?: "0.00",
+                retailerId = "",
+                paymentMode = "",
+                depositBankName = "",
+                branchCodeChecqueNo = "",
+                apporvedStatus = status,
+                registrationId = mStash!!.getStringValue(Constants.RegistrationId, ""),
+                benfiid = "",
+                accountHolder = "",
+                flag = "Y"
+            )
+
+            Log.d("transferAmountToAgent", Gson().toJson(transferAmountToAgentsReq))
+
+            getAllApiServiceViewModel.getTransferAmountToAgents(transferAmountToAgentsReq)
+                .observe(viewLifecycleOwner) { resource ->
+                    resource?.let {
+                        when (it.apiStatus) {
+                            ApiStatus.SUCCESS -> {
+                                it.data?.let { users ->
+                                    users.body()?.let { response ->
+                                        Log.d("transafertoagent", Gson().toJson(response))
+
+                                        val commission = mStash!!.getStringValue(Constants.retailerCommission, "0.00")?.trim()?.toDoubleOrNull() ?: 0.0
+
+                                        Log.d("retailercommissionforpayout", commission.toString())
+
+                                        if (commission > 0.0) {
+                                                Log.d("checkconditionforcommission", "Commissionmethod")
+                                                getTransferAmountToAgentInCommissionCal(response, commissionremark)
+                                            } else {
+                                                Log.d("checkconditionforcommission", "CommissionMethodfailed")
+                                                getTransferAmountToAgentWithCalRes(response)
+                                            }
+
+                                    }
+                                }
+                            }
+
+                            ApiStatus.ERROR -> {
+                                pd.dismiss()
+                                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+
+                            ApiStatus.LOADING -> {
+                                pd.show()
+                            }
+                        }
+                    }
+                }
+        }
+
+    }
+
+    private fun getTransferAmountToAgentInCommissionCal(response: TransferAmountToAgentsRes, remarks: String) {
+        var totalamount = mStash!!.getStringValue(Constants.totalTransaction, "")
+        var withouttdscommissionamount = mStash!!.getStringValue(Constants.retailerCommissionWithoutTDS, "")
+        var tdsamount = mStash!!.getStringValue(Constants.tds, "")
+        var actualcommission = mStash!!.getStringValue(Constants.retailerCommission, "")
+
+        Log.d("tdsamount", tdsamount.toString())
+        Log.d("commissionamount", withouttdscommissionamount.toString())
+        Log.d("actualcommission", actualcommission.toString())
+
+        val transferAmountToAgentsReq = TransferToAgentReq(
+            merchantCode = mStash!!.getStringValue(Constants.MerchantId, ""),
+            transferFrom = "Admin",
+            amountType = "Deposit",
+            transIpAddress = mStash!!.getStringValue(Constants.deviceIPAddress, ""),
+            remark = "Commission Deposit by $remarks ",
+            transferTo = mStash!!.getStringValue(Constants.RegistrationId, ""),
+            transferToMsg = "Your account has been credited by ₹ ${withouttdscommissionamount} due to a commission deposit on  ${
+                mStash!!.getStringValue(
+                    Constants.RegistrationId,
+                    ""
+                )
+            } , with reference number ${response.data!!.refTransID}.",
+            gstAmt = 0,
+            parmUserName = mStash!!.getStringValue(Constants.RegistrationId, ""),
+            servicesChargeGSTAmt = 0,
+            servicesChargeWithoutGST = 0,
+            actualTransactionAmount = withouttdscommissionamount?.toDouble() ?: 0.0,
+            actualCommissionAmt = 0,
+            commissionWithoutGST = 0,
+            transferFromMsg = "Your account has been debited by ₹ ${withouttdscommissionamount} due to a commission deposit on ${
+                mStash!!.getStringValue(
+                    Constants.RegistrationId,
+                    ""
+                )
+            },with reference number ${response.data!!.refTransID}.",
+            netCommissionAmt = 0,
+            tdSAmt = tdsamount?.toDouble() ?: 0.0,
+            servicesChargeAmt = 0,
+            customerVirtualAddress = "",
+            transferAmt = actualcommission?.toDouble() ?: 0.0,
+        )
+
+        Log.d("transferAmountToAgentcommissionreq", Gson().toJson(transferAmountToAgentsReq))
+
+        getAllApiServiceViewModel.transferToAgentReq(transferAmountToAgentsReq)
+            .observe(viewLifecycleOwner) { resource ->
+                resource?.let {
+                    when (it.apiStatus) {
+
+                        ApiStatus.SUCCESS -> {
+                            it.data?.let { users ->
+                                users.body()?.let { commissionresp ->
+                                    if(pd!=null && pd.isShowing){
+                                        pd.dismiss()
+                                    }
+                                    referenceId = response.data!!.refTransID!!  // payout referenceid
+                                    Log.d("transferAmountToAgentcommissionresp", Gson().toJson(response))
+                                    var intent = Intent(requireContext(), RechargeSuccessfulPageActivity::class.java)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
+
+                        ApiStatus.ERROR -> {
+                            pd.dismiss()
+                            Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+
+                        ApiStatus.LOADING -> {
+                            pd.show()
+                        }
+
+                    }
+                }
+            }
+    }
+
+    private fun getTransferAmountToAgentWithCalRes(response: TransferAmountToAgentsRes) {
+        if (response.isSuccess == true) {
+            referenceId = response.data!!.refTransID!!  // payout referenceid
+            var intent = Intent(requireContext(), RechargeSuccessfulPageActivity::class.java)
+            startActivity(intent)
+        } else {
+            pd.dismiss()
+            toast(response.returnMessage.toString())
+        }
+    }
+
+    fun hitApiForRechargeCategory() {
         //     // new changes done by Annu
 
         var categoryreq = RechargeCategoryReq(
             registerationID = mStash?.getStringValue(Constants.MerchantId, "") /*"AOP-554"*/
         )
 
-        MobileRechargeViewModel.getRechargeCategoryRequest(categoryreq).observe(requireActivity()) { resource ->
-            resource?.let {
-                when (it.apiStatus) {
-                    ApiStatus.SUCCESS -> {
-                        it.data?.let { users ->
-                            users.body()?.let { response ->
-                                uploadDataOnFirebaseConsole(Gson().toJson(response),"RechargeFragmentCategoryRequest",requireContext())
-                                if(response.status!!){
-                                    Log.d("RechargeCategoryRespo",Gson().toJson(response))
-                                    //Toast.makeText(context,response.message.toString(),Toast.LENGTH_SHORT).show()
-                                    if(response.data!!.size>0){
-                                        var getdata =  response.data
-                                        getdata.forEach { it->
+        MobileRechargeViewModel.getRechargeCategoryRequest(categoryreq)
+            .observe(requireActivity()) { resource ->
+                resource?.let {
+                    when (it.apiStatus) {
+                        ApiStatus.SUCCESS -> {
+                            it.data?.let { users ->
+                                users.body()?.let { response ->
+                                    uploadDataOnFirebaseConsole(
+                                        Gson().toJson(response),
+                                        "RechargeFragmentCategoryRequest",
+                                        requireContext()
+                                    )
+                                    if (response.status!!) {
+                                        Log.d("RechargeCategoryRespo", Gson().toJson(response))
+                                        //Toast.makeText(context,response.message.toString(),Toast.LENGTH_SHORT).show()
+                                        if (response.data!!.size > 0) {
+                                            var getdata = response.data
+                                            getdata.forEach { it ->
 
-                                            if(it!!.displayName!!.lowercase().contains("prepaid") && rechargeType == "mobile"){
-                                                DisplayName = it!!.displayName
-                                                if (DisplayName!!.isNotEmpty()) {
-                                                    Constants.operatorName = ArrayList()
-                                                    Constants.productIdList = ArrayList()
-                                                    hitApiForRechargeOperatorNameList(DisplayName!!)
-                                                }
-                                            }
-
-                                            else{
-
-                                                if(it!!.displayName!!.lowercase().contains("dth") && rechargeType == "dth"){
+                                                if (it!!.displayName!!.lowercase()
+                                                        .contains("prepaid") && rechargeType == "mobile"
+                                                ) {
                                                     DisplayName = it!!.displayName
+                                                    mStash!!.setStringValue(
+                                                        Constants.OperatorCategory,
+                                                        DisplayName
+                                                    )
+                                                    if (DisplayName!!.isNotEmpty()) {
+                                                        Constants.operatorName = ArrayList()
+                                                        Constants.productIdList = ArrayList()
+                                                        hitApiForRechargeOperatorNameList(
+                                                            DisplayName!!
+                                                        )
+                                                    }
+                                                } else {
+
+                                                    if (it!!.displayName!!.lowercase()
+                                                            .contains("dth") && rechargeType == "dth"
+                                                    ) {
+                                                        DisplayName = it!!.displayName
+                                                    }
+
+                                                    mStash!!.setStringValue(
+                                                        Constants.OperatorCategory,
+                                                        DisplayName
+                                                    )
+
+                                                    if (DisplayName!!.isNotEmpty()) {
+                                                        Constants.operatorName = ArrayList()
+                                                        Constants.productIdList = ArrayList()
+                                                        hitApiForRechargeOperatorNameList(
+                                                            DisplayName!!
+                                                        )
+                                                    }
                                                 }
 
-                                                if (DisplayName!!.isNotEmpty()) {
-                                                    Constants.operatorName = ArrayList()
-                                                    Constants.productIdList = ArrayList()
-                                                    hitApiForRechargeOperatorNameList(DisplayName!!)
-                                                }
                                             }
-
                                         }
+                                    } else {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            response.message,
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        pd.dismiss()
                                     }
-                                }
-                                else{
-                                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_LONG).show()
-                                    pd.dismiss()
                                 }
                             }
                         }
-                    }
 
-                    ApiStatus.ERROR -> {
-                        pd.dismiss()
-                    }
+                        ApiStatus.ERROR -> {
+                            pd.dismiss()
+                        }
 
-                    ApiStatus.LOADING -> {
-                        pd.show()
+                        ApiStatus.LOADING -> {
+                            pd.show()
+                        }
                     }
                 }
-            }
 
-        }
+            }
 
     }
 
-
-    fun CheckAndHitApi(){
+    fun CheckAndHitApi() {
         val caNumber = binding.etDTHBillNumber.text.toString().trim()
         val operator = binding.spOperator.selectedItem?.toString()
         val circle = binding.etCircle.selectedItem?.toString()
@@ -3950,9 +4368,11 @@ class RechargeFragment : Fragment() {
                 "operator" -> {
                     hitApiForGetDTHInfo()
                 }
+
                 "circle" -> {
                     hitApiForGetDTHInfo()
                 }
+
                 "ca" -> {
                     hitApiForGetDTHInfo()
                 }
@@ -3960,10 +4380,9 @@ class RechargeFragment : Fragment() {
         }
     }
 
+    fun hitApiForGetDTHInfo() {
 
-    fun hitApiForGetDTHInfo(){
-
-        apiCalled= false
+        apiCalled = false
         operatorNameDTHList.forEach { item ->
 
             if (item.second.toString().equals(OperatorID)) {
@@ -3988,29 +4407,35 @@ class RechargeFragment : Fragment() {
                     ApiStatus.SUCCESS -> {
                         it.data?.let { users ->
                             users.body()?.let { response ->
-                                uploadDataOnFirebaseConsole(Gson().toJson(response),"RechargeFragmentDthInfoRequest",requireContext())
-                                if(response.status!!){
-                                    Log.d("dthRespo",Gson().toJson(response))
-                                    if(response.data!!.size>0){
-                                        if(pd!=null && pd.isShowing){
+                                uploadDataOnFirebaseConsole(
+                                    Gson().toJson(response),
+                                    "RechargeFragmentDthInfoRequest",
+                                    requireContext()
+                                )
+                                if (response.status!!) {
+                                    Log.d("dthRespo", Gson().toJson(response))
+                                    if (response.data!!.size > 0) {
+                                        if (pd != null && pd.isShowing) {
                                             pd.dismiss()
                                         }
-                                        var getdata =  response.data
+                                        var getdata = response.data
                                         DthInfoList = getdata!!.toMutableList()!!
-                                        binding.dthinfo.visibility= View.VISIBLE
-                                        var adapter = DTHViewInfoAdapter(requireContext(),DthInfoList, clickListener = DTHViewInfoAdapter.ClickListener { it->
-                                            binding.etAmount.setText(it.toString())
-                                        })
+                                        binding.dthinfo.visibility = View.VISIBLE
+                                        var adapter = DTHViewInfoAdapter(
+                                            requireContext(),
+                                            DthInfoList,
+                                            clickListener = DTHViewInfoAdapter.ClickListener { it ->
+                                                binding.etAmount.setText(it.toString())
+                                            })
                                         binding.dthinfo.adapter = adapter
                                         adapter.notifyDataSetChanged()
                                     }
-                                }
-                                else{
-                                    if(pd!=null && pd.isShowing){
+                                } else {
+                                    if (pd != null && pd.isShowing) {
                                         pd.dismiss()
                                     }
-                                    binding.dthinfo.visibility= View.GONE
-                                    Toast.makeText(requireContext(),"Must check operator or circle may be incorrect",Toast.LENGTH_SHORT).show()
+                                    binding.dthinfo.visibility = View.GONE
+                                    Toast.makeText(requireContext(), "Must check operator or circle may be incorrect", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         }
@@ -4029,30 +4454,5 @@ class RechargeFragment : Fragment() {
         }
 
     }
-
-    /*fun uploadRechargeOnFirebaseConsole(data:String, collectionPath:String){
-        val db = Firebase.firestore
-        val sdf = SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.getDefault())
-        val currentDateTime = sdf.format(Date())
-
-        // Create a new user with a first and last name
-        val logData = hashMapOf(
-            "filename" to "aopaytravel.txt",
-            "content" to data,
-            "timestamp" to System.currentTimeMillis()
-        )
-
-        db.collection(collectionPath)
-            .document(currentDateTime)
-            .set(logData)
-            .addOnSuccessListener {
-                //Toast.makeText(requireContext(), "Log saved in Firestore", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { e ->
-                Log.d("Error", " $e.message")
-                Toast.makeText(requireContext(), "Failed: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-    }*/
-
 
 }
