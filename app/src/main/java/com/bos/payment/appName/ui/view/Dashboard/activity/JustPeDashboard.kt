@@ -169,27 +169,14 @@ class JustPeDashboard : AppCompatActivity() {
         }
 
         init()
+        getFuseLocation()
         getfirebasetoken()
-        hitApiForBanner()
+        hitApiForBannerRetailer("retailer")
         startMerchantListPolling(mStash!!.getStringValue(Constants.MerchantId, "").toString())
         getBankDetails(mStash!!.getStringValue(Constants.RegistrationId, "").toString())
         setMoneyTransferServices()
         setclickListner()
-        setListForSupport()
-    }
 
-
-    fun setListForSupport(){
-        binding.nav.supportlist.layoutManager = LinearLayoutManager(this)
-        navAdapter = NavAdapter(this, items) { clickedChild ->
-            // Handle child item clicks here
-            when (clickedChild) {
-                Constants.TicketStatus ->
-                    startActivity(Intent(this@JustPeDashboard, TicketStatus::class.java)
-                )
-            }
-        }
-        binding.nav.supportlist.adapter = navAdapter
     }
 
     private fun startMerchantListPolling(merchantId: String) {
@@ -379,9 +366,6 @@ class JustPeDashboard : AppCompatActivity() {
             shareBitmap(QRBimap!!,this)
         }
 
-        binding.nav.makepaymentlayout.setOnClickListener {
-           startActivity(Intent(this@JustPeDashboard, AdminBankListActivity::class.java))
-        }
 
         binding.nav.saveqrcode.setOnClickListener {
             if(QRBimap!=null){
@@ -605,7 +589,6 @@ class JustPeDashboard : AppCompatActivity() {
         }
     }
 
-
     @SuppressLint("SetTextI18n", "DefaultLocale")
     private fun getAllWalletBalanceRes(response: GetBalanceRes) {
         val data = Gson().toJson(response)
@@ -644,20 +627,16 @@ class JustPeDashboard : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        handler.removeCallbacksAndMessages(null)
+       handler.removeCallbacksAndMessages(null)
     }
 
 
     override fun onResume() {
         super.onResume()
 
-        getWalletBalance()
-        getFuseLocation()
         startAutoSlide()
+        getWalletBalance()
         hitApiForServicesRequest()
-
-        getBankDetails(mStash!!.getStringValue(Constants.RegistrationId, "").toString())
-
     }
 
 
@@ -677,6 +656,7 @@ class JustPeDashboard : AppCompatActivity() {
     private fun requestLocationPermission() {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
     }
+
 
     private fun checkLocationPermission(): Boolean {
         val fineLocationPermission = ContextCompat.checkSelfPermission(
@@ -727,33 +707,87 @@ class JustPeDashboard : AppCompatActivity() {
         }
     }
 
-    fun hitApiForBanner(){
-        var retailerCode = /*mStash!!.getStringValue(Constants.RegistrationId,"")*/ "BOS-1142"
+    fun hitApiForBannerRetailer(agentType:String){
+        binding.appBarDashBoard.deskdesign.viewpager.visibility= View.VISIBLE
+        var retailerCode = mStash!!.getStringValue(Constants.RegistrationId,"")
+        var merchantCode = mStash!!.getStringValue(Constants.MerchantId,"")
+        var adminCode = mStash!!.getStringValue(Constants.AdminCode,"")
         var task = "GET"
         var rid = 0
 
-        getAllApiServiceViewModel.getDashboardBannerRequest(rid,retailerCode!!,task).observe(this) { resource ->
-            resource?.let {
-                when (it.apiStatus) {
-                    ApiStatus.SUCCESS -> {
-                        it.data?.let { response ->
-                                pd.dismiss()
-                                Log.d("BannerList",Gson().toJson(response))
-                                setViewPagerData(response)
-                        }
-                    }
 
-                    ApiStatus.ERROR -> {
-                        pd.dismiss()
-                    }
+        getAllApiServiceViewModel.getDashboardBannerRequest(rid, task, merchantCode!!, adminCode!!,retailerCode!! , agentType).observe(this) { resource ->
 
-                    ApiStatus.LOADING -> {
-                        pd.show()
-                    }
+            when (resource.apiStatus) {
 
+                ApiStatus.SUCCESS -> {
+                    pd.dismiss()
+
+                    val response = resource.data
+                    if (response?.isSuccess == true) {
+                        Log.d("BannerList", Gson().toJson(response))
+                        setViewPagerData(response)
+                    } else {
+                        hitApiForBannerAdmin("admin")
+                        Log.d("ERRORmessage", response?.returnMessage!!)
+                        //Toast.makeText(this, response?.returnMessage ?: "Something went wrong", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                ApiStatus.ERROR -> {
+                    hitApiForBannerAdmin("admin")
+                    pd.dismiss()
+                    //Toast.makeText(this, resource.message ?: "Error occurred", Toast.LENGTH_SHORT).show()
+                }
+
+                ApiStatus.LOADING -> {
+                    pd.show()
                 }
             }
         }
+
+
+    }
+
+    fun hitApiForBannerAdmin(agentType:String){
+        var retailerCode = mStash!!.getStringValue(Constants.AdminCode,"")
+        var merchantCode = mStash!!.getStringValue(Constants.MerchantId,"")
+        var adminCode = mStash!!.getStringValue(Constants.AdminCode,"")
+        var task = "GET"
+        var rid = 0
+
+        getAllApiServiceViewModel.getDashboardBannerRequest(rid, task, merchantCode!!, adminCode!!,retailerCode!! , agentType).observe(this) { resource ->
+
+            when (resource.apiStatus) {
+
+                ApiStatus.SUCCESS -> {
+                    pd.dismiss()
+
+                    val response = resource.data
+
+                    if (response?.isSuccess == true) {
+                        Log.d("AdminBannerList", Gson().toJson(response))
+                        binding.appBarDashBoard.deskdesign.viewpager.visibility= View.VISIBLE
+                        setViewPagerData(response)
+                    } else {
+                        binding.appBarDashBoard.deskdesign.viewpager.visibility= View.GONE
+                        Log.d("ERRORmessage", response?.returnMessage!!)
+                        Toast.makeText(this, response?.returnMessage ?: "Something went wrong", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                ApiStatus.ERROR -> {
+                    pd.dismiss()
+                    binding.appBarDashBoard.deskdesign.viewpager.visibility= View.GONE
+                    Toast.makeText(this, resource.message ?: "Error occurred", Toast.LENGTH_SHORT).show()
+                }
+
+                ApiStatus.LOADING -> {
+                    pd.show()
+                }
+            }
+        }
+
 
     }
 
@@ -812,13 +846,11 @@ class JustPeDashboard : AppCompatActivity() {
                                         binding.appBarDashBoard.deskdesign.financialservicesimageview.visibility= View.GONE
                                     }
 
-
                                     if(BillRechargeCard){
                                         binding.appBarDashBoard.deskdesign.billrechargeimageview.visibility= View.VISIBLE
                                     }else{
                                         binding.appBarDashBoard.deskdesign.billrechargeimageview.visibility= View.GONE
                                     }
-
 
                                     Log.d("ServicesName", Gson().toJson(matchedServices))
 

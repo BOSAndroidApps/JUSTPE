@@ -16,6 +16,7 @@ import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTicketCancelRe
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTicketCancellationChargeReq
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTicketingReq
 import com.bos.payment.appName.data.model.travel.bus.city.BusCityListReq
+import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommissionReq
 import com.bos.payment.appName.data.model.travel.bus.history.BusHistoryReq
 import com.bos.payment.appName.data.model.travel.bus.searchBus.BusSearchReq
 import com.bos.payment.appName.data.model.travel.flight.AirReprintReq
@@ -51,6 +52,7 @@ class TravelRepository(private val travelInterface: TravelInterface,private val 
 
 
     suspend fun getAddBusTicketRequest(req: AddTicketReq) = apiInterface.getAddTicketRequest(req)
+    suspend fun getBusCommissionRequest(req: BusCommissionReq) = apiInterface.getBusCommissionRequest(req)
     suspend fun getAddBusTicketResponse(req: AddTicketResponseReq) = apiInterface.getAddTicketResponse(req)
     suspend fun getBusBookListResponse(req: BusBookingListReq) = apiInterface.getAllBusBookingList(req)
     suspend fun getBusTicketCancelResponseReq(req: BusTicketCancelResponseReq) = apiInterface.getAllBusTicketCancelResponseReq(req)

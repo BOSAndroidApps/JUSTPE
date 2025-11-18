@@ -27,10 +27,11 @@ class ImageSliderAdapter(
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val item = bannerList[position]
+        val imagepath =  "https://bosapi.bos.center${item.imagePath}"
 
         // Load image from URL using Glide
         Glide.with(holder.itemView.context)
-            .load(item.imagePath)
+            .load(imagepath)
             .placeholder(R.drawable.image1) // optional placeholder
             .error(R.drawable.image2) // optional error image
             .into(holder.imageView)

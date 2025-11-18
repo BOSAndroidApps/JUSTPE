@@ -67,6 +67,7 @@ class BusSearchDetails : AppCompatActivity() {
                         it.data?.let { users ->
                             users.body()?.let { response ->
                                 Log.d("BussearchList",response.buses[0]?.availableSeats.toString())
+                                Log.d("BusList",Gson().toJson(response.buses))
                                 getAllBusSearchListRes(response)
                             }
                         }

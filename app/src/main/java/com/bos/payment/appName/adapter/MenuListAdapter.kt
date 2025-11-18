@@ -2,6 +2,7 @@ package com.bos.payment.appName.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -12,12 +13,15 @@ import com.bos.payment.appName.databinding.DrawerSliderItemLayoutBinding
 import com.bos.payment.appName.ui.view.CreditCardDetailsFragment
 import com.bos.payment.appName.ui.view.Dashboard.activity.GenerateQRCodeActivity
 import com.bos.payment.appName.ui.view.Dashboard.activity.ServiceWiseTransaction
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Fragment.RechargeFragment
-import com.bos.payment.appName.ui.view.Dashboard.activity.DashboardActivity
+import com.bos.payment.appName.ui.view.Dashboard.rechargefragment.RechargeFragment
 import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard
 import com.bos.payment.appName.ui.view.Dashboard.dmt.PayoutDMT
 import com.bos.payment.appName.ui.view.Dashboard.transactionreports.TransactionReportsActivity
+import com.bos.payment.appName.ui.view.makepayment.AdminBankListActivity
+import com.bos.payment.appName.ui.view.makepayment.MakepaymentReports
 import com.bos.payment.appName.ui.view.moneyTransfer.ScannerFragment
+import com.bos.payment.appName.ui.view.supportmanagement.TicketStatus
+import com.google.gson.Gson
 
 class MenuListAdapter(
     private val context: Context,
@@ -38,6 +42,8 @@ class MenuListAdapter(
     override fun getItemCount(): Int = menuList.size
 
     override fun onBindViewHolder(holder: MenuListViewHolder, position: Int) {
+        Log.d("menulist", Gson().toJson(menuList))
+
         val menuItem = menuList[position]
 
         // Set menu text
@@ -73,7 +79,9 @@ class MenuListAdapter(
                     "M00014" -> context.startActivity(Intent(context, GenerateQRCodeActivity::class.java))
                     "M00030" -> context.startActivity(Intent(context, ServiceWiseTransaction::class.java))
                     "M00031" -> context.startActivity(Intent(context, TransactionReportsActivity::class.java))
-                    "M00008" -> context.startActivity(Intent(context, JustPeDashboard::class.java /*DashboardActivity::class.java*/))
+                    "M00087" -> context.startActivity(Intent(context, AdminBankListActivity::class.java))
+                    "M00089" -> context.startActivity(Intent(context, MakepaymentReports::class.java))
+                    "M00080" -> context.startActivity(Intent(context, TicketStatus::class.java /*DashboardActivity::class.java*/))
                     "M00042" -> context.startActivity(Intent(context,JustPeDashboard::class.java /*DashboardActivity::class.java*/))
                     "M00009" -> context.startActivity(Intent(context,JustPeDashboard::class.java /*DashboardActivity::class.java*/))
                     "M00010" -> navigateToFragment(RechargeFragment(), "FastTag")

@@ -41,6 +41,8 @@ import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
 import com.bos.payment.appName.data.model.justpaymodel.GenerateQRCodeResponse
 import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualAccountModel
 import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualBankDetailsResponseModel
+import com.bos.payment.appName.data.model.justpaymodel.GetToSelfPayoutCommercialResp
+import com.bos.payment.appName.data.model.justpaymodel.GetToselfPayoutCommercialReq
 import com.bos.payment.appName.data.model.justpaymodel.RetailerContactListRequestModel
 import com.bos.payment.appName.data.model.justpaymodel.RetailerContactListResponseModel
 import com.bos.payment.appName.data.model.justpaymodel.SendMoneyToMobileReqModel
@@ -159,6 +161,8 @@ import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTampBookingRes
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTempBookingRequest
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTicketCancelRespoResponse
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTicketCancelResponseReq
+import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommissionReq
+import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommissionResp
 import com.bos.payment.appName.data.model.travel.flight.AirportListReq
 import com.bos.payment.appName.data.model.travel.flight.AirportListResp
 import com.bos.payment.appName.data.model.travel.flight.FlightRequeryReq
@@ -194,9 +198,16 @@ interface ApiInterface {
 
      /*  BASE URL =  https://bosapi.bos.center*/
 
+
      @FormUrlEncoded
      @POST("api/Banner/BannerDetail")
-      suspend fun getdashboardbanner(@Field("RID") rid:Int, @Field("RetailerCode") retailercode : String, @Field("Task") task : String):Response<DashboardBannerListModel>
+     suspend fun getdashboardbanner( @Field("RID") rid:Int,
+                                     @Field("Task") task : String,
+                                     @Field("MarchentCode") marchentcode : String,
+                                     @Field("AdminCode") admincode : String,
+                                     @Field("RetailerCode") retailercode : String,
+                                     @Field("AgentType") agentType : String
+                                     ):Response<DashboardBannerListModel>
 
 
     @POST("api/Feature/GetRetailerServices")
@@ -411,9 +422,13 @@ interface ApiInterface {
     @POST("api/Commercial/GetAndroidCommercial")
     suspend fun getAllApiPayoutCommercialCharge(@Body req: GetPayoutCommercialReq): Response<GetPayoutCommercialRes>?
 
-
+     // for recharge check slab
     @POST("api/Commercial/GeTCommercial")
     suspend fun getAllRechargeAndBillServiceCharge(@Body req: GetCommercialReq): Response<GetCommercialRes>?
+
+   // for toself check slab
+    @POST("api/Payout/GetPayoutCommercial")
+    suspend fun getPayoutServiceCharge(@Body req: GetToselfPayoutCommercialReq): Response<GetToSelfPayoutCommercialResp>?
 
 
     @POST("api/BOS/ReturnWalletBalance")
@@ -450,6 +465,10 @@ interface ApiInterface {
 
     @POST("api/V6/Payout/AOPPayout")
     suspend fun sendAllPayoutAmount(@Body req: AOPPayOutReq): Response<AOPPayOutRes>?
+
+
+    @POST("api/TravelServiceMaster/GetBusCommissionValues")
+    suspend fun getBusCommissionRequest(@Body req: BusCommissionReq): Response<BusCommissionResp>? // Annu
 
 
     @POST("api/BusApi/BusAddTicketRequest")

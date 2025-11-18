@@ -233,6 +233,7 @@ object Constants {
    var AdminBank =  "Adminbank"
    var BranchNamee =  "branchname"
    var CashDeposit =  "Cash Deposit"
+   var DateSelectionHint =  "Select Date"
 
 
     val KEY_192 = "your-24-byte-key-here!".toByteArray(Charsets.UTF_8) // 24 bytes

@@ -1,4 +1,4 @@
-package com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge
+package com.bos.payment.appName.ui.view.Dashboard.rechargeactivity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -14,8 +14,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.bos.payment.appName.R
 import com.bos.payment.appName.databinding.ActivityRechargeBinding
-import com.bos.payment.appName.ui.view.Dashboard.activity.DashboardActivity
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Fragment.RechargeFragment
+import com.bos.payment.appName.ui.view.Dashboard.rechargefragment.RechargeFragment
 import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard
 import com.bos.payment.appName.utils.Constants
 import com.bos.payment.appName.utils.MStash
@@ -68,11 +67,11 @@ class RechargeSuccessfulPageActivity : AppCompatActivity() {
         binding.let {
             // Set various UI components with data from the intent
             binding.operatorName.text = "Pay $operatorName"
-            binding.rechargeAmount.text = "₹ ${planPrice}"
+            binding.rechargeAmount.text = "₹ $planPrice"
             binding.dateAndTime.text = Datetime
             binding.transactionId.text = transactionID
             binding.referenceId.text =  referenceId
-            binding.mobileNo.text = "+91 ${ mobileNumber}"
+            binding.mobileNo.text = "+91 $mobileNumber"
 
             // Logic for service and commission charges
             when {
@@ -88,9 +87,9 @@ class RechargeSuccessfulPageActivity : AppCompatActivity() {
 
 
             // Set remaining commission and tax values
-            binding.totalAmount.text = "₹ ${totalTransaction}"
-            binding.serviceChargeWithGSTText.text = "₹ ${serviceChargeWithGST}"
-            binding.totalTransactionText.text = "₹ ${totalTransaction}"
+            binding.totalAmount.text = "₹ $totalTransaction"
+            binding.serviceChargeWithGSTText.text = "₹ $serviceChargeWithGST"
+            binding.totalTransactionText.text = "₹ $totalTransaction"
 
             if(serviceChargeWithGST.toDouble()>0.0){
                 binding.servicewithgstlayout.visibility=View.VISIBLE
@@ -106,7 +105,7 @@ class RechargeSuccessfulPageActivity : AppCompatActivity() {
             binding.circle.setBackgroundResource(colorResId)
             binding.status.text = if (isSuccess) "Recharge Successful" else "Recharge Failed"
 
-            if(operatorLogo!=null){
+            if(operatorLogo !=null){
                 it.operatorLogo.setImageDrawable(operatorLogo)
             }
             else{

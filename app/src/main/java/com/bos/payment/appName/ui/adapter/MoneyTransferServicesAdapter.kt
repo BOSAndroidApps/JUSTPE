@@ -1,31 +1,19 @@
 package com.bos.payment.appName.ui.adapter
 
 import android.content.Context
-import android.content.Intent
-import android.content.res.ColorStateList
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bos.payment.appName.R
 import com.bos.payment.appName.data.model.justpaymodel.MoneyTransferServicesModel
 import com.bos.payment.appName.databinding.MoneytransferServicesLayoutBinding
-import com.bos.payment.appName.databinding.ShowingDetailsDthinfoBinding
-import com.bos.payment.appName.ui.adapter.DTHViewInfoAdapter.ViewHolder
 import com.bos.payment.appName.ui.view.CreditCardDetailsFragment
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Fragment.RechargeFragment
+import com.bos.payment.appName.ui.view.Dashboard.rechargefragment.RechargeFragment
 import com.bos.payment.appName.ui.view.Dashboard.activity.AllServicesSelectionActivity
-import com.bos.payment.appName.ui.view.Dashboard.dmt.DMTMobileActivity
-import com.bos.payment.appName.ui.view.travel.busactivity.BookingTravel
 import com.bos.payment.appName.ui.view.travel.busfragment.BusBookingMainFragment
-import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
 import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.FlightMainFragment
 
 class MoneyTransferServicesAdapter( var servicesList:List<MoneyTransferServicesModel>, var context: Context, private val activity: AppCompatActivity) : RecyclerView.Adapter<MoneyTransferServicesAdapter.ViewHolder>(){

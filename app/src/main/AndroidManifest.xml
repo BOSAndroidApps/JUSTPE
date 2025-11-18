@@ -51,6 +51,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/companylogo"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@drawable/companylogo"
         android:supportsRtl="true"
@@ -58,9 +59,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
-            android:name=".ui.view.makepayment.AdminBankListActivity"
+            android:name=".ui.view.makepayment.MakepaymentReports"
             android:exported="false"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.view.makepayment.AdminBankListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.view.makepayment.MakePaymentActivity"
             android:exported="false"
@@ -237,7 +242,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.view.Dashboard.Wallet.Recharge.ViewRechargePlanActivity"
+            android:name=".ui.view.Dashboard.rechargeactivity.ViewRechargePlanActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -261,7 +266,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity"
+            android:name=".ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <meta-data
@@ -324,14 +329,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
+        </activity> <!-- Alias for User Type 1 -->
         <activity-alias
-            android:name=".ui.view.UserType3Alias"
+            android:name=".ui.view.UserType1Alias"
             android:enabled="false"
             android:exported="true"
-            android:icon="@drawable/pic"
-            android:label="@string/Bos_Pay"
+            android:icon="@drawable/pay_indialogo"
+            android:label="@string/Pay_india"
             android:targetActivity=".ui.view.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -352,13 +356,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity-alias> <!-- Alias for User Type 1 -->
+        </activity-alias>
         <activity-alias
-            android:name=".ui.view.UserType1Alias"
+            android:name=".ui.view.UserType3Alias"
             android:enabled="false"
             android:exported="true"
-            android:icon="@drawable/pay_indialogo"
-            android:label="@string/Pay_india"
+            android:icon="@drawable/pic"
+            android:label="@string/Bos_Pay"
             android:targetActivity=".ui.view.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

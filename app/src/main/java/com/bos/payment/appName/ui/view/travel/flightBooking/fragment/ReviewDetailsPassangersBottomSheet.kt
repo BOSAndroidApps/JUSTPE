@@ -141,7 +141,6 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
     }
 
 
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialog?.setOnShowListener { it ->
             val d = it as BottomSheetDialog
@@ -298,7 +297,6 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
         }
 
     }
-
 
 
     private fun getMerchantBalance(flightBalance: Double) {

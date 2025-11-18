@@ -71,10 +71,28 @@
 
             <EditText
                 android:id="@+id/holdername"
-                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:padding="@dimen/dimen_4dp"/>
+
+            <LinearLayout
+                android:layout_weight=".1"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="@dimen/dimen_20dp"
+                    android:layout_height="@dimen/dimen_20dp"
+                    android:src="@drawable/searchicon"
+                    app:tint="@color/greydark"/>
+
+            </LinearLayout>
+
+
 
         </LinearLayout>
 
@@ -101,11 +119,26 @@
 
             <EditText
                 android:id="@+id/accountnumber"
-                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:inputType="number"
                 android:padding="@dimen/dimen_4dp" />
+
+            <LinearLayout
+                android:layout_weight=".1"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="@dimen/dimen_20dp"
+                    android:layout_height="@dimen/dimen_20dp"
+                    android:src="@drawable/searchicon"
+                    app:tint="@color/greydark"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

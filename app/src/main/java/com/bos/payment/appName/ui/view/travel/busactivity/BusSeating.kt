@@ -48,6 +48,8 @@ import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTampBookingRes
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTempBookingRequest
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTicketingReq
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTicketingRes
+import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommissionReq
+import com.bos.payment.appName.data.model.travel.bus.forservicecharge.SeattypeModel
 import com.bos.payment.appName.data.repository.GetAllAPIServiceRepository
 import com.bos.payment.appName.data.repository.TravelRepository
 import com.bos.payment.appName.data.viewModelFactory.GetAllApiServiceViewModelFactory
@@ -107,9 +109,9 @@ class BusSeating : AppCompatActivity() {
     var headers: Array<String> = arrayOf("Name", "Gender", "Seat No","Ticket Number")
     var data = mutableListOf<MutableList<String?>>()
     var ticketDetails = mutableListOf<TicketDetailsForGenerateTicket>()
+    var forServiceChargeSeatType : MutableList<SeattypeModel> = mutableListOf()
 
-
-        private val date = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+    private val date = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
         view.maxDate = System.currentTimeMillis()
         myCalender.add(Calendar.YEAR, -18)
         myCalender[Calendar.YEAR] = year
@@ -156,9 +158,8 @@ class BusSeating : AppCompatActivity() {
 
 
     private fun setupViewModel() {
-        viewModel = ViewModelProvider(this, TravelViewModelFactory(TravelRepository(RetrofitClient.apiAllTravelAPI,RetrofitClient.apiBusAddRequestlAPI)))[TravelViewModel::class.java]
+        viewModel = ViewModelProvider(this, TravelViewModelFactory(TravelRepository(RetrofitClient.apiAllTravelAPI, RetrofitClient.apiBusAddRequestlAPI)))[TravelViewModel::class.java]
         getAllApiServiceViewModel = ViewModelProvider(this, GetAllApiServiceViewModelFactory(GetAllAPIServiceRepository(RetrofitClient.apiAllInterface)))[GetAllApiServiceViewModel::class.java]
-
     }
 
 
@@ -177,11 +178,12 @@ class BusSeating : AppCompatActivity() {
         }
 
         bin.proceedToBookBtn.setOnClickListener {
+            //tempbooking .................................
             validationPassenger()
         }
 
-
         bin.passengerDetails.passengerDob.parent.requestDisallowInterceptTouchEvent(true)
+
         bin.passengerDetails.passengerDob.setOnClickListener {
             Toast.makeText(this@BusSeating,"Hii",Toast.LENGTH_SHORT).show()
             Utils.hideKeyboard(this)
@@ -194,12 +196,10 @@ class BusSeating : AppCompatActivity() {
             ).show()
         }
 
-
-
         bin.seatSelectBtn.setOnClickListener {
             getAllMappingSeat()
-
         }
+
         bin.reviewBookingInclude.backBtn.setOnClickListener {
             onBackPressed()
         }
@@ -214,7 +214,6 @@ class BusSeating : AppCompatActivity() {
             getAllBusRequaryTicket()
         }
 
-
         bin.printBtn.setOnClickListener {
             toast("Show Toast")
             qrBitmap?.let {
@@ -222,7 +221,6 @@ class BusSeating : AppCompatActivity() {
                 openDialogForGenerateTicket(context = this,fileName = "MyBusTicket_${System.currentTimeMillis()}",qrBitmap!!,data,ticketDetails)
             }
         }
-
 
         bin.confirmBookingLayout.backBtn.setOnClickListener {
             onBackPressed()
@@ -263,6 +261,41 @@ class BusSeating : AppCompatActivity() {
         }
 
     }
+
+
+    // for adding commission and service charge
+    private fun getCommissionRequest(){
+        val commissionreq = BusCommissionReq(
+            productSource = "",
+            seatType = "",
+            retailerType = "",
+            busCategory = "",
+            admincode = "",
+            userType = "",
+            retailerID = ""
+        )
+
+        Log.d("commissionRequest", Gson().toJson(commissionreq))
+
+        viewModel.getBusCommissionRequest(commissionreq).observe(this) { resource ->
+            resource?.let {
+                when (it.apiStatus) {
+                    ApiStatus.SUCCESS -> {
+
+                    }
+
+                    ApiStatus.ERROR -> {
+                        pd.dismiss()
+                    }
+
+                    ApiStatus.LOADING -> {
+                        pd.show()
+                    }
+                }
+            }
+        }
+    }
+
 
 
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
@@ -363,16 +396,11 @@ class BusSeating : AppCompatActivity() {
             hitApiforPassDetailsListResponse(PaxRequeryResponseReq)
 
 
-
-
         } else {
-            Toast.makeText(
-                this,
-                response?.responseHeader?.errorInnerException.toString(),
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, response?.responseHeader?.errorInnerException.toString(), Toast.LENGTH_SHORT).show()
         }
     }
+
 
 
     fun hitApiforPassDetailsListResponse(PaxRequeryResponseReq: BusPaxRequeryResponseReq){
@@ -406,6 +434,7 @@ class BusSeating : AppCompatActivity() {
     }
 
 
+
     fun generateQrCode(content: String, size: Int = 512): Bitmap {
         val hints = Hashtable<EncodeHintType, String>().apply {
             put(EncodeHintType.CHARACTER_SET, "UTF-8")
@@ -433,29 +462,9 @@ class BusSeating : AppCompatActivity() {
     }
 
 
-    private fun buildQrData(
-        transportPNR: String?,
-        bookingRefNo: String?,
-        fromCity: String?,
-        toCity: String?,
-        travelDate: String?,
-        busType: String?
-    ): String? {
-        return """
-            bookingRefNo: $bookingRefNo
-            PNR No: $transportPNR
-            fromCity: $fromCity
-            toCity: $toCity
-            travelDate: $travelDate
-            busType: $busType
-        """.trimIndent()
-    }
 
-
-    private fun buildQrDataWithPassengers(pnr: String?, bookingRefNo: String?, fromCity: String?, toCity: String?, travelDate: String?,
-        busType: String?,
-        passengerList: ArrayList<com.bos.payment.appName.data.model.travel.bus.busRequery.PaXDetails>
-        ): String {
+    private fun buildQrDataWithPassengers(pnr: String?, bookingRefNo: String?, fromCity: String?, toCity: String?, travelDate: String?, busType: String?, passengerList: ArrayList<com.bos.payment.appName.data.model.travel.bus.busRequery.PaXDetails>
+    ): String {
         val builder = StringBuilder()
 
         builder.appendLine("🚌 Bus Ticket")
@@ -480,54 +489,6 @@ class BusSeating : AppCompatActivity() {
     }
 
 
-    fun createTicketPdf(context: Context, fileName: String, qrBitmap: Bitmap, ticketData: String) {
-        val pdfDocument = PdfDocument()
-        val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() // A4 size
-        val page = pdfDocument.startPage(pageInfo)
-        val canvas = page.canvas
-
-        val paint = Paint()
-        paint.textSize = 14f
-        paint.color = Color.BLACK
-
-        // Draw ticket text
-        val lines = ticketData.split("\n")
-        var yPosition = 50
-        for (line in lines) {
-            canvas.drawText(line, 50f, yPosition.toFloat(), paint)
-            yPosition += 25
-        }
-
-        // Draw QR Code below the text
-        val resizedQr = Bitmap.createScaledBitmap(qrBitmap, 200, 200, false)
-        canvas.drawBitmap(resizedQr, 50f, (yPosition + 20).toFloat(), null)
-
-        pdfDocument.finishPage(page)
-
-        // Save to Downloads folder
-        val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-
-        if (!downloadsDir.exists()) downloadsDir.mkdirs()
-
-        val file = File(downloadsDir, "$fileName.pdf")
-        try {
-            val outputStream = FileOutputStream(file)
-            pdfDocument.writeTo(outputStream)
-            outputStream.flush()
-            outputStream.close()
-            val uri = Uri.fromFile(file)
-            val scanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri)
-            context.sendBroadcast(scanIntent)
-            Toast.makeText(context, "PDF saved to Downloads", Toast.LENGTH_SHORT).show()
-        }
-        catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(context, "Failed to save PDF", Toast.LENGTH_SHORT).show()
-        }
-
-        pdfDocument.close()
-    }
-
 
     fun openDialogForGenerateTicket(context: Context,fileName: String,bitmap:Bitmap,data:MutableList<MutableList<String?>>, ticketDetails :MutableList<TicketDetailsForGenerateTicket>){
         if(!ticketDetails.isEmpty()&&ticketDetails.size>0) {
@@ -542,6 +503,7 @@ class BusSeating : AppCompatActivity() {
 
 
     }
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -565,6 +527,7 @@ class BusSeating : AppCompatActivity() {
             }
         }
     }
+
 
 
     private fun validationBoarding() {
@@ -821,6 +784,7 @@ class BusSeating : AppCompatActivity() {
         )
         Log.d("BusAddMoneyReq", Gson().toJson(busAddMoneyReq))
         AppLog.d("BusAddMoneyReq",Gson().toJson(busAddMoneyReq))
+
         viewModel.getAllAddMoney(busAddMoneyReq).observe(this) { resource ->
             resource?.let {
                 when (it.apiStatus) {
@@ -843,6 +807,7 @@ class BusSeating : AppCompatActivity() {
                 }
             }
         }
+
     }
 
 
@@ -1398,22 +1363,17 @@ class BusSeating : AppCompatActivity() {
             val col = seat.column ?: 0
             val zIndex = seat.zIndex?.toIntOrNull() ?: 0
             val length = seat.length?.toIntOrNull() ?: 1
-//            val seatName = seat.seatNumber ?: ""
             val seatName = ("₹" + seat.fareMaster?.basicAmount) ?: ""
 
             mStash.setStringValue(Constants.seatNumber, seat.seatNumber.toString())
-
             val seatView = createSeatView(seatName.toString(), this, row, col, length, seat)
 
             if (zIndex == 1) {
-//                bin.seatLayout.upperBerthGrid.visibility = View.VISIBLE
-//                bin.seatLayout.lowerBerthGrid.visibility = View.GONE
                 upperGrid.addView(seatView)
             } else {
-//                bin.seatLayout.upperBerthGrid.visibility = View.GONE
-//                bin.seatLayout.lowerBerthGrid.visibility = View.VISIBLE
                 lowerGrid.addView(seatView)
             }
+
         }
     }
 
@@ -1423,7 +1383,6 @@ class BusSeating : AppCompatActivity() {
         val seatView = LayoutInflater.from(context).inflate(R.layout.seat_item, null)
         val tvPrice = seatView.findViewById<TextView>(R.id.tvPrice)
         tvPrice.text = seatName
-//        tvPrice.text = seat.seatNumber
         tvPrice.setTextColor(Color.BLACK)
 
         val isSleeper = length == 2
@@ -1476,8 +1435,7 @@ class BusSeating : AppCompatActivity() {
                 val formView = LayoutInflater.from(context).inflate(R.layout.passenger_details, null)
                 formView.tag = seat.seatNumber
                 val typePrefix = if ((seat.zIndex?.toIntOrNull() ?: 0) == 1) "U" else "L"
-                formView.findViewById<TextView>(R.id.seatTitle).text =
-                    "Seat $typePrefix${seat.seatNumber}"
+                formView.findViewById<TextView>(R.id.seatTitle).text = "Seat $typePrefix${seat.seatNumber}"
                 bin.passengerDetails.passengerDetailsLayout.addView(formView)
             }
 
@@ -1491,6 +1449,30 @@ class BusSeating : AppCompatActivity() {
                 val type = if ((it.zIndex?.toIntOrNull() ?: 0) == 1) "U" else "L"
                 "$type${it.seatNumber}"
             }
+
+            val lengthCount = selectedSeats.groupingBy { it.length }.eachCount()
+
+            val countLen1 = lengthCount["1"] ?: 0   // for seater
+            val countLen2 = lengthCount["2"] ?: 0  // for sleeper
+
+            Log.d("count1","$countLen1")
+            Log.d("count2","$countLen2")
+            forServiceChargeSeatType.clear()
+
+            var busType: String
+
+            if(intent.getStringExtra(Constants.busName)!!.contains("NON A/C Sleeper"))
+            {
+                busType="NON-AC"
+            }else{
+                busType="AC"
+            }
+
+            forServiceChargeSeatType.add(SeattypeModel(
+                countLen2,countLen1,busType.trim()
+            ))
+
+            Log.d("servicetypelist",Gson().toJson(forServiceChargeSeatType))
 
             bin.selectedSeat.text = seatLabels.joinToString(" ")
             val totalAmount = selectedSeats.sumOf { it.fareMaster?.basicAmount ?: 0 }

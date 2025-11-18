@@ -16,6 +16,7 @@ import com.bos.payment.appName.utils.Utils
 
 class BusSearchAdapter(private val context: Context, private val busList: ArrayList<Buses>) : RecyclerView.Adapter<BusSearchAdapter.CustomViewHolder>() {
 
+
     inner class CustomViewHolder(val bin: BusSearchItemBinding): RecyclerView.ViewHolder(bin.root) {
         val companyName: TextView = itemView.findViewById(R.id.companyName)
         val busName: TextView = itemView.findViewById(R.id.busName)
@@ -27,14 +28,17 @@ class BusSearchAdapter(private val context: Context, private val busList: ArrayL
         var droppingId: String?= null
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val bin = BusSearchItemBinding.inflate(LayoutInflater.from(context), parent, false)
         return CustomViewHolder(bin)
     }
 
+
     override fun getItemCount(): Int {
         return busList.size
     }
+
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
@@ -54,7 +58,8 @@ class BusSearchAdapter(private val context: Context, private val busList: ArrayL
 
         if (minAmount != null) {
             holder.amount.text = "₹$minAmount"
-        } else {
+        }
+        else {
             holder.amount.text = "₹0"
         }
 

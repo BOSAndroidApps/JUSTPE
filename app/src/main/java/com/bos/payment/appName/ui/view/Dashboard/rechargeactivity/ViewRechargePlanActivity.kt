@@ -1,4 +1,4 @@
-package com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge
+package com.bos.payment.appName.ui.view.Dashboard.rechargeactivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

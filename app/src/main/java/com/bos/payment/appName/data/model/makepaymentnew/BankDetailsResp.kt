@@ -50,5 +50,8 @@ data class BankDataItem(
 	val rid: Int? = null,
 
 	@field:SerializedName("status")
-	val status: String? = null
+	val status: String? = null ,
+
+	@field:SerializedName("staticQRCodeIntent_url")
+	val staticQRCodeIntenturl: String? = null
 )

@@ -1,4 +1,4 @@
-package com.bos.payment.appName.ui.view.Dashboard.Wallet.Fragment
+package com.bos.payment.appName.ui.view.Dashboard.rechargefragment
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -15,8 +15,6 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextUtils
@@ -45,13 +43,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.transition.Visibility
 import com.bos.payment.appName.R
 import com.bos.payment.appName.adapter.ViewPlanListAdapter
 import com.bos.payment.appName.adapter.ViewPlanListLatestAdapter
 import com.bos.payment.appName.constant.ConstantClass
 import com.bos.payment.appName.constant.CustomFuseLocationActivity
-import com.bos.payment.appName.data.model.AgentRefrenceid.AgentRefrenceidRes
 import com.bos.payment.appName.data.model.fastTag.billPayment.BillPaymentPaybillReq
 import com.bos.payment.appName.data.model.fastTag.customerDetails.BillFetchDetails
 import com.bos.payment.appName.data.model.fastTag.customerDetails.FetchConsumerDetailsReq
@@ -61,7 +57,6 @@ import com.bos.payment.appName.data.model.fastTag.recharge.FastTagRechargeReq
 import com.bos.payment.appName.data.model.fastTag.viewBillPayment.FetchBilPaymentDetailsReq
 import com.bos.payment.appName.data.model.fastTag.viewBillPayment.FetchBilPaymentDetailsRes
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.GetAPIServiceChargeReq
-import com.bos.payment.appName.data.model.merchant.apiServiceCharge.GetAPIServiceChargeRes
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.mobileCharge.GetCommercialReq
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.mobileCharge.GetCommercialRes
 import com.bos.payment.appName.data.model.recharge.BillOperationPaymentReq
@@ -78,14 +73,10 @@ import com.bos.payment.appName.data.model.recharge.newapiflowforrecharge.Recharg
 import com.bos.payment.appName.data.model.recharge.operator.RechargeOperatorsListReq
 import com.bos.payment.appName.data.model.recharge.operator.RechargeOperatorsListRes
 import com.bos.payment.appName.data.model.recharge.recharge.DthInfoReq
-import com.bos.payment.appName.data.model.recharge.recharge.MobileRechargeReq
-import com.bos.payment.appName.data.model.recharge.recharge.MobileRechargeRes
 import com.bos.payment.appName.data.model.recharge.recharge.RechargeapiresponseReq
 import com.bos.payment.appName.data.model.recharge.recharge.TransferToAgentReq
 import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespReq
 import com.bos.payment.appName.data.model.recharge.recharge.UploadRechargeMobileRespRespReq
-import com.bos.payment.appName.data.model.recharge.status.RechargeStatusReq
-import com.bos.payment.appName.data.model.recharge.status.RechargeStatusRes
 import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsReq
 import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsRes
 import com.bos.payment.appName.data.model.walletBalance.merchantBal.GetMerchantBalanceReq
@@ -102,17 +93,17 @@ import com.bos.payment.appName.databinding.FragmentRechargeBinding
 import com.bos.payment.appName.network.RetrofitClient
 import com.bos.payment.appName.ui.adapter.DTHViewInfoAdapter
 import com.bos.payment.appName.ui.adapter.RechargePlanNameAdapter
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.Datetime
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.mobileNumber
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.operatorLogo
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.orderID
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.planPrice
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.rechargeStatus
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.referenceId
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.serviceChargeWithGST
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.totalTransaction
-import com.bos.payment.appName.ui.view.Dashboard.Wallet.Recharge.RechargeSuccessfulPageActivity.Companion.transactionID
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.Datetime
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.mobileNumber
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.operatorLogo
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.orderID
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.planPrice
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.rechargeStatus
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.referenceId
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.serviceChargeWithGST
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.totalTransaction
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.transactionID
 import com.bos.payment.appName.ui.view.LoginActivity
 import com.bos.payment.appName.ui.viewmodel.AttendanceViewModel
 import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
@@ -121,30 +112,22 @@ import com.bos.payment.appName.ui.viewmodel.MoneyTransferViewModel
 import com.bos.payment.appName.utils.ApiStatus
 import com.bos.payment.appName.utils.Constants
 import com.bos.payment.appName.utils.Constants.getCurrentIsoDate
-import com.bos.payment.appName.utils.Constants.operatorName
 import com.bos.payment.appName.utils.Constants.uploadDataOnFirebaseConsole
 import com.bos.payment.appName.utils.MStash
 import com.bos.payment.appName.utils.Utils.PD
-import com.bos.payment.appName.utils.Utils.getCurrentDateTime
 import com.bos.payment.appName.utils.Utils.runIfConnected
 import com.bos.payment.appName.utils.Utils.toast
 import com.example.example.FetchConsumerDetailsRes
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import org.json.JSONArray
-import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class RechargeFragment : Fragment() {
     private lateinit var binding: FragmentRechargeBinding
@@ -667,7 +650,7 @@ class RechargeFragment : Fragment() {
                 val amount = binding.etAmount.text.toString().trim()
                 val operatorId = mStash!!.getStringValue(Constants.OperatorId.toString(), "")
 
-                // ✅ Trigger popup only after typing stopped
+                // ✅ dynamic first check slab for commission and service charge
                 getAllServiceChargeRetailer(amount)
             }
 
@@ -931,22 +914,12 @@ class RechargeFragment : Fragment() {
 
                 if (rechargeType == "dth") {
                     var CANumber = binding.etDTHBillNumber.text.toString()
-                    hitApiForMobileRecharge(
-                        binding.etAmount.text.toString(),
-                        CANumber,
-                        binding.spOperator.selectedItem.toString().trim(),
-                        "DTH Api",
-                        "DTH Recharge"
-                    )
+                    hitApiForMobileRecharge(binding.etAmount.text.toString(), CANumber, binding.spOperator.selectedItem.toString().trim(), "DTH Api", "DTH Recharge")
                 }
 
             } else {
                 pd.dismiss()
-                Toast.makeText(
-                    requireContext(),
-                    "Wallet balance is low. VBal = $mainBalance, MBal = $merchantBalance, totalAmt = $totalAmount",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(requireContext(), "Wallet balance is low. VBal = $mainBalance, MBal = $merchantBalance, totalAmt = $totalAmount", Toast.LENGTH_LONG).show()
             }
         } else {
             pd.dismiss()
@@ -2936,8 +2909,7 @@ class RechargeFragment : Fragment() {
             if (it.isSuccess == true) {
                 // Parse values safely
                 val rechargeAmountValue = rechargeAmount.toDoubleOrNull() ?: 0.0
-                val retailerCommission =
-                    response.data[0].retailerCommission?.toDoubleOrNull() ?: 0.0
+                val retailerCommission = response.data[0].retailerCommission?.toDoubleOrNull() ?: 0.0
 
                 val TDSTax = 5.0 // Fixed TDS rate
 
@@ -3957,6 +3929,19 @@ class RechargeFragment : Fragment() {
         var productID = mStash!!.getStringValue(Constants.OperatorId.toString(), "")
         var totalamount = mStash!!.getStringValue(Constants.totalTransaction, "")
 
+        var rechargeamount =""
+        var rechargenumber =""
+
+
+        if(commissionremark.contains("dth",ignoreCase = true)){
+            rechargeamount = binding.etAmount.text.toString().trim()
+            rechargenumber = binding.etDTHBillNumber.text.toString()
+        }
+        else{
+            rechargeamount =  binding.rechargeAmount.text.toString().trim()
+            rechargenumber =  binding.etMobileNumber.text.toString().trim()
+        }
+
         val req = RechargeapiresponseReq(
             rechargePayableAmount = totalamount,
             refundReqStatus = "",
@@ -3966,7 +3951,7 @@ class RechargeFragment : Fragment() {
             rechargeAmount = totalamount,
             transIpAddress = "",
             apIErrorCode = rechargeResponse.error,
-            rechargeMobileNoCaNo = binding.rechargeAmount.text.toString().trim(),
+            rechargeMobileNoCaNo = rechargenumber,
             retailerID = registrationId,
             apIService = "RECH",
             apIResText = rechargeResponse.data!!.message,
@@ -3986,7 +3971,7 @@ class RechargeFragment : Fragment() {
             apIOrderId = rechargeResponse.referanceID,
             apIStatus = rechargeResponse.statusBos,
             apIBillName = "",
-            apIMobile = binding.rechargeAmount.text.toString().trim(),
+            apIMobile = rechargeamount,
             apIBillAmount = "",
             gateway = ""
         )
@@ -4002,7 +3987,8 @@ class RechargeFragment : Fragment() {
                                 users.body()?.let { response ->
                                     Log.d("rechargeapiresponsersp", Gson().toJson(response))
                                     getTransferAmountToAgentWithCal(
-                                        binding.rechargeAmount.text.toString(),
+                                        rechargeamount,
+                                        rechargenumber,
                                         operatorName,
                                         remarks,
                                         commissionremark
@@ -4026,7 +4012,7 @@ class RechargeFragment : Fragment() {
 
     }
 
-    private fun getTransferAmountToAgentWithCal(rechargeAmount: String, operatorName: String, remarks: String, commissionremark: String) {
+    private fun getTransferAmountToAgentWithCal(rechargeAmount: String,rechargenumber:String, operatorName: String, remarks: String, commissionremark: String) {
         var totalamount = mStash!!.getStringValue(Constants.totalTransaction, "")
         var status = ""
 
@@ -4044,8 +4030,8 @@ class RechargeFragment : Fragment() {
                 transferTo = "Admin",
                 transferAmt = "0.00",
                 remark = "Recharge $remarks",
-                transferFromMsg = "Your recharge of ₹$rechargeAmount  on $operatorName number ${binding.etMobileNumber.text.toString().trim()}  has failed. No amount has been deducted",
-                transferToMsg = "Your recharge of ₹$rechargeAmount  on $operatorName number ${binding.etMobileNumber.text.toString().trim()}  has failed. No amount has been credited",
+                transferFromMsg = "Your recharge of ₹$rechargeAmount  on $operatorName number ${rechargenumber}  has failed. No amount has been deducted",
+                transferToMsg = "Your recharge of ₹$rechargeAmount  on $operatorName number ${rechargenumber}  has failed. No amount has been credited",
                 amountType = "Payout",
                 actualTransactionAmount = "0.00",
                 transIpAddress = mStash!!.getStringValue(Constants.deviceIPAddress, ""),
@@ -4099,17 +4085,17 @@ class RechargeFragment : Fragment() {
                 }
 
         }
+
         else{
             val transferAmountToAgentsReq = TransferAmountToAgentsReq(
                 transferFrom = mStash!!.getStringValue(Constants.RegistrationId, ""),
                 transferTo = "Admin",
                 transferAmt = mStash!!.getStringValue(Constants.totalTransaction, "0.00") ?: "0.00",
                 remark = "Recharge $remarks",
-                transferFromMsg = "Your account has been debited by ₹$totalamount for a recharge on $operatorName number ${
-                    binding.etMobileNumber.text.toString().trim()
+                transferFromMsg = "Your account has been debited by ₹$totalamount for a recharge on $operatorName number ${rechargenumber
                 }.",
                 transferToMsg = "Your Account has been credited by ₹$totalamount for a recharge on $operatorName  number  ${
-                    binding.etMobileNumber.text.toString().trim()
+                    rechargenumber
                 }.",
                 amountType = "Payout",
                 actualTransactionAmount = rechargeAmount,

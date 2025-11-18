@@ -1,6 +1,7 @@
 package com.bos.payment.appName.data.repository
 
 import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
+import com.bos.payment.appName.data.model.justpaymodel.GetToselfPayoutCommercialReq
 import com.bos.payment.appName.data.model.justpaymodel.RetailerContactListRequestModel
 import com.bos.payment.appName.data.model.justpaymodel.SendMoneyToMobileReqModel
 import com.bos.payment.appName.data.model.justpaymodel.UpdateBankDetailsReq
@@ -40,6 +41,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 class GetAllAPIServiceRepository(private val apiInterface: ApiInterface) {
 
     suspend fun getAllRechargeAndBillServiceCharge(req: GetCommercialReq) = apiInterface.getAllRechargeAndBillServiceCharge(req)
+    suspend fun getToSelfPayoutServiceCharge(req: GetToselfPayoutCommercialReq) = apiInterface.getPayoutServiceCharge(req)
     suspend fun getWalletBalance(req: GetBalanceReq) = apiInterface.getWalletBalance(req)
     suspend fun getAllMerchantBalance(req: GetMerchantBalanceReq) = apiInterface.getAllMerchantBalance(req)
 
@@ -53,7 +55,7 @@ class GetAllAPIServiceRepository(private val apiInterface: ApiInterface) {
 
     suspend fun getAirTicketListRequest(req: GetAirTicketListReq) = apiInterface.getAirTicketListReq(req)
 
-    suspend fun getDashboardBanner(rid: Int,retailercode: String, task: String) = apiInterface.getdashboardbanner(rid,retailercode, task)
+    suspend fun getDashboardBanner(rid: Int,task: String, marchentcode: String, admincode: String, retailercode: String,agentType: String) = apiInterface.getdashboardbanner(rid,task,marchentcode,admincode,retailercode,agentType)
 
     suspend fun getRetailerWiseServicesRequest(req: RetailerWiseServicesRequest) = apiInterface.getRetailerWiseServices(req)
 

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.bos.payment.appName.ui.view.Dashboard.Wallet.Fragment.RechargeFragment">
+    tools:context="com.bos.payment.appName.ui.view.Dashboard.rechargefragment.RechargeFragment">
 
     <include
         android:id="@+id/serviceWiseToolbar"

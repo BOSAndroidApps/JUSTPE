@@ -33,9 +33,12 @@ import com.bos.payment.appName.R
 import com.bos.payment.appName.data.model.idfcPayout.AOPPayOutReq
 import com.bos.payment.appName.data.model.idfcPayout.AOPPayOutRes
 import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
+import com.bos.payment.appName.data.model.justpaymodel.GetToSelfPayoutCommercialResp
+import com.bos.payment.appName.data.model.justpaymodel.GetToselfPayoutCommercialReq
 import com.bos.payment.appName.data.model.justpaymodel.ToSelfTransferSlabMaxMin
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.GetPayoutCommercialReq
 import com.bos.payment.appName.data.model.merchant.apiServiceCharge.GetPayoutCommercialRes
+import com.bos.payment.appName.data.model.merchant.apiServiceCharge.mobileCharge.GetCommercialRes
 import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsReq
 import com.bos.payment.appName.data.model.walletBalance.merchantBal.GetMerchantBalanceReq
 import com.bos.payment.appName.data.model.walletBalance.merchantBal.GetMerchantBalanceRes
@@ -50,6 +53,7 @@ import com.bos.payment.appName.network.RetrofitClient
 import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard.Companion.QRBimap
 import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard.Companion.vpa
 import com.bos.payment.appName.ui.view.Dashboard.dmt.DMTRechargeSuccessfulPage
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.serviceChargeWithGST
 import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
 import com.bos.payment.appName.ui.viewmodel.PayoutViewModel
 import com.bos.payment.appName.utils.ApiStatus
@@ -252,14 +256,243 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
             toast("Please enter your amount")
         }
         else {
-            getAllApiPayoutCommercialCharge(transferAmountText)
+            hitApiForToSelfPayoutCommercialRetailer(transferAmountText)
         }
+
+    }
+
+    // checking slab for services charge
+
+    private fun hitApiForToSelfPayoutCommercialRetailer(transferamt:String){
+        var merchantCode = mStash!!.getStringValue(Constants.RegistrationId,"")
+        var request = GetToselfPayoutCommercialReq(
+            txtslabamtfrom  = transferamt.toIntOrNull(),
+            txtslabamtto =  transferamt.toIntOrNull(),
+            merchant= merchantCode,
+            modeofPayment = "NEFT",
+            productId = "F0112")
+
+        Log.d("retailercommissionreq", Gson().toJson(request))
+
+        getAllApiServiceViewModel.getToSelfPayoutServiceCharge(request)
+            .observe(this) { resource ->
+                resource?.let {
+                    when (it.apiStatus) {
+                        ApiStatus.SUCCESS -> {
+                            pd.dismiss()
+                            it.data?.let { users ->
+                                users.body()?.let { response ->
+                                    Log.d("retailercommissionresp",Gson().toJson(response))
+                                    getAllServiceChargeApiResRetailer(response,transferamt)
+
+                                }
+                            }
+                        }
+
+                        ApiStatus.ERROR -> {
+                            pd.dismiss()
+                        }
+
+                        ApiStatus.LOADING -> {
+                            pd.show()
+                        }
+                    }
+                }
+            }
+
 
 
     }
 
 
-    private fun getAllApiPayoutCommercialCharge(transferAmt: String) {
+    @SuppressLint("DefaultLocale", "SetTextI18n", "SuspiciousIndentation")
+    private fun getAllServiceChargeApiResRetailer(response: GetToSelfPayoutCommercialResp, rechargeAmount: String) {
+        response.let {
+            if (it.isSuccess == true) {
+                // Service charge calculation
+                val gst = 18.0 // Fixed GST rate of 18%
+                val serviceCharge = response.data!![0]!!.serviceCharge?.toDoubleOrNull() ?: 0.0
+
+                val totalServiceChargeWithGst = serviceChargeCalculation(serviceCharge, gst, rechargeAmount, response)
+                Log.d("servicechargewithgst", String.format("%.2f", totalServiceChargeWithGst))
+
+//              Calculating the total recharge amount
+                val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + totalServiceChargeWithGst
+                Log.d("rechargeAmount", String.format("%.2f", totalRechargeAmount))
+
+                // Save commission types in shared preferences
+                with(mStash!!) {
+                    setStringValue(Constants.serviceType, response.data!![0]!!.serviceType.toString())
+                }
+
+                mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
+
+                 if(totalRechargeAmount<= walletAmount){
+                     openDialogForPayout(rechargeAmount.toDoubleOrNull() ?: 0.0, totalServiceChargeWithGst)
+
+                 }
+                else{
+                    Toast.makeText(this,"",Toast.LENGTH_SHORT).show()
+                 }
+
+            } else {
+                hitApiForToSelfPayoutCommercialAdmin(rechargeAmount)
+
+            }
+        }
+    }
+
+
+    private fun hitApiForToSelfPayoutCommercialAdmin(transferamt:String){
+        var merchantCode = mStash!!.getStringValue(Constants.AdminCode,"")
+        var request = GetToselfPayoutCommercialReq(
+            txtslabamtfrom  = transferamt.toIntOrNull(),
+            txtslabamtto =  transferamt.toIntOrNull(),
+            merchant= merchantCode,
+            modeofPayment = "NEFT",
+            productId = "F0112"
+        )
+
+        Log.d("admincommissionreq", Gson().toJson(request))
+
+        getAllApiServiceViewModel.getToSelfPayoutServiceCharge(request)
+            .observe(this) { resource ->
+                resource?.let {
+                    when (it.apiStatus) {
+                        ApiStatus.SUCCESS -> {
+                            pd.dismiss()
+                            it.data?.let { users ->
+                                users.body()?.let { response ->
+                                    Log.d("admincommissionresp",Gson().toJson(response))
+                                    getAllServiceChargeApiResAdmin(response, transferamt)
+
+                                }
+                            }
+                        }
+
+                        ApiStatus.ERROR -> {
+                            pd.dismiss()
+                        }
+
+                        ApiStatus.LOADING -> {
+                            pd.show()
+                        }
+                    }
+                }
+            }
+
+
+
+    }
+
+    @SuppressLint("DefaultLocale", "SetTextI18n", "SuspiciousIndentation")
+    private fun getAllServiceChargeApiResAdmin(response: GetToSelfPayoutCommercialResp, rechargeAmount: String) {
+        response.let {
+            if (it.isSuccess == true) {
+                // Parse values safely
+
+                // Service charge calculation
+                val gst = 18.0 // Fixed GST rate of 18%
+                val serviceCharge = response.data!![0]!!.serviceCharge?.toDoubleOrNull() ?: 0.0
+
+                val totalServiceChargeWithGst = serviceChargeCalculation(serviceCharge, gst, rechargeAmount, response)
+                Log.d("servicechargewithgst", String.format("%.2f", totalServiceChargeWithGst))
+
+//              Calculating the total recharge amount
+                val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + totalServiceChargeWithGst
+                Log.d("rechargeAmount", String.format("%.2f", totalRechargeAmount))
+
+                // Save commission types in shared preferences
+                with(mStash!!) {
+                    setStringValue(Constants.serviceType, response.data[0]!!.serviceType.toString())
+                }
+
+
+                mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
+                if(totalRechargeAmount<= walletAmount){
+                    openDialogForPayout(rechargeAmount.toDoubleOrNull() ?: 0.0, totalServiceChargeWithGst)
+                }
+                else{
+                    Toast.makeText(this,"",Toast.LENGTH_SHORT).show()
+                }
+
+            }
+            else {
+
+                // Save commission types in shared preferences
+                with(mStash!!) {
+                    setStringValue(Constants.serviceType, "")
+                }
+
+                val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + 0.0
+                mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
+
+                serviceChargeWithGST = mStash!!.getStringValue(Constants.serviceChargeWithGST, "")!!
+                mStash!!.setStringValue(Constants.serviceChargeGST, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", 0.0))
+
+                if(totalRechargeAmount<= walletAmount){
+                    openDialogForPayout(rechargeAmount.toDoubleOrNull() ?: 0.0, 0.0)
+                }else{
+                    Toast.makeText(this,"",Toast.LENGTH_SHORT).show()
+                }
+
+            }
+        }
+    }
+
+
+    @SuppressLint("DefaultLocale", "SetTextI18n")
+    private fun serviceChargeCalculation(serviceCharge: Double, gstRate: Double, rechargeAmount: String, response: GetToSelfPayoutCommercialResp): Double {
+
+        val rechargeAmountValue = rechargeAmount.toDoubleOrNull() ?: 0.0
+
+        val totalAmountWithGst = when (response.data!![0]!!.serviceType) {
+            "Amount" -> {
+                // Service charge is a fixed amount
+                //binding.serviceChargeText.text = "Service Charge Rs"
+                val serviceChargeWithGst = serviceCharge * (gstRate / 100)
+                mStash!!.setStringValue(Constants.serviceChargeGST, String.format("%.2f", serviceChargeWithGst))
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", serviceCharge))
+                serviceCharge + serviceChargeWithGst
+            }
+
+            "Percentage" -> {
+                // Service charge is a percentage of the recharge amount
+                //binding.serviceChargeText.text = "Service Charge %"
+                val serviceInAmount = rechargeAmountValue * (serviceCharge / 100)
+                val serviceWithGst = serviceInAmount * (gstRate / 100)
+                mStash!!.setStringValue(Constants.serviceChargeGST, String.format("%.2f", serviceWithGst))
+                // binding.serviceChargeWithGST.text = String.format("%.2f", serviceWithGst)
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", serviceInAmount))
+                serviceInAmount + serviceWithGst
+
+            }
+
+            else -> {
+                mStash!!.setStringValue(Constants.serviceChargeGST, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", 0.0))
+                0.0
+            }
+        }
+
+
+        mStash!!.setStringValue(Constants.serviceChargeWithGST, String.format("%.2f", totalAmountWithGst)) // totalservicewithgstamount
+
+        Log.d("gstamount", mStash!!.getStringValue(Constants.serviceChargeGST, "").toString())
+        Log.d("servicecharge", mStash!!.getStringValue(Constants.serviceCharge, "").toString())
+        Log.d("totalAmountWithGst", mStash!!.getStringValue(Constants.serviceChargeWithGST, "").toString())
+
+        // Return the total service charge (with GST) to include in the final transaction
+        return totalAmountWithGst
+    }
+
+
+
+
+
+
+   /* private fun getAllApiPayoutCommercialCharge(transferAmt: String) {
         //F0112 for payout
         val getPayoutCommercialReq = GetPayoutCommercialReq(
             merchant = mStash!!.getStringValue(Constants.RegistrationId, ""),
@@ -267,6 +500,7 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
             modeofPayment = "NEFT"
         )
         Log.d("getAllGsonFromAPI", Gson().toJson(getPayoutCommercialReq))
+
         getAllApiServiceViewModel.getAllApiPayoutCommercialCharge(getPayoutCommercialReq)
             .observe(this) { resource ->
                 resource?.let {
@@ -292,8 +526,7 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
                 }
             }
 
-         }
-
+    }
 
     private fun getAllApiPayoutCommercialChargeRes(response: GetPayoutCommercialRes, transferAmt: String) {
         if (response.isSuccess == true)
@@ -369,7 +602,6 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
         }
     }
 
-
     fun matchMaxMinSlabAmount(amount: Double, slabs: MutableList<ToSelfTransferSlabMaxMin>): Boolean {
         // 🔍 Try to find a matching slab where amount lies between min and max
         val matchingSlab = slabs.find { amount in it.min..it.max }
@@ -389,7 +621,6 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
             false
         }
     }
-
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun serviceChargeCalculation(serviceCharge: Double, gstRate: Double, rechargeAmount: String, response: GetPayoutCommercialRes, min: Double, max: Double): Double {
@@ -454,6 +685,7 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
         return serviceChargeWithGst
     }
 
+    */
 
     fun getBankDetails(retailerCode: String){
         val requestForBankDetails = CheckBankDetailsModel(reatilerCode =  retailerCode)
@@ -598,7 +830,6 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
     }
 
 
-
     private fun getAllMerchantBalanceRes(response: GetMerchantBalanceRes, mainBalance: Double) {
         if (response.isSuccess == true) {
             Log.d(TAG, "getAllMerchantBalanceRes: ${response.data[0].debitBalance}")
@@ -612,7 +843,7 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
             Log.d("balanceCheck", "MainBal = $mainBalance, merchantBal = $merchantBalance,totalAmount = $totalAmount, Status = ${totalAmount <= mainBalance && totalAmount <= merchantBalance}")
 
             if (totalAmount <= merchantBalance) {
-                getTransferAmountToAgentWithCal(binding.etAmount.text.toString())
+                getTransferAmountToAgentWithCal(binding.etAmount.text.toString())  // payout api
             }
             else {
                 pd.dismiss()
@@ -632,21 +863,31 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
         try {
             val currentDateTime = Utils.getCurrentDateTime()
             val bankAccountNo = binding.accountnumber.text.toString().trim()
+            var servicechargewithGst = mStash!!.getStringValue(Constants.serviceChargeWithGST, "") ?: "0.00"
+
+            val serviceChargeWithGst = servicechargewithGst.toDoubleOrNull() ?: 0.0
+            val rechargeAmt = rechargeAmount.toDoubleOrNull() ?: 0.0
+
+            // debit = recharge amount + service charge
+            val debitAmount = rechargeAmt + serviceChargeWithGst
+
+            // credit = debit - service charge
+            val creditAmount = debitAmount - serviceChargeWithGst
 
             val transferAmountToAgentsReq = TransferAmountToAgentsReq(
                 transferFrom = mStash!!.getStringValue(Constants.RegistrationId, "") ?: "0",
                 transferTo = "Admin",
                 transferAmt = mStash!!.getStringValue(Constants.totalTransaction, "") ?: "0",
                 remark = binding.remarks.text.toString().trim(),
-                transferFromMsg = "Your account is debited by ${rechargeAmount ?: "0"} Rs from wallet and credited to your bank account due to ToSelf on number ${bankAccountNo ?: ""}",
+                transferFromMsg = "Your account is debited by ₹${debitAmount ?: "0"} from your wallet and credited with ₹${creditAmount ?: "0"} to your bank account due to ToSelf on number ${bankAccountNo ?: ""}.",
                 transferToMsg = "", // for toself commission remarks
                 amountType = "Payout",
                 actualTransactionAmount = rechargeAmount ?: "0",
                 transIpAddress = mStash!!.getStringValue(Constants.deviceIPAddress, "") ?: "0.0.0.0",
                 parmUserName = mStash!!.getStringValue(Constants.RegistrationId, "") ?: "0",
                 merchantCode = mStash!!.getStringValue(Constants.MerchantId, "") ?: "0",
-                servicesChargeAmt = mStash!!.getStringValue(Constants.serviceCharge, "") ?: "0.00",
-                servicesChargeGSTAmt ="0.00",
+                servicesChargeAmt = servicechargewithGst ?: "0.00",
+                servicesChargeGSTAmt = mStash!!.getStringValue(Constants.serviceChargeGST, "") ?: "0.00",
                 servicesChargeWithoutGST = mStash!!.getStringValue(Constants.serviceCharge, "") ?: "0.00",
                 customerVirtualAddress = "",
                 retailerCommissionAmt ="0.00",
@@ -751,7 +992,7 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
 
 
     @SuppressLint("SetTextI18n")
-    fun openDialogForPayout(serviceCharge: Double, transferAmount: Double) {
+    fun openDialogForPayout(transferAmount: Double, servicechargeincludingGst: Double) {
         dialog = Dialog(this@ToSelfMoneyTransferPage, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.payoutscreen)
@@ -765,8 +1006,9 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
         dialog.setCanceledOnTouchOutside(false)
 
         val transferamttxt = dialog.findViewById<TextView>(R.id.actualamt)
-        val serviceChargetxt = dialog.findViewById<TextView>(R.id.servicecharge)
+        val serviceChargeincludinggsttxt = dialog.findViewById<TextView>(R.id.servicecharge)
         val creditedamt = dialog.findViewById<TextView>(R.id.creditamt)
+        val debitamt = dialog.findViewById<TextView>(R.id.walletdebit)
         val serviceChargeamount = dialog.findViewById<TextView>(R.id.servicescharge)
         val gstamount = dialog.findViewById<TextView>(R.id.gstamount)
 
@@ -777,17 +1019,22 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
 
 
         transferamttxt.text = "$transferAmount"
-        serviceChargetxt.text = "$serviceCharge"
+        serviceChargeincludinggsttxt.text = String.format("%.2f", servicechargeincludingGst)
 
        var servicechargeamount = mStash!!.getStringValue(Constants.serviceCharge, "") ?: "0.00"
-       var servicechargeGst = mStash!!.getStringValue(Constants.serviceChargeGST, "") ?: "0.00"
+       var servicechargeGstamount = mStash!!.getStringValue(Constants.serviceChargeGST, "") ?: "0.00"
 
 
         serviceChargeamount.text = "$servicechargeamount"
-        gstamount.text = "$servicechargeGst"
+        gstamount.text = "$servicechargeGstamount" // gst amount
 
-        val toBeCreditedAmt = transferAmount - serviceCharge
-        creditedamt.text = String.format("%.2f", toBeCreditedAmt)
+        val toBeCreditedAmt = transferAmount - servicechargeincludingGst
+
+        val debitamtt = transferAmount + servicechargeincludingGst
+
+        creditedamt.text = String.format("%.2f", transferAmount)
+
+        debitamt.text = String.format("%.2f", debitamtt)
 
         var checkView : Boolean = false
 
@@ -809,10 +1056,7 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
                 getMerchantBalance(walletAmount)
             }
             else{
-                Toast.makeText(this,
-                    "Transfer amount must be greater than the service charge.",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(this, "Transfer amount must be greater than the service charge.", Toast.LENGTH_LONG).show()
             }
 
         }

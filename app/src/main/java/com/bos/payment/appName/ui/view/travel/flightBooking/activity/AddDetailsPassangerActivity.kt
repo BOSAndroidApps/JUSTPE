@@ -143,8 +143,8 @@ class AddDetailsPassangerActivity : AppCompatActivity() {
 
         fromTocityname = segmentListPassangerDetail[0]!!.originCity.plus(" to ")
             .plus(segmentListPassangerDetail[segmentListPassangerDetail.size - 1]!!.destinationCity)
-        passangerdetails =
-            originDate.plus(",").plus(adultCount).plus("Adult").plus(",").plus(childCount)
+
+        passangerdetails = originDate.plus(",").plus(adultCount).plus("Adult").plus(",").plus(childCount)
                 .plus("Child").plus(",").plus(infantCount).plus("Infant").plus(",").plus(className)
 
         if (segmentListPassangerDetail.size == 1) {

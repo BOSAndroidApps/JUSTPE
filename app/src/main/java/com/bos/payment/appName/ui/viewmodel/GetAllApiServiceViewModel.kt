@@ -1,13 +1,18 @@
 package com.bos.payment.appName.ui.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import com.bos.payment.appName.data.model.justpaymodel.CheckBankDetailsModel
 import com.bos.payment.appName.data.model.justpaymodel.GenerateVirtualAccountModel
+import com.bos.payment.appName.data.model.justpaymodel.GetToselfPayoutCommercialReq
 import com.bos.payment.appName.data.model.justpaymodel.RetailerContactListRequestModel
 import com.bos.payment.appName.data.model.justpaymodel.SendMoneyToMobileReqModel
 import com.bos.payment.appName.data.model.justpaymodel.UpdateBankDetailsReq
+import com.bos.payment.appName.data.model.justpedashboard.DashboardBannerListModel
 import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesRequest
+import com.bos.payment.appName.data.model.justpedashboard.RetailerWiseServicesResponse
 import com.bos.payment.appName.data.model.makepaymentnew.BankDetailsReq
 import com.bos.payment.appName.data.model.makepaymentnew.RaiseMakePaymentReq
 import com.bos.payment.appName.data.model.makepaymentnew.ReferenceIDGenerateReq
@@ -38,18 +43,27 @@ import com.bos.payment.appName.data.repository.GetAllAPIServiceRepository
 import com.bos.payment.appName.utils.ApiResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import java.io.IOException
 
-class GetAllApiServiceViewModel constructor(private val repository: GetAllAPIServiceRepository) :
-    ViewModel() {
+class GetAllApiServiceViewModel constructor(private val repository: GetAllAPIServiceRepository) : ViewModel() {
 
     fun getAllRechargeAndBillServiceCharge(req: GetCommercialReq) = liveData(Dispatchers.IO) {
         emit(ApiResponse.loading(data = null))
         try {
             emit(ApiResponse.success(data = repository.getAllRechargeAndBillServiceCharge(req)))
+        }catch (exception: Exception) {
+            emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))
+        }
+    }
+
+    fun getToSelfPayoutServiceCharge(req: GetToselfPayoutCommercialReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            emit(ApiResponse.success(data = repository.getToSelfPayoutServiceCharge(req)))
         }catch (exception: Exception) {
             emit(ApiResponse.error(data = null, message = exception.message?: "Error Occurred!"))
         }
@@ -175,15 +189,35 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
 
 
     //dashboard banner
-    fun getDashboardBannerRequest(rid: Int, retailercode: String, task: String) = liveData(Dispatchers.IO) {
+    fun getDashboardBannerRequest(
+        rid: Int,
+        task: String,
+        marchentcode: String,
+        admincode: String,
+        retailercode: String,
+        agentType: String
+    ) = liveData(Dispatchers.IO) {
+
         emit(ApiResponse.loading(data = null))
+
         try {
             val response = withTimeout(10_000) {
-                repository.getDashboardBanner(rid, retailercode, task)
+                repository.getDashboardBanner(rid, task, marchentcode, admincode, retailercode, agentType)
             }
 
             if (response.isSuccessful) {
-                emit(ApiResponse.success(response.body()))
+                val body = response.body()
+
+                // Check API internal success (isSuccess = true/false)
+                if (body?.isSuccess == true) {
+                    emit(ApiResponse.success(body))
+                } else {
+                    emit(ApiResponse.error(
+                        data = body,
+                        message = body?.returnMessage ?: "Something went wrong"
+                    ))
+                }
+
             } else {
                 emit(ApiResponse.error(data = null, message = "Server error: ${response.code()}"))
             }
@@ -198,6 +232,7 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
     }
 
 
+
     // services request for retailerwise
     fun getRetailerWiseServicesReq(req: RetailerWiseServicesRequest) = liveData(Dispatchers.IO) {
         emit(ApiResponse.loading(data = null))
@@ -209,6 +244,11 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
             }
 
     }
+
+
+
+
+
 
 
     fun getBankDetails(req: CheckBankDetailsModel) = liveData(Dispatchers.IO) {

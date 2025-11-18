@@ -22,6 +22,9 @@ data class DataItem(
 	@field:SerializedName("createdDate")
 	val createdDate: String? = null,
 
+	@field:SerializedName("agentType")
+	val agentType: String? = null,
+
 	@field:SerializedName("activeStatus")
 	val activeStatus: String? = null,
 
@@ -37,11 +40,14 @@ data class DataItem(
 	@field:SerializedName("modifiedDate")
 	val modifiedDate: String? = null,
 
+	@field:SerializedName("adminCode")
+	val adminCode: String? = null,
+
 	@field:SerializedName("retailerCode")
 	val retailerCode: String? = null,
 
 	@field:SerializedName("modifiedBy")
-	val modifiedBy: Any? = null,
+	val modifiedBy: String? = null,
 
 	@field:SerializedName("urlRedirect")
 	val urlRedirect: String? = null,
