@@ -160,7 +160,6 @@ object Utils {
         }
     }
 
-
     fun getCurrentDateTime(): String {
         val calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
@@ -467,9 +466,11 @@ object Utils {
     }
 
 
+
     fun getBitmapFromDrawable(img: ImageView, c: Context?): Bitmap {
         return (img.drawable as BitmapDrawable).bitmap
     }
+
 
 
     @JvmStatic
@@ -579,8 +580,6 @@ object Utils {
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 
-
-
     fun getStateCode(stateName: String): String {
         return when (stateName.trim().lowercase()) {
             "jammu and kashmir" -> "01"
@@ -633,9 +632,6 @@ object Utils {
         return barcodeEncoder.encodeBitmap(content, BarcodeFormat.QR_CODE, sizePx, sizePx, hints)
     }
 
-
-
-
     fun buildUpiUri(
         pa: String,   // payee address (vpa)
         pn: String,   // payee name
@@ -660,7 +656,6 @@ object Utils {
         if (uri.endsWith("&")) uri = uri.dropLast(1)
         return uri
     }
-
 
 
     fun getScreenshotFromView(view: View): Bitmap {
@@ -694,9 +689,6 @@ object Utils {
                 textView.animate().scaleX(1f).scaleY(1f).setDuration(90).start()
             }.start()
     }
-
-
-
 
 
 }

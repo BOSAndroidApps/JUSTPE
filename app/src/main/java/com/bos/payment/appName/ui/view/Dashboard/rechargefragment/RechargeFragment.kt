@@ -917,9 +917,10 @@ class RechargeFragment : Fragment() {
                     hitApiForMobileRecharge(binding.etAmount.text.toString(), CANumber, binding.spOperator.selectedItem.toString().trim(), "DTH Api", "DTH Recharge")
                 }
 
+
             } else {
                 pd.dismiss()
-                Toast.makeText(requireContext(), "Wallet balance is low. VBal = $mainBalance, MBal = $merchantBalance, totalAmt = $totalAmount", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Your merchant balance is low. Please contact the administrator", Toast.LENGTH_LONG).show()
             }
         } else {
             pd.dismiss()
@@ -961,6 +962,7 @@ class RechargeFragment : Fragment() {
                 }
             }
     }
+
 
     private fun billRecharge() {
         var referenceID: String = ConstantClass.generateRandomNumber()
@@ -1006,6 +1008,7 @@ class RechargeFragment : Fragment() {
                 }
             }
     }
+
 
     private fun getBill() {
         requireContext().runIfConnected {
@@ -2857,7 +2860,6 @@ class RechargeFragment : Fragment() {
                                     }
                                 }
                             }
-
                             ApiStatus.ERROR -> pd.dismiss()
                             ApiStatus.LOADING -> pd.dismiss()
                         }
@@ -3004,7 +3006,8 @@ class RechargeFragment : Fragment() {
                     ""
                 )
 
-            } else {
+            }
+            else {
                 getAllServiceChargeAdmin(rechargeAmount)
 
             }
@@ -3233,13 +3236,10 @@ class RechargeFragment : Fragment() {
                     Constants.actualRechargeAmount,
                     String.format("%.2f", transferAmount)
                 )
+
                 getAllWalletBalance()
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Transfer amount must be greater than the service charge.",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(requireContext(), "Transfer amount must be greater than the service charge.", Toast.LENGTH_LONG).show()
             }
 
         }
@@ -3844,13 +3844,7 @@ class RechargeFragment : Fragment() {
                             it.data?.let { users ->
                                 users.body()?.let { response ->
                                     Log.d("RechargeReqResp", Gson().toJson(response))
-                                    hitApiForMobileRechargeRespUpload(
-                                        rechargeResponse,
-                                        operatorName,
-                                        remarks,
-                                        commissionremark
-                                    )
-
+                                    hitApiForMobileRechargeRespUpload(rechargeResponse, operatorName, remarks, commissionremark)
                                 }
                             }
                         }

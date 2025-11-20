@@ -21,6 +21,7 @@ import com.bos.payment.appName.data.model.travel.flight.SegmentsItem
 import com.bos.payment.appName.data.model.travel.flight.airReprintresponse.AirPNRDetailsItem
 import com.bos.payment.appName.data.model.travel.flight.airReprintresponse.AirReprintRespo
 import com.bos.payment.appName.databinding.ActivityFlightBookedTicketBinding
+import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.FlightDetails
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.FlightList
@@ -216,7 +217,7 @@ class FlightBookedTicketActivity : AppCompatActivity() {
         }
 
         binding.back1.setOnClickListener {
-            startActivity(Intent(this@FlightBookedTicketActivity,FlightMainActivity::class.java))
+            startActivity(Intent(this@FlightBookedTicketActivity,JustPeDashboard::class.java))
             finish()
         }
 

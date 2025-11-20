@@ -32,6 +32,7 @@ class FlightConstant {
         var BaseFare: String = ""
         var TaxAndFees: String = ""
         var GrossFare: String = ""
+        val airlinecode ="airlinecode"
 
 
         var  fromCityName: String = "Delhi"

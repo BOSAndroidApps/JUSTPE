@@ -31,7 +31,6 @@ import com.bos.payment.appName.network.RetrofitClient
 import com.bos.payment.appName.ui.view.travel.busactivity.BusSearchDetails
 import com.bos.payment.appName.ui.view.travel.busactivity.BusTicketConsListClass
 import com.bos.payment.appName.ui.view.travel.busactivity.MyBookingBusActivity
-import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
 import com.bos.payment.appName.ui.view.travel.model.DateModel
 import com.bos.payment.appName.ui.viewmodel.TravelViewModel
 import com.bos.payment.appName.utils.ApiStatus
@@ -254,7 +253,7 @@ class BusBookingMainFragment : Fragment() {
             bin.flightcard.setCardBackgroundColor(resources.getColor(R.color.white))
             bin.flighticon.imageTintList= resources.getColorStateList(R.color.blue)
             bin.flights.setTextColor(resources.getColor(R.color.blue))*/
-            startActivity(Intent(requireContext(), FlightMainActivity::class.java))
+           // startActivity(Intent(requireContext(), FlightMainActivity::class.java))
         }
 
         bin.trainsLayout.setOnClickListener {

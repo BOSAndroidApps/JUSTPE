@@ -19,7 +19,6 @@ import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Compa
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.className
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.infantCount
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.totalCount
-import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -235,12 +234,12 @@ class SelectTravellersClassBottomSheet:BottomSheetDialogFragment() {
 
        // (activity as? FlightMainActivity)?. setData()
 
-        if(context is FlightMainActivity){
+       /* if(context is FlightMainActivity){
             (context as? FlightMainActivity)?.setData()
         }
-        else {
+        else {*/
             (scanForActivity(context)?.supportFragmentManager?.findFragmentByTag("FlightMainFragment") as? FlightMainFragment)?.setData()
-        }
+       // }
     }
 
 

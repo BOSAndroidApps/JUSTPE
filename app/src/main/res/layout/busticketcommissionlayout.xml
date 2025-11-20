@@ -22,6 +22,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,7 +42,7 @@
                 android:id="@+id/titlelayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Transaction Amount"
+                android:text="Price Summery"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimen_16sp"
                 android:textStyle="bold"
@@ -50,6 +51,20 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/cancel" />
 
+            <TextView
+                android:id="@+id/warningmsg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:textSize="@dimen/dimen_14sp"
+                android:hint="Warning:"
+                android:textStyle="bold"
+                android:padding="@dimen/dimen_4dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titlelayout"/>
+
+
             <LinearLayout
                 android:id="@+id/transferamtlayout"
                 android:layout_width="match_parent"
@@ -57,13 +72,13 @@
                 android:padding="@dimen/dimen_4dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cancel">
+                app:layout_constraintTop_toBottomOf="@+id/warningmsg">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Transfer Amt "
+                    android:text="Onword Fare "
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -107,7 +122,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Service Charge "
+                            android:text="Convenience Fee "
                             android:textColor="@color/black"
                             android:textStyle="bold" />
 
@@ -149,7 +164,7 @@
                     android:text=":" />
 
                 <TextView
-                    android:id="@+id/servicecharge"
+                    android:id="@+id/servicechargewithgst"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -172,11 +187,12 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/basefaretxt"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight=".2"
-                        android:text="Service Charge"
+                        android:text="BaseFare"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/dimen_12sp" />
 
@@ -219,8 +235,6 @@
 
             </LinearLayout>
 
-
-
             <LinearLayout
                 android:id="@+id/actualtransferamt"
                 android:layout_width="match_parent"
@@ -234,7 +248,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="To Be Credited "
+                    android:text="Grand Total "
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -245,7 +259,7 @@
                     android:text=":" />
 
                 <TextView
-                    android:id="@+id/creditamt"
+                    android:id="@+id/transferamt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -268,13 +282,54 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:padding="@dimen/dimen_10dp"
-                    android:text="Proceed"
+                    android:text="Pay Now"
                     android:textColor="@color/white"
                     android:textSize="@dimen/dimen_14sp"
                     android:textStyle="bold" />
 
 
             </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/retailercommissionlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/light_grey"
+                android:orientation="horizontal"
+                android:padding="@dimen/dimen_6dp"
+                app:layout_constraintTop_toBottomOf="@+id/Proceedbtn">
+
+                <ImageView
+                    android:layout_width="@dimen/dimen_20dp"
+                    android:layout_height="@dimen/dimen_20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/info"
+                    app:tint="@color/green" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dimen_6dp"
+                    android:text="Retailer Commission:"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/dimen_12sp" />
+
+                <TextView
+                    android:id="@+id/retailercommission"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dimen_4dp"
+                    android:text="₹00.00"
+                    android:textColor="@color/green"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/dimen_12sp" />
+
+            </LinearLayout>
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

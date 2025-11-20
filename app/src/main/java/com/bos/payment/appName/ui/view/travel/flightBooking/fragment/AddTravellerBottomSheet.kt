@@ -37,7 +37,6 @@ import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsP
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.infantList
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.paxDetailsListFromReprice
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.segmentListPassangerDetail
-import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
 import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.ReviewDetailsPassangersBottomSheet.Companion.passangerDetailsList
 import com.bos.payment.appName.utils.Constants.scanForActivity
 import com.bos.payment.appName.utils.Utils
@@ -304,12 +303,12 @@ class AddTravellerBottomSheet:BottomSheetDialogFragment() {
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         //(activity as? FlightMainActivity)?.setData()
-        if(context is FlightMainActivity){
+       /* if(context is FlightMainActivity){
             (context as? FlightMainActivity)?.setData()
         }
-        else {
+        else {*/
             (scanForActivity(context)?.supportFragmentManager?.findFragmentByTag("FlightMainFragment") as? FlightMainFragment)?.setData()
-        }
+       // }
     }
 
 

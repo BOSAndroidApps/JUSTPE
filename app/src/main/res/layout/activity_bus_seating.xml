@@ -635,6 +635,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="vertical">
+
     <include
         android:id="@+id/reviewBookingInclude"
         layout="@layout/review_booking"

@@ -317,7 +317,7 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
                 Log.d("servicechargewithgst", String.format("%.2f", totalServiceChargeWithGst))
 
 //              Calculating the total recharge amount
-                val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + totalServiceChargeWithGst
+                val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + 0.0
                 Log.d("rechargeAmount", String.format("%.2f", totalRechargeAmount))
 
                 // Save commission types in shared preferences
@@ -325,7 +325,6 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
                     setStringValue(Constants.serviceType, response.data!![0]!!.serviceType.toString())
                 }
 
-                mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
 
                  if(totalRechargeAmount<= walletAmount){
                      openDialogForPayout(rechargeAmount.toDoubleOrNull() ?: 0.0, totalServiceChargeWithGst)
@@ -486,9 +485,6 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
         // Return the total service charge (with GST) to include in the final transaction
         return totalAmountWithGst
     }
-
-
-
 
 
 
@@ -866,20 +862,18 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
             var servicechargewithGst = mStash!!.getStringValue(Constants.serviceChargeWithGST, "") ?: "0.00"
 
             val serviceChargeWithGst = servicechargewithGst.toDoubleOrNull() ?: 0.0
+
             val rechargeAmt = rechargeAmount.toDoubleOrNull() ?: 0.0
 
-            // debit = recharge amount + service charge
-            val debitAmount = rechargeAmt + serviceChargeWithGst
-
             // credit = debit - service charge
-            val creditAmount = debitAmount - serviceChargeWithGst
+            val creditAmount = mStash?.getStringValue(Constants.toBeCreditedAmt,"")
 
             val transferAmountToAgentsReq = TransferAmountToAgentsReq(
                 transferFrom = mStash!!.getStringValue(Constants.RegistrationId, "") ?: "0",
                 transferTo = "Admin",
-                transferAmt = mStash!!.getStringValue(Constants.totalTransaction, "") ?: "0",
-                remark = binding.remarks.text.toString().trim(),
-                transferFromMsg = "Your account is debited by ₹${debitAmount ?: "0"} from your wallet and credited with ₹${creditAmount ?: "0"} to your bank account due to ToSelf on number ${bankAccountNo ?: ""}.",
+                transferAmt = rechargeAmount ?: "0", //dr
+                remark = "Self Payout Deposit" /*binding.remarks.text.toString().trim()*/,
+                transferFromMsg = "Your account is debited by ₹${rechargeAmt ?: "0"} from your wallet and credited with ₹${creditAmount ?: "0"} to your bank account due to ToSelf on number ${bankAccountNo ?: ""}.",
                 transferToMsg = "", // for toself commission remarks
                 amountType = "Payout",
                 actualTransactionAmount = rechargeAmount ?: "0",
@@ -903,6 +897,7 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
             )
 
             Log.d("getAllGsonFromAPI", Gson().toJson(transferAmountToAgentsReq))
+
             getAllApiServiceViewModel.getTransferAmountToAgents(transferAmountToAgentsReq)
                 .observe(this) { resource ->
                     resource?.let {
@@ -930,6 +925,7 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
                         }
                     }
                 }
+
         } catch (e: NumberFormatException) {
             e.printStackTrace()
             pd.dismiss()
@@ -1008,7 +1004,6 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
         val transferamttxt = dialog.findViewById<TextView>(R.id.actualamt)
         val serviceChargeincludinggsttxt = dialog.findViewById<TextView>(R.id.servicecharge)
         val creditedamt = dialog.findViewById<TextView>(R.id.creditamt)
-        val debitamt = dialog.findViewById<TextView>(R.id.walletdebit)
         val serviceChargeamount = dialog.findViewById<TextView>(R.id.servicescharge)
         val gstamount = dialog.findViewById<TextView>(R.id.gstamount)
 
@@ -1030,11 +1025,7 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
 
         val toBeCreditedAmt = transferAmount - servicechargeincludingGst
 
-        val debitamtt = transferAmount + servicechargeincludingGst
-
-        creditedamt.text = String.format("%.2f", transferAmount)
-
-        debitamt.text = String.format("%.2f", debitamtt)
+        creditedamt.text = String.format("%.2f", toBeCreditedAmt)
 
         var checkView : Boolean = false
 

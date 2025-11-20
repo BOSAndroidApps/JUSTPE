@@ -163,6 +163,8 @@ import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTicketCancelRe
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTicketCancelResponseReq
 import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommissionReq
 import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommissionResp
+import com.bos.payment.appName.data.model.travel.flight.AirCommissionReq
+import com.bos.payment.appName.data.model.travel.flight.AirCommissionResp
 import com.bos.payment.appName.data.model.travel.flight.AirportListReq
 import com.bos.payment.appName.data.model.travel.flight.AirportListResp
 import com.bos.payment.appName.data.model.travel.flight.FlightRequeryReq
@@ -516,6 +518,10 @@ interface ApiInterface {
 
     @POST("api/Air/api/AirbookingList")
     suspend fun getAirTicketListReq(@Body req: GetAirTicketListReq): Response<AirTicketListResp>? // Annu
+
+
+    @POST("api/TravelServiceMaster/GetCommissionValues")
+    suspend fun getAirCommissionReq(@Body req: AirCommissionReq): Response<AirCommissionResp>? // Annu
 
 
     // new api for recharge............................................................................

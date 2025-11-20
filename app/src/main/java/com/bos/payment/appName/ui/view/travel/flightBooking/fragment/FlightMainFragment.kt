@@ -24,8 +24,15 @@ import com.bos.payment.appName.databinding.ActivityFlightSearchBinding
 import com.bos.payment.appName.network.RetrofitClient
 import com.bos.payment.appName.ui.view.travel.adapter.FlightSpecialOfferAdapter
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant
+import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.AllFlightList
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.DepartureDateAndTime
+import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.TripDetailsList
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.adultCount
+import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.after12pmlayout
+import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.after6amlayout
+import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.after6pmlayout
+import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.airportNameList
+import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.before6layout
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.bookingType
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.checkFrom
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.checkTo
@@ -44,8 +51,15 @@ import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Compa
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.totalCount
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.travelDate
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.travelType
+import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.adultList
+import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.childList
+import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.infantList
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightBookingPage
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightDetailListActivity
+import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.AddGSTInformationBottomSheet.Companion.CheckBox
+import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.AddGSTInformationBottomSheet.Companion.companyName
+import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.AddGSTInformationBottomSheet.Companion.registrationNo
+import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.ReviewDetailsPassangersBottomSheet.Companion.passangerDetailsList
 import com.bos.payment.appName.ui.viewmodel.TravelViewModel
 import com.bos.payment.appName.utils.ApiStatus
 import com.bos.payment.appName.utils.Constants
@@ -479,6 +493,7 @@ class FlightMainFragment : Fragment(), FlightSpecialOfferAdapter.setClickListner
                 travelDate = String.format("%02d/%02d/%04d", month + 1, day, year)
             }
 
+            Log.d("TravelType", "$travelType")
             // All validations passed
             hitApiForSearchFlight()
         }
@@ -628,7 +643,7 @@ class FlightMainFragment : Fragment(), FlightSpecialOfferAdapter.setClickListner
             defenceFareSearch = FlightConstant.defenceFare,
             registartionId = mStash.getStringValue(Constants.MerchantId, ""),
             ipAddress = mStash.getStringValue(Constants.deviceIPAddress, ""),
-            filterAirlineList = listOf(FilterAirLine("")),
+            filterAirlineList = getFilterAirLineList(),
             tripeInfoList = listOf(
                 TripInfo(
                     origin = binding.fromairportcode.text.toString(),
@@ -645,12 +660,58 @@ class FlightMainFragment : Fragment(), FlightSpecialOfferAdapter.setClickListner
             when (resource.apiStatus) {
                 ApiStatus.SUCCESS -> {
                     val response = resource.data?.body()
+                    uploadDataOnFirebaseConsole(Gson().toJson(response),"FlightMainActivitySearchRequest",requireContext())
                     Log.d("FlightSearchResponse", Gson().toJson(response))
+
                     if (response?.responseHeader?.errorCode == "0000") {
-                        FlightConstant.TripDetailsList.clear()
-                        response.tripDetails?.let { FlightConstant.TripDetailsList.addAll(it) }
+                        adultList.clear()
+                        childList.clear()
+                        infantList.clear()
+                        passangerDetailsList.clear()
+                        companyName = ""
+                        registrationNo = ""
+                        CheckBox = false
+                        before6layout = false
+                        after6amlayout = false
+                        after12pmlayout = false
+                        after6pmlayout = false
+                        if (childCount == 0 && infantCount == 0) {
+                            FlightConstant.datepassangerandclassstring =
+                                binding.datemonthdeparture.text.toString().plus("|").plus(adultCount).plus("Adult")
+                                    .plus("|").plus(className)
+                        } else {
+                            FlightConstant.datepassangerandclassstring =
+                                binding.datemonthdeparture.text.toString().plus("|").plus(totalCount)
+                                    .plus("Travellers").plus("|").plus(className)
+                        }
+                        mStash.setStringValue(Constants.FlightSearchKey, response.searchKey)
+                        Log.d("SearchKey", response.searchKey)
+                        var getData = response.tripDetails
+                        mStash.setFlightSearchData("flightsearchdata", getData, requireContext())
+                        TripDetailsList.clear()
+                        getData?.let { it1 -> TripDetailsList.addAll(it1) }
+
+                        airportNameList.clear()
+
+                        airportNameList = TripDetailsList[0]?.flights
+                            ?.mapNotNull { it.segments?.getOrNull(0)?.airlineName }
+                            ?.distinct()
+                            ?.map { it to false }
+                            ?.toMutableList() ?: mutableListOf()
+
+                        Log.d("AirlineName",Gson().toJson(airportNameList))
+
+                        AllFlightList.clear()
+
+                        TripDetailsList[0]!!.flights?.let { AllFlightList.addAll(it) }
+
+
+                        fromCityName = binding.fromcityname.text.toString()
+                        toCityName = binding.tocityname.text.toString()
                         startActivity(Intent(requireContext(), FlightDetailListActivity::class.java))
-                    } else {
+                        pd.dismiss()
+                    }
+                    else {
                         toast(response?.responseHeader?.errorInnerException ?: "Error")
                     }
                     pd.dismiss()
@@ -664,9 +725,18 @@ class FlightMainFragment : Fragment(), FlightSpecialOfferAdapter.setClickListner
         }
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+
+
+    fun getFilterAirLineList(): List<FilterAirLine> {
+        var airlinecodeList: MutableList<FilterAirLine> = mutableListOf()
+        airlinecodeList.add(FilterAirLine(airlineCode = ""))
+        return airlinecodeList
     }
 
     fun getTripInfoList(): List<TripInfo> {

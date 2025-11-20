@@ -2,6 +2,8 @@ package com.bos.payment.appName.ui.view.travel.adapter
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,7 +29,14 @@ import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Compa
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightDetailListActivity
 import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.FlightDetailsBottomSheet
 import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.SelectTravellersClassBottomSheet
+import com.bos.payment.appName.utils.MStash
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -37,6 +46,7 @@ class FlightDetailsAdapter (private val context: Context, private var flightList
         var segmentList : MutableList<SegmentsItem> = mutableListOf()
         var fareList : MutableList<FaresItem> = mutableListOf()
         var selectionPosition= -1
+        private var mStash: MStash? = null
 
 
 
@@ -57,6 +67,7 @@ class FlightDetailsAdapter (private val context: Context, private var flightList
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         segmentList.clear()
         fareList.clear()
+        mStash = MStash.getInstance(context)
 
         flightList[position].segments?.let { segmentList.addAll(it) }
 
@@ -65,7 +76,36 @@ class FlightDetailsAdapter (private val context: Context, private var flightList
         holder.flightname.text= segmentList!![0].airlineName
 
         var airportIcon = GetAirlineLogo(flightList[position].airlineCode)
-        Glide.with(context).load(airportIcon).into(holder.flighticon)
+
+        Log.d("IMAGE_URL", airportIcon)
+
+
+        Glide.with(context)
+            .load(airportIcon)
+            .error(R.drawable.ic_error)
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    Log.e("GLIDE_ERROR", "Error: ${e?.rootCauses}")
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    return false
+                }
+
+            })
+            .into(holder.flighticon)
 
         if(segmentList.size==1){
             holder.fromcityname.text= segmentList[segmentList.size-1].originCity
@@ -137,6 +177,7 @@ class FlightDetailsAdapter (private val context: Context, private var flightList
         holder.booknow.setOnClickListener {
             FlightDetails.clear()
             FlightDetails.add(flightList[position])
+            mStash!!.setStringValue(FlightConstant.airlinecode,flightList[position].airlineCode)
             val bottomfrag = FlightDetailsBottomSheet()
             (context as FlightDetailListActivity).supportFragmentManager.let { bottomfrag.show(it, FlightDetailsBottomSheet.TAG) }
         }

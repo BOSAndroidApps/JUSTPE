@@ -1,3 +1,4 @@
+/*
 package com.bos.payment.appName.ui.view.travel.flightBooking.activity
 
 import android.app.DatePickerDialog
@@ -450,17 +451,12 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
 
         binding.searchflightlayout.setOnClickListener {
 
-            if (!fromCountryName.equals(
-                    "India",
-                    ignoreCase = true
-                ) || !toCountryName.equals("India", ignoreCase = true)
-            ) {
+            if (!fromCountryName.equals("India", ignoreCase = true) || !toCountryName.equals("India", ignoreCase = true)) {
                 travelType = 1
-            } else {
+            }
+            else {
                 travelType = 0
             }
-
-
 
             if (bookingType !in 0..2) {
                 toast("Invalid Booking Type")
@@ -504,6 +500,7 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
                 val day = c.get(Calendar.DAY_OF_MONTH)
                 travelDate = String.format("%02d/%02d/%04d", month + 1, day, year)
             }
+
 
             // All validations passed
             hitApiForSearchFlight()
@@ -719,14 +716,16 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
                                         ?.map { it to false }
                                         ?.toMutableList() ?: mutableListOf()
 
+                                    Log.d("AirlineName",Gson().toJson(airportNameList))
+
                                     AllFlightList.clear()
 
                                     TripDetailsList[0]!!.flights?.let { AllFlightList.addAll(it) }
 
+
                                     fromCityName = binding.fromcityname.text.toString()
                                     toCityName = binding.tocityname.text.toString()
-                                    startActivity(Intent(this, FlightDetailListActivity::class.java)
-                                    )
+                                    startActivity(Intent(this, FlightDetailListActivity::class.java))
                                     pd.dismiss()
                                 } else {
                                     toast(response.responseHeader.errorInnerException)
@@ -773,7 +772,8 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
     }
 
 
-    /*fun uploadAirportListOnFirebaseConsole(data:String, collectionPath:String){
+    */
+/*fun uploadAirportListOnFirebaseConsole(data:String, collectionPath:String){
 
         val db = Firebase.firestore
 
@@ -798,7 +798,8 @@ class FlightMainActivity : AppCompatActivity(), FlightSpecialOfferAdapter.setCli
                 Log.d("Error", " $e.message")
                 Toast.makeText(this, "Failed: ${e.message}", Toast.LENGTH_SHORT).show()
             }
-    }*/
+    }*//*
 
 
-}
+
+}*/

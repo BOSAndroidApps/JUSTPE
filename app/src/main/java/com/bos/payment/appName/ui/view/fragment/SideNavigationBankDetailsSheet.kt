@@ -56,7 +56,6 @@ import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsP
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.flightDetailsPassangerDetail
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.infantList
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.segmentListPassangerDetail
-import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
 import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
 import com.bos.payment.appName.ui.viewmodel.GetAllMobileRechargeViewModel
 import com.bos.payment.appName.utils.ApiStatus

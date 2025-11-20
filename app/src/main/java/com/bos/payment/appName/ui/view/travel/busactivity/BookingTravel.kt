@@ -23,7 +23,6 @@ import com.bos.payment.appName.data.repository.TravelRepository
 import com.bos.payment.appName.data.viewModelFactory.TravelViewModelFactory
 import com.bos.payment.appName.databinding.ActivityBookingTravelBinding
 import com.bos.payment.appName.network.RetrofitClient
-import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
 import com.bos.payment.appName.ui.view.travel.model.DateModel
 import com.bos.payment.appName.ui.viewmodel.TravelViewModel
 import com.bos.payment.appName.utils.ApiStatus
@@ -234,7 +233,7 @@ class BookingTravel : AppCompatActivity() {
             bin.flightcard.setCardBackgroundColor(resources.getColor(R.color.white))
             bin.flighticon.imageTintList= resources.getColorStateList(R.color.blue)
             bin.flights.setTextColor(resources.getColor(R.color.blue))*/
-            startActivity(Intent(this, FlightMainActivity::class.java))
+           //startActivity(Intent(this, FlightMainActivity::class.java))
         }
 
         bin.trainsLayout.setOnClickListener {

@@ -8,17 +8,28 @@ import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.bos.payment.appName.R
+import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommissionReq
+import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommissionResp
+import com.bos.payment.appName.data.model.travel.flight.AirCommissionReq
+import com.bos.payment.appName.data.model.travel.flight.AirCommissionResp
 import com.bos.payment.appName.data.model.travel.flight.AirRepriceRequests
 import com.bos.payment.appName.data.model.travel.flight.AirReprintReq
 import com.bos.payment.appName.data.model.travel.flight.AirTicketingReq
@@ -45,6 +56,7 @@ import com.bos.payment.appName.databinding.GstDetailsLayoutBinding
 import com.bos.payment.appName.databinding.ReviewDetailsPassangerItemlayoutBinding
 import com.bos.payment.appName.databinding.TravellersclassItemBottomsheetBinding
 import com.bos.payment.appName.network.RetrofitClient
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.serviceChargeWithGST
 import com.bos.payment.appName.ui.view.travel.adapter.FlightTicketDetailsAdapter
 import com.bos.payment.appName.ui.view.travel.adapter.PassangerDataList
 import com.bos.payment.appName.ui.view.travel.adapter.PassangerDetailsListShownAdapter
@@ -58,6 +70,7 @@ import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Compa
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.infantCount
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.totalCount
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.totalDurationTime
+import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant.Companion.travelType
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.adultList
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.childList
@@ -68,7 +81,6 @@ import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsP
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.AddDetailsPassangerActivity.Companion.segmentListPassangerDetail
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightBookedTicketActivity
 import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightBookedTicketActivity.Companion.BookedTicketList
-import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
 import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
 import com.bos.payment.appName.ui.viewmodel.TravelViewModel
 import com.bos.payment.appName.utils.ApiStatus
@@ -94,12 +106,14 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
     lateinit var viewModel : TravelViewModel
     private var mStash: MStash? = null
     lateinit var pd : ProgressDialog
+    lateinit var dialogg: Dialog
     private lateinit var getAllApiServiceViewModel: GetAllApiServiceViewModel
 
     companion object {
         const val TAG = "ReviewDetailsBottomSheet"
         var passangerDetailsList: MutableList<PassangerDataList> = mutableListOf()
         var tempBookingPassangerDetails: MutableList<TempBookingPassangerDetails> = mutableListOf()
+        var BaseFareAmount : String = ""
     }
 
 
@@ -212,7 +226,11 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
                                 mStash!!.setStringValue(Constants.BookingRefNo,response.bookingRefNo)
 
                                 if(response.responseHeader.errorCode.equals("0000")){
-                                    getAllWalletBalance()
+                                    // check commission slab ....................................
+
+                                    getCommissionRequestRetailer()
+
+                                    //getAllWalletBalance()
                                 }
 
                                 if(response.responseHeader.errorCode.equals("0004")){
@@ -364,7 +382,7 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
             iPAddress = mStash?.getStringValue(Constants.deviceIPAddress, ""),
             requestId =  mStash?.getStringValue(Constants.requestId, ""),
             imeINumber = "2232323232323",
-            registrationID = mStash?.getStringValue(Constants.MerchantId, "")/*"AOP-554"*/
+            registrationID = mStash?.getStringValue(Constants.MerchantId, "")
         )
 
         Log.d("AddPaymentReq", Gson().toJson(flightaddpaymentreq))
@@ -538,6 +556,7 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
     }
 
 
+
     fun getpaxDetails(): MutableList<PaXDetailsFlight> {
         val paxDetailsList = mutableListOf<PaXDetailsFlight>()
 
@@ -585,16 +604,17 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
     }
 
 
+
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
        // (activity as? FlightMainActivity)?.setData()
 
-        if(context is FlightMainActivity){
+        /*if(context is FlightMainActivity){
             (context as? FlightMainActivity)?.setData()
         }
-        else {
+        else {*/
             (scanForActivity(context)?.supportFragmentManager?.findFragmentByTag("FlightMainFragment") as? FlightMainFragment)?.setData()
-        }
+       // }
 
     }
 
@@ -629,6 +649,328 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
                 }
             }
         }
+
+
+    private fun getCommissionRequestRetailer(){
+        var adminCode =  mStash!!.getStringValue(Constants.AdminCode,"")
+        var retailerId =  mStash!!.getStringValue(Constants.RegistrationId,"")
+        var airCategory = ""
+        if(travelType==0){
+            airCategory = "DOMESTIC"
+        }
+        else{
+            airCategory = "INTERNATIONAL"
+        }
+        var operatorId =  mStash!!.getStringValue(FlightConstant.airlinecode,"")
+
+        var rechargeAmount = mStash!!.getStringValue(Constants.AirTotalTicketPrice, "")
+
+        hitCommissionAPIRetailer(operatorId!!, retailerId!!, adminCode!!, airCategory, rechargeAmount!!)
+
+    }
+
+    fun hitCommissionAPIRetailer(operatorID: String, retailerId: String, adminCode: String, airCategory: String, rechargeAmount: String) {
+
+        val req = AirCommissionReq(
+            productSource = "F0134",
+            retailerType = "SPECIFIC",
+            airCategory = airCategory,
+            adminCode = adminCode,
+            userType = "B2B",
+            retailerID = retailerId,
+            operatorID = operatorID,
+        )
+
+        Log.d("RetailerFlightCommissionReq",Gson().toJson(req))
+
+        getAllApiServiceViewModel.getFlightCommissionRequest(req).observe(this) { resource ->
+            when (resource.apiStatus) {
+                ApiStatus.SUCCESS -> {
+                    val response = resource.data?.body()
+                    pd.dismiss()
+                    Log.d("RetailerCommissionResp",Gson().toJson(response))
+                    if (response != null && response.isSuccess!!) {
+                        getAllServiceChargeApiResRetailer(response, rechargeAmount)
+                    }
+                    else {
+
+                        // Save commission types in shared preferences
+                        with(mStash!!) {
+                            setStringValue(Constants.retailer_CommissionType, "")
+                            setStringValue(Constants.serviceType, "")
+                        }
+
+                        mStash!!.setStringValue(Constants.retailerCommissionWithoutTDS, String.format("%.2f", 0.0))
+                        mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", 0.0))
+                        mStash!!.setStringValue(Constants.tds, String.format("%.2f", 0.0))
+
+                        val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + 0.0
+                        mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
+
+                        serviceChargeWithGST = mStash!!.getStringValue(Constants.serviceChargeWithGST, "")!!
+                        mStash!!.setStringValue(Constants.gst, String.format("%.2f", 0.0))
+                        mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", 0.0))
+                        mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", 0.0))
+                        mStash!!.setStringValue(Constants.tds, String.format("%.2f", 0.0))
+
+                        var msg = "Warning : Slab structure not found. This transaction will proceed without any commission being credited."
+                        openDialogForPayout(rechargeAmount.toDoubleOrNull() ?: 0.0, 0.0, totalRechargeAmount, 0.0, msg)
+
+                    }
+                }
+                ApiStatus.ERROR -> pd.dismiss()
+                ApiStatus.LOADING -> pd.show()
+            }
+        }
+
+    }
+
+    private fun getAllServiceChargeApiResRetailer(response: AirCommissionResp, rechargeAmount: String) {
+        if (response.isSuccess!!) {
+            // Parse values safely
+            val rechargeAmountValue = rechargeAmount.toDoubleOrNull() ?: 0.0
+            val retailerCommission = response!!.data!![0]?.commissionValue ?: 0.0
+
+            val TDSTax = 5.0 // Fixed TDS rate
+
+            // Function to calculate commission with TDS
+            fun calculateCommission(amount: Double, type: String?, tdsRate: Double): Double {
+                return when {
+                    "percentage".equals(type, ignoreCase = true) -> {
+                        val commissionAmount = rechargeAmountValue * (amount / 100)
+                        val tdsAmount = commissionAmount * (tdsRate / 100)
+
+                        mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", commissionAmount))
+                        mStash!!.setStringValue(Constants.tds, String.format("%.2f", tdsAmount))
+
+                        commissionAmount - tdsAmount
+                    }
+
+                    "amount".equals(type, ignoreCase = true) -> {
+                        val tdsAmount = amount * (tdsRate / 100)
+
+                        mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", amount))
+                        mStash!!.setStringValue(Constants.tds, String.format("%.2f", tdsAmount))
+
+                        amount - tdsAmount
+                    }
+
+                    else -> {
+                        mStash!!.setStringValue(Constants.retailerCommission, "0.0")
+                        mStash!!.setStringValue(Constants.tds, "0.0")
+                        0.0
+                    }
+                }
+            }
+
+            // Calculate retailer commission
+            var type =  response.data!![0]?.commissionType!!.trim()?.lowercase() ?: ""
+            val finalRetailerCommission = calculateCommission(retailerCommission, type, TDSTax)
+
+            // Log results
+            Log.d("FinalRetailerCommission", String.format("%.2f", finalRetailerCommission))
+
+
+            // Service charge calculation
+            val gst = 18.0 // Fixed GST rate of 18%
+            val serviceCharge = response!!.data!![0]?.servicesValue ?: 0.0
+
+            val totalServiceChargeWithGst = serviceChargeCalculation(serviceCharge, gst, rechargeAmount, response)
+            Log.d("servicechargewithgst", String.format("%.2f", totalServiceChargeWithGst))
+
+//              Calculating the total recharge amount
+            val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + totalServiceChargeWithGst
+            Log.d("rechargeAmount", String.format("%.2f", totalRechargeAmount))
+
+            // Save commission types in shared preferences
+            with(mStash!!) {
+                setStringValue(Constants.retailer_CommissionType, response.data!![0]?.commissionType.toString())
+                setStringValue(Constants.serviceType, response.data!![0]?.servicesType.toString())
+            }
+
+            mStash!!.setStringValue(Constants.retailerCommissionWithoutTDS, String.format("%.2f", finalRetailerCommission))
+
+            mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
+
+            openDialogForPayout(rechargeAmount.toDoubleOrNull() ?: 0.0, totalServiceChargeWithGst, totalRechargeAmount, mStash!!.getStringValue(Constants.retailerCommission, "")!!.toDoubleOrNull()!!, "")
+
+        }
+        else {
+
+            // Save commission types in shared preferences
+            with(mStash!!) {
+                setStringValue(Constants.retailer_CommissionType, "")
+                setStringValue(Constants.serviceType, "")
+            }
+
+            mStash!!.setStringValue(Constants.retailerCommissionWithoutTDS, String.format("%.2f", 0.0))
+            mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", 0.0))
+            mStash!!.setStringValue(Constants.tds, String.format("%.2f", 0.0))
+
+            val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + 0.0
+            mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
+
+            serviceChargeWithGST = mStash!!.getStringValue(Constants.serviceChargeWithGST, "")!!
+            mStash!!.setStringValue(Constants.gst, String.format("%.2f", 0.0))
+            mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", 0.0))
+            mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", 0.0))
+            mStash!!.setStringValue(Constants.tds, String.format("%.2f", 0.0))
+
+            var msg = "Warning : Slab structure not found. This transaction will proceed without any commission being credited."
+            openDialogForPayout(rechargeAmount.toDoubleOrNull() ?: 0.0, 0.0, totalRechargeAmount, 0.0, msg)
+
+        }
+
+    }
+
+    private fun serviceChargeCalculation(serviceCharge: Double, gstRate: Double, rechargeAmount: String, response: AirCommissionResp): Double {
+
+        val rechargeAmountValue = rechargeAmount.toDoubleOrNull() ?: 0.0
+        var type =  response.data!![0]?.servicesType!!.trim()?.lowercase() ?: ""
+        val totalAmountWithGst = when (type) {
+            "amount" -> {
+                // Service charge is a fixed amount
+                val serviceChargeWithGst = serviceCharge * (gstRate / 100)
+                mStash!!.setStringValue(Constants.gst, String.format("%.2f", serviceChargeWithGst))
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", serviceCharge))
+                serviceCharge + serviceChargeWithGst
+            }
+
+            "percentage" -> {
+                // Service charge is a percentage of the recharge amount
+                val serviceInAmount = rechargeAmountValue * (serviceCharge / 100)
+                val serviceWithGst = serviceInAmount * (gstRate / 100)
+                mStash!!.setStringValue(Constants.gst, String.format("%.2f", serviceWithGst))
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", serviceInAmount))
+                serviceInAmount + serviceWithGst
+
+            }
+            else -> {
+                mStash!!.setStringValue(Constants.gst, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", 0.0))
+                0.0
+            }
+        }
+
+        mStash!!.setStringValue(Constants.serviceChargeWithGST, String.format("%.2f", totalAmountWithGst))
+
+        Log.d("gstamount", mStash!!.getStringValue(Constants.gst, "").toString())
+        Log.d("servicecharge", mStash!!.getStringValue(Constants.serviceCharge, "").toString())
+        Log.d("totalAmountWithGst", mStash!!.getStringValue(Constants.serviceChargeWithGST, "").toString())
+
+        // Return the total service charge (with GST) to include in the final transaction
+        return totalAmountWithGst
+    }
+
+
+    fun openDialogForPayout(transferAmount: Double, servicechargeGst: Double, totalRechargeAmount: Double, retailerCommission: Double, msg: String) {
+        dialogg = Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialogg.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogg.setContentView(R.layout.busticketcommissionlayout)
+
+        dialogg.window?.apply {
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        }
+
+        dialogg.setCanceledOnTouchOutside(false)
+
+        val transferamttxt = dialogg.findViewById<TextView>(R.id.actualamt)
+        val servicechargewithgst = dialogg.findViewById<TextView>(R.id.servicechargewithgst)
+        val warningmsg = dialogg.findViewById<TextView>(R.id.warningmsg)
+        val transferamt = dialogg.findViewById<TextView>(R.id.transferamt)
+        val serviceChargeamount = dialogg.findViewById<TextView>(R.id.servicescharge)
+        val retailercommission = dialogg.findViewById<TextView>(R.id.retailercommission)
+        val gstamount = dialogg.findViewById<TextView>(R.id.gstamount)
+        val basefaretxt = dialogg.findViewById<TextView>(R.id.basefaretxt)
+        val cancel = dialogg.findViewById<ImageView>(R.id.cancel)
+        val done = dialogg.findViewById<LinearLayout>(R.id.Proceedbtn)
+        val viewBreakLayout = dialogg.findViewById<LinearLayout>(R.id.viewbreaklayout)
+        val servicechargelayout = dialogg.findViewById<LinearLayout>(R.id.servicechargelayout)
+        val detailsgstserviceslayout = dialogg.findViewById<LinearLayout>(R.id.chargesdetailslayout)
+        val retailercommissionlayout = dialogg.findViewById<LinearLayout>(R.id.retailercommissionlayout)
+
+        if (msg.isNotEmpty()) {
+            warningmsg.visibility = View.VISIBLE
+            warningmsg.text = msg
+        }
+        else {
+            warningmsg.visibility = View.GONE
+        }
+
+        val gst = mStash!!.getStringValue(Constants.gst, "")
+
+        mStash!!.setStringValue(Constants.serviceChargewithgst, String.format("%.2f", servicechargeGst)).toString()
+        mStash!!.setStringValue(Constants.actualbusticketamt, String.format("%.2f", transferAmount)).toString()
+
+        transferamttxt.text = "$transferAmount"
+        servicechargewithgst.text = String.format("%.2f", servicechargeGst)
+        retailercommission.text = String.format("%.2f", retailerCommission)
+        serviceChargeamount.text = mStash!!.getStringValue(Constants.serviceCharge, "").toString()
+        gstamount.text = "$gst"
+        var totalcount = adultCount + childCount + infantCount
+        basefaretxt.text = "Base Fare (${totalcount})"
+        transferamt.text = String.format("%.2f", totalRechargeAmount)
+
+        if(servicechargeGst==0.0){
+            servicechargelayout.visibility=View.GONE
+        }else{
+            servicechargelayout.visibility=View.VISIBLE
+        }
+
+        if(retailerCommission==0.0){
+            retailercommissionlayout.visibility = View.GONE
+        }
+        else{
+            retailercommissionlayout.visibility = View.VISIBLE
+        }
+
+        var checkView: Boolean = false
+
+
+        viewBreakLayout.setOnClickListener {
+            if (checkView) {
+                detailsgstserviceslayout.visibility = View.GONE
+                checkView = false
+            } else {
+                detailsgstserviceslayout.visibility = View.VISIBLE
+                checkView = true
+            }
+            if(pd!=null && pd.isShowing){
+                pd.dismiss()
+            }
+        }
+
+        done.setOnClickListener {
+            if (totalRechargeAmount > 0) {
+                mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
+                mStash!!.setStringValue(Constants.serviceChargeWithGST, String.format("%.2f", servicechargeGst))
+                mStash!!.setStringValue(Constants.actualRechargeAmount, String.format("%.2f", transferAmount))
+                getAllWalletBalance()
+            } else {
+                Toast.makeText(requireContext(), "Transfer amount must be greater than the base fare.", Toast.LENGTH_LONG).show()
+            }
+
+        }
+
+        cancel.setOnClickListener {
+            if (dialogg != null && dialogg.isShowing) {
+                dialogg.dismiss()
+            }
+
+        }
+
+        dialogg.setOnDismissListener {
+            dialogg.dismiss()
+        }
+
+        dialogg.show() // ✅ REQUIRED
+    }
+
+
+
+
 
 
 

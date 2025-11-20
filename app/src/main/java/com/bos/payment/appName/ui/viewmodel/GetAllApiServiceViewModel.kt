@@ -35,6 +35,7 @@ import com.bos.payment.appName.data.model.transactionreportsmodel.RaiseTicketReq
 import com.bos.payment.appName.data.model.transactionreportsmodel.ReportListReq
 import com.bos.payment.appName.data.model.transactionreportsmodel.TransactionReportsReq
 import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsReq
+import com.bos.payment.appName.data.model.travel.flight.AirCommissionReq
 import com.bos.payment.appName.data.model.travel.flight.FlightRequeryReq
 import com.bos.payment.appName.data.model.travel.flight.GetAirTicketListReq
 import com.bos.payment.appName.data.model.walletBalance.merchantBal.GetMerchantBalanceReq
@@ -186,6 +187,39 @@ class GetAllApiServiceViewModel constructor(private val repository: GetAllAPISer
             )
         }
     }
+
+
+
+    // for air commission request
+    fun getFlightCommissionRequest(req: AirCommissionReq) = liveData(Dispatchers.IO) {
+        emit(ApiResponse.loading(data = null))
+        try {
+            val response = withTimeout(10_000) { // 100 seconds (1 minute 40 seconds)
+                repository.getFlightCommissionReq(req)
+            }
+            emit(ApiResponse.success(response))
+        }
+        catch (e: TimeoutCancellationException) {
+            emit(ApiResponse.error(data = null, message = "Request timed out. Please try again."))
+        }
+        catch (e: IOException) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "No internet connection. Please check your network."
+                )
+            )
+        }
+        catch (e: Exception) {
+            emit(
+                ApiResponse.error(
+                    data = null,
+                    message = "Something went wrong: ${e.localizedMessage}"
+                )
+            )
+        }
+    }
+
 
 
     //dashboard banner

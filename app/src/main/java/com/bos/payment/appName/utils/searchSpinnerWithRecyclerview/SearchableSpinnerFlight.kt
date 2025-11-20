@@ -14,14 +14,9 @@ import com.bos.payment.appName.R
 import com.bos.payment.appName.data.model.travel.flight.DataItem
 import com.bos.payment.appName.ui.view.travel.adapter.AirPortListAdapter
 import com.bos.payment.appName.ui.view.travel.flightBooking.FlightConstant
-import com.bos.payment.appName.ui.view.travel.flightBooking.activity.FlightMainActivity
 import com.bos.payment.appName.ui.view.travel.flightBooking.fragment.FlightMainFragment
 
-class SearchableSpinnerFlight @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : AppCompatSpinner(context, attrs, defStyleAttr), View.OnTouchListener {
+class SearchableSpinnerFlight @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : AppCompatSpinner(context, attrs, defStyleAttr), View.OnTouchListener {
 
     companion object {
         const val NO_ITEM_SELECTED = -1
@@ -103,12 +98,12 @@ class SearchableSpinnerFlight @JvmOverloads constructor(
                             FlightConstant.toAirportName = item.airportDescription
                             FlightConstant.toCountryName = item.country
                         }
-                        if(context is FlightMainActivity){
+                        /*if(context is FlightMainActivity){
                             (context as? FlightMainActivity)?.setData()
                         }
-                        else {
+                        else {*/
                             (scanForActivity(_context)?.supportFragmentManager?.findFragmentByTag("FlightMainFragment") as? FlightMainFragment)?.setData()
-                        }
+                        /*}*/
                     }
                 }
 

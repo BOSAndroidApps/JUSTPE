@@ -2,12 +2,15 @@ package com.bos.payment.appName.ui.view.travel.busactivity
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.app.ProgressDialog
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.drawable.ColorDrawable
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.os.Build
@@ -16,10 +19,15 @@ import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -28,7 +36,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bos.payment.appName.R
+import com.bos.payment.appName.data.model.merchant.apiServiceCharge.mobileCharge.GetCommercialReq
+import com.bos.payment.appName.data.model.merchant.apiServiceCharge.mobileCharge.GetCommercialRes
+import com.bos.payment.appName.data.model.recharge.recharge.TransferToAgentReq
 import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsReq
+import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsRes
 import com.bos.payment.appName.data.model.travel.bus.addMoney.BusAddMoneyReq
 import com.bos.payment.appName.data.model.travel.bus.addMoney.BusAddMoneyRes
 import com.bos.payment.appName.data.model.travel.bus.busBooking.BusTempBookingReq
@@ -49,7 +61,13 @@ import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTempBookingReq
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTicketingReq
 import com.bos.payment.appName.data.model.travel.bus.busTicket.BusTicketingRes
 import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommissionReq
+import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommissionResp
+import com.bos.payment.appName.data.model.travel.bus.forservicecharge.DataItem
 import com.bos.payment.appName.data.model.travel.bus.forservicecharge.SeattypeModel
+import com.bos.payment.appName.data.model.walletBalance.merchantBal.GetMerchantBalanceReq
+import com.bos.payment.appName.data.model.walletBalance.merchantBal.GetMerchantBalanceRes
+import com.bos.payment.appName.data.model.walletBalance.walletBalanceCal.GetBalanceReq
+import com.bos.payment.appName.data.model.walletBalance.walletBalanceCal.GetBalanceRes
 import com.bos.payment.appName.data.repository.GetAllAPIServiceRepository
 import com.bos.payment.appName.data.repository.TravelRepository
 import com.bos.payment.appName.data.viewModelFactory.GetAllApiServiceViewModelFactory
@@ -58,6 +76,10 @@ import com.bos.payment.appName.databinding.ActivityBusSeatingBinding
 import com.bos.payment.appName.localdb.AppLog
 import com.bos.payment.appName.localdb.AppLog.d
 import com.bos.payment.appName.network.RetrofitClient
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.rechargeStatus
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.referenceId
+import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.serviceChargeWithGST
 import com.bos.payment.appName.ui.view.travel.adapter.UserPassengerDetailsAdapter
 import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
 import com.bos.payment.appName.ui.viewmodel.TravelViewModel
@@ -69,6 +91,7 @@ import com.bos.payment.appName.utils.Utils
 import com.bos.payment.appName.utils.Utils.calculateAgeFromDOB
 import com.bos.payment.appName.utils.Utils.getChangeDateFormat
 import com.bos.payment.appName.utils.Utils.getNextNumber
+import com.bos.payment.appName.utils.Utils.runIfConnected
 import com.bos.payment.appName.utils.Utils.showLoadingDialog
 import com.bos.payment.appName.utils.Utils.toast
 import com.google.gson.Gson
@@ -110,6 +133,8 @@ class BusSeating : AppCompatActivity() {
     var data = mutableListOf<MutableList<String?>>()
     var ticketDetails = mutableListOf<TicketDetailsForGenerateTicket>()
     var forServiceChargeSeatType : MutableList<SeattypeModel> = mutableListOf()
+    var rechargeAmount : String =""
+    lateinit var dialog: Dialog
 
     private val date = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
         view.maxDate = System.currentTimeMillis()
@@ -163,6 +188,7 @@ class BusSeating : AppCompatActivity() {
     }
 
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setClickListeners() {
         bin.backBtn.setOnClickListener {
@@ -205,9 +231,8 @@ class BusSeating : AppCompatActivity() {
         }
 
         bin.reviewBookingInclude.proceedToPay.setOnClickListener {
-            // checking for ticket booking.........................................
-            getAllBusAddMoney(mStash.getStringValue(Constants.booking_RefNo, "").toString())
-
+            // checking  commission slab for ticket booking.........................................
+            getCommissionRequestRetailer()
         }
 
         bin.reviewBookingInclude.showTicketBtn.setOnClickListener {
@@ -227,7 +252,6 @@ class BusSeating : AppCompatActivity() {
         }
 
     }
-
 
     private fun getAllBusRequaryTicket() {
         val busRequery = BusRequeryReq(
@@ -262,40 +286,502 @@ class BusSeating : AppCompatActivity() {
 
     }
 
+    private fun getSeatTypes(): List<Pair<String,String>> {
+        val types = mutableListOf<Pair<String,String>>()
+
+        val sleeper = forServiceChargeSeatType[0].sleeper
+        val seater = forServiceChargeSeatType[0].seater
+
+        if (sleeper != 0) types.add( Pair("2","SLEEPER"))
+        if (seater != 0) types.add(Pair("1","SEATER"))
+
+        return types // size 1 (single) or 2 (both)
+    }
 
     // for adding commission and service charge
-    private fun getCommissionRequest(){
-        val commissionreq = BusCommissionReq(
-            productSource = "",
-            seatType = "",
-            retailerType = "",
-            busCategory = "",
-            admincode = "",
-            userType = "",
-            retailerID = ""
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("DefaultLocale", "SetTextI18n", "SuspiciousIndentation")
+    private fun getCommissionRequestRetailer(){
+        var adminCode =  mStash.getStringValue(Constants.AdminCode,"")
+        var retailerId =  mStash.getStringValue(Constants.RegistrationId,"")
+        var buscategory =  forServiceChargeSeatType.get(0).busType
+
+        var seattype = getSeatTypes()
+
+        if (seattype.size == 1) {
+            // Only Sleeper or only Seater
+            hitCommissionAPIRetailer(seattype[0].second, retailerId!!, adminCode!!, buscategory, rechargeAmount){resp ->
+                Log.d("commissionresp", Gson().toJson(resp))
+            }
+        }
+        else {
+            // Both Sleeper + Seater
+            hitBothSeatTypeApiRetailer(seattype, retailerId!!, adminCode!!, buscategory, rechargeAmount)
+        }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("DefaultLocale", "SetTextI18n", "SuspiciousIndentation")
+    fun hitCommissionAPIRetailer(seatType: String, retailerId: String, adminCode: String, busCategory: String, rechargeAmount: String,callback: (BusCommissionResp) -> Unit) {
+
+        val req = BusCommissionReq(
+            productSource = "F0133",
+            seatType = seatType,
+            retailerType = "SPECIFIC",
+            busCategory = busCategory,
+            admincode = adminCode,
+            userType = "B2B",
+            retailerID = retailerId,
         )
+        Log.d("RetailerCommissionReq",Gson().toJson(req))
 
-        Log.d("commissionRequest", Gson().toJson(commissionreq))
-
-        viewModel.getBusCommissionRequest(commissionreq).observe(this) { resource ->
-            resource?.let {
-                when (it.apiStatus) {
-                    ApiStatus.SUCCESS -> {
-
+        viewModel.getBusCommissionRequest(req).observe(this) { resource ->
+            when (resource.apiStatus) {
+                ApiStatus.SUCCESS -> {
+                    val response = resource.data?.body()
+                    Log.d("RetailerCommissionResp",Gson().toJson(response))
+                    if (response != null && response.isSuccess!!) {
+                        getAllServiceChargeApiResRetailer(response, rechargeAmount)
                     }
+                    else {
 
-                    ApiStatus.ERROR -> {
-                        pd.dismiss()
-                    }
+                        // Save commission types in shared preferences
+                        with(mStash!!) {
+                            setStringValue(Constants.retailer_CommissionType, "")
+                            setStringValue(Constants.serviceType, "")
+                        }
 
-                    ApiStatus.LOADING -> {
-                        pd.show()
+                        mStash!!.setStringValue(Constants.retailerCommissionWithoutTDS, String.format("%.2f", 0.0))
+                        mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", 0.0))
+                        mStash!!.setStringValue(Constants.tds, String.format("%.2f", 0.0))
+
+                        val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + 0.0
+                        mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
+
+                        serviceChargeWithGST = mStash!!.getStringValue(Constants.serviceChargeWithGST, "")!!
+                        mStash!!.setStringValue(Constants.gst, String.format("%.2f", 0.0))
+                        mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", 0.0))
+                        mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", 0.0))
+                        mStash!!.setStringValue(Constants.tds, String.format("%.2f", 0.0))
+
+                        var msg = "Warning : Slab structure not found. This transaction will proceed without any commission being credited."
+                        openDialogForPayout(rechargeAmount.toDoubleOrNull() ?: 0.0, 0.0, totalRechargeAmount, 0.0, msg)
+
                     }
                 }
+                ApiStatus.ERROR -> pd.dismiss()
+                ApiStatus.LOADING -> pd.show()
             }
+        }
+
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("DefaultLocale", "SetTextI18n", "SuspiciousIndentation")
+    fun hitBothSeatTypeApiRetailer(seatTypes: List<Pair<String,String>>, retailerId: String, adminCode: String, busCategory: String, rechargeAmount: String) {
+
+        var commissionResp1: BusCommissionResp? = null
+        var commissionResp2: BusCommissionResp? = null
+
+        fun tryMerge() {
+            if (commissionResp1 != null && commissionResp2 != null) {
+                mergeAndCalculateRetailer(commissionResp1!!, commissionResp2!!, rechargeAmount)
+            }
+        }
+
+
+        hitCommissionAPIRetailer(seatTypes[0].second, retailerId, adminCode, busCategory, rechargeAmount) { resp ->
+            commissionResp1 = resp
+            Log.d("RetailerBothCommissionResp", Gson().toJson(resp))
+            tryMerge()
+        }
+
+        hitCommissionAPIRetailer(seatTypes[1].second, retailerId, adminCode, busCategory, rechargeAmount) { resp ->
+            commissionResp2 = resp
+            Log.d("RetailerBothCommissionResp", Gson().toJson(resp))
+            tryMerge()
+        }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("DefaultLocale", "SetTextI18n", "SuspiciousIndentation")
+    private fun mergeAndCalculateRetailer(resp1: BusCommissionResp, resp2: BusCommissionResp, rechargeAmount: String) {
+
+        val combined = BusCommissionResp(
+            isSuccess = true,
+            data = listOf(
+                DataItem(
+                    commissionValue = (resp1.data!![0].commissionValue ?: 0.0) + (resp2.data[0].commissionValue ?: 0.0),
+                    commissionType = resp1.data!![0].commissionType, // assume same type
+                    servicesValue = (resp1.data!![0].servicesValue ?: 0.0) + (resp2.data[0].servicesValue ?: 0.0),
+                    servicesType = resp1.data!![0].servicesType // assume same
+                 )
+            )
+        )
+
+        getAllServiceChargeApiResRetailer(combined, rechargeAmount)
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("DefaultLocale", "SetTextI18n", "SuspiciousIndentation")
+    private fun getAllServiceChargeApiResRetailer(response: BusCommissionResp, rechargeAmount: String) {
+        if (response.isSuccess!!) {
+                // Parse values safely
+                val rechargeAmountValue = rechargeAmount.toDoubleOrNull() ?: 0.0
+                val retailerCommission = response!!.data!![0]?.commissionValue ?: 0.0
+
+                val TDSTax = 5.0 // Fixed TDS rate
+
+                // Function to calculate commission with TDS
+                fun calculateCommission(amount: Double, type: String?, tdsRate: Double): Double {
+                    return when {
+                        "percentage".equals(type, ignoreCase = true) -> {
+                            val commissionAmount = rechargeAmountValue * (amount / 100)
+                            val tdsAmount = commissionAmount * (tdsRate / 100)
+
+                            mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", commissionAmount))
+                            mStash!!.setStringValue(Constants.tds, String.format("%.2f", tdsAmount))
+
+                            commissionAmount - tdsAmount
+                        }
+
+                        "amount".equals(type, ignoreCase = true) -> {
+                            val tdsAmount = amount * (tdsRate / 100)
+
+                            mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", amount))
+                            mStash!!.setStringValue(Constants.tds, String.format("%.2f", tdsAmount))
+
+                            amount - tdsAmount
+                        }
+
+                        else -> {
+                            mStash!!.setStringValue(Constants.retailerCommission, "0.0")
+                            mStash!!.setStringValue(Constants.tds, "0.0")
+                            0.0
+                        }
+                    }
+                }
+
+                // Calculate retailer commission
+                var type =  response.data[0].commissionType!!.trim()?.lowercase() ?: ""
+                val finalRetailerCommission = calculateCommission(retailerCommission, type, TDSTax)
+
+                // Log results
+                Log.d("FinalRetailerCommission", String.format("%.2f", finalRetailerCommission))
+
+
+                // Service charge calculation
+                val gst = 18.0 // Fixed GST rate of 18%
+                val serviceCharge = response!!.data!![0]?.servicesValue ?: 0.0
+
+                val totalServiceChargeWithGst = serviceChargeCalculation(serviceCharge, gst, rechargeAmount, response)
+                Log.d("servicechargewithgst", String.format("%.2f", totalServiceChargeWithGst))
+
+//              Calculating the total recharge amount
+                val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + totalServiceChargeWithGst
+                Log.d("rechargeAmount", String.format("%.2f", totalRechargeAmount))
+
+                // Save commission types in shared preferences
+                with(mStash!!) {
+                    setStringValue(Constants.retailer_CommissionType, response.data!![0]?.commissionType.toString())
+                    setStringValue(Constants.serviceType, response.data!![0]?.servicesType.toString())
+                }
+
+                mStash!!.setStringValue(Constants.retailerCommissionWithoutTDS, String.format("%.2f", finalRetailerCommission))
+
+                mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
+
+                openDialogForPayout(rechargeAmount.toDoubleOrNull() ?: 0.0, totalServiceChargeWithGst, totalRechargeAmount, mStash!!.getStringValue(Constants.retailerCommission, "")!!.toDoubleOrNull()!!, "")
+
+            }
+        else {
+
+                // Save commission types in shared preferences
+                with(mStash!!) {
+                    setStringValue(Constants.retailer_CommissionType, "")
+                    setStringValue(Constants.serviceType, "")
+                }
+
+                mStash!!.setStringValue(Constants.retailerCommissionWithoutTDS, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.tds, String.format("%.2f", 0.0))
+
+                val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + 0.0
+                mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
+
+                serviceChargeWithGST = mStash!!.getStringValue(Constants.serviceChargeWithGST, "")!!
+                mStash!!.setStringValue(Constants.gst, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.tds, String.format("%.2f", 0.0))
+
+                var msg = "Warning : Slab structure not found. This transaction will proceed without any commission being credited."
+                openDialogForPayout(rechargeAmount.toDoubleOrNull() ?: 0.0, 0.0, totalRechargeAmount, 0.0, msg)
+
+            }
+
+    }
+
+
+
+    @SuppressLint("DefaultLocale", "SetTextI18n")
+    private fun serviceChargeCalculation(serviceCharge: Double, gstRate: Double, rechargeAmount: String, response: BusCommissionResp): Double {
+
+        val rechargeAmountValue = rechargeAmount.toDoubleOrNull() ?: 0.0
+        var type =  response.data!![0]?.servicesType!!.trim()?.lowercase() ?: ""
+        val totalAmountWithGst = when (type) {
+            "amount" -> {
+                // Service charge is a fixed amount
+                val serviceChargeWithGst = serviceCharge * (gstRate / 100)
+                mStash!!.setStringValue(Constants.gst, String.format("%.2f", serviceChargeWithGst))
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", serviceCharge))
+                serviceCharge + serviceChargeWithGst
+            }
+
+            "percentage" -> {
+                // Service charge is a percentage of the recharge amount
+                val serviceInAmount = rechargeAmountValue * (serviceCharge / 100)
+                val serviceWithGst = serviceInAmount * (gstRate / 100)
+                mStash!!.setStringValue(Constants.gst, String.format("%.2f", serviceWithGst))
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", serviceInAmount))
+                serviceInAmount + serviceWithGst
+
+            }
+            else -> {
+                mStash!!.setStringValue(Constants.gst, String.format("%.2f", 0.0))
+                mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", 0.0))
+                0.0
+            }
+        }
+
+        mStash!!.setStringValue(Constants.serviceChargeWithGST, String.format("%.2f", totalAmountWithGst))
+
+        Log.d("gstamount", mStash!!.getStringValue(Constants.gst, "").toString())
+        Log.d("servicecharge", mStash!!.getStringValue(Constants.serviceCharge, "").toString())
+        Log.d("totalAmountWithGst", mStash!!.getStringValue(Constants.serviceChargeWithGST, "").toString())
+
+        // Return the total service charge (with GST) to include in the final transaction
+        return totalAmountWithGst
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("SetTextI18n")
+    fun openDialogForPayout(transferAmount: Double, servicechargeGst: Double, totalRechargeAmount: Double, retailerCommission: Double, msg: String) {
+        dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.busticketcommissionlayout)
+
+        dialog.window?.apply {
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        }
+
+        dialog.setCanceledOnTouchOutside(false)
+
+        val transferamttxt = dialog.findViewById<TextView>(R.id.actualamt)
+        val servicechargewithgst = dialog.findViewById<TextView>(R.id.servicechargewithgst)
+        val warningmsg = dialog.findViewById<TextView>(R.id.warningmsg)
+        val transferamt = dialog.findViewById<TextView>(R.id.transferamt)
+        val serviceChargeamount = dialog.findViewById<TextView>(R.id.servicescharge)
+        val retailercommission = dialog.findViewById<TextView>(R.id.retailercommission)
+        val gstamount = dialog.findViewById<TextView>(R.id.gstamount)
+        val basefaretxt = dialog.findViewById<TextView>(R.id.basefaretxt)
+        val cancel = dialog.findViewById<ImageView>(R.id.cancel)
+        val done = dialog.findViewById<LinearLayout>(R.id.Proceedbtn)
+        val viewBreakLayout = dialog.findViewById<LinearLayout>(R.id.viewbreaklayout)
+        val servicechargelayout = dialog.findViewById<LinearLayout>(R.id.servicechargelayout)
+        val detailsgstserviceslayout = dialog.findViewById<LinearLayout>(R.id.chargesdetailslayout)
+        val retailercommissionlayout = dialog.findViewById<LinearLayout>(R.id.retailercommissionlayout)
+
+        if (msg.isNotEmpty()) {
+            warningmsg.visibility = View.VISIBLE
+            warningmsg.text = msg
+        }
+        else {
+            warningmsg.visibility = View.GONE
+        }
+
+        val gst = mStash!!.getStringValue(Constants.gst, "")
+
+        mStash!!.setStringValue(Constants.serviceChargewithgst, String.format("%.2f", servicechargeGst)).toString()
+        mStash!!.setStringValue(Constants.actualbusticketamt, String.format("%.2f", transferAmount)).toString()
+
+        transferamttxt.text = "$transferAmount"
+        servicechargewithgst.text = String.format("%.2f", servicechargeGst)
+        retailercommission.text = String.format("%.2f", retailerCommission)
+        serviceChargeamount.text = mStash!!.getStringValue(Constants.serviceCharge, "").toString()
+        gstamount.text = "$gst"
+
+        var totalcount = forServiceChargeSeatType[0].seater + forServiceChargeSeatType[0].sleeper
+
+        basefaretxt.text = "Base Fare (${totalcount})"
+        transferamt.text = String.format("%.2f", totalRechargeAmount)
+
+        if(servicechargeGst==0.0){
+            servicechargelayout.visibility=View.GONE
+        }else{
+            servicechargelayout.visibility=View.VISIBLE
+        }
+
+        if(retailerCommission==0.0){
+            retailercommissionlayout.visibility = View.GONE
+        }
+        else{
+            retailercommissionlayout.visibility = View.VISIBLE
+        }
+
+        var checkView: Boolean = false
+
+
+        viewBreakLayout.setOnClickListener {
+            if (checkView) {
+                detailsgstserviceslayout.visibility = View.GONE
+                checkView = false
+            } else {
+                detailsgstserviceslayout.visibility = View.VISIBLE
+                checkView = true
+            }
+            if(pd!=null && pd.isShowing){
+                pd.dismiss()
+            }
+        }
+
+        done.setOnClickListener {
+            if (totalRechargeAmount > 0) {
+                mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
+                mStash!!.setStringValue(Constants.serviceChargeWithGST, String.format("%.2f", servicechargeGst))
+                mStash!!.setStringValue(Constants.actualRechargeAmount, String.format("%.2f", transferAmount))
+                getAllWalletBalance()
+            } else {
+                Toast.makeText(this, "Transfer amount must be greater than the base fare.", Toast.LENGTH_LONG).show()
+            }
+
+        }
+
+        cancel.setOnClickListener {
+            if (dialog != null && dialog.isShowing) {
+                dialog.dismiss()
+            }
+
+        }
+
+        dialog.setOnDismissListener {
+            dialog.dismiss()
+        }
+
+        dialog.show() // ✅ REQUIRED
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getAllWalletBalance() {
+       runIfConnected {
+            val walletBalanceReq = GetBalanceReq(
+                parmUser = mStash!!.getStringValue(Constants.RegistrationId, ""),
+                flag = "CreditBalance"
+            )
+            getAllApiServiceViewModel.getWalletBalance(walletBalanceReq)
+                .observe(this) { resource ->
+                    resource?.let {
+                        when (it.apiStatus) {
+                            ApiStatus.SUCCESS -> {
+                                it.data?.let { users ->
+                                    users.body()?.let { response ->
+                                        getAllWalletBalanceRes(response)
+                                    }
+                                }
+                            }
+
+                            ApiStatus.ERROR -> {
+                                pd.dismiss()
+                            }
+
+                            ApiStatus.LOADING -> {
+                                pd.show()
+                            }
+                        }
+                    }
+                }
         }
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("SetTextI18n", "DefaultLocale")
+    private fun getAllWalletBalanceRes(response: GetBalanceRes) {
+        if (response.isSuccess == true) {
+            val mainBalance = (response.data[0].result!!.toDoubleOrNull() ?: 0.0)
+            getMerchantBalance(mainBalance)
+
+            Log.d("actualBalance", "main = $mainBalance")
+
+            val totalAmount = mStash!!.getStringValue(Constants.totalTransaction, "")?.toDoubleOrNull() ?: 0.0
+
+        } else {
+            toast(response.returnMessage.toString())
+        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getMerchantBalance(mainBalance: Double) {
+        val getMerchantBalanceReq = GetMerchantBalanceReq(
+            parmUser = mStash!!.getStringValue(Constants.MerchantId, ""),
+            flag = "DebitBalance"
+        )
+        getAllApiServiceViewModel.getAllMerchantBalance(getMerchantBalanceReq)
+            .observe(this) { resource ->
+                resource?.let {
+                    when (it.apiStatus) {
+                        ApiStatus.SUCCESS -> {
+                            it.data?.let { users ->
+                                users.body()?.let { response ->
+                                    getAllMerchantBalanceRes(response, mainBalance)
+                                }
+                            }
+                        }
+
+                        ApiStatus.ERROR -> {
+                            pd.dismiss()
+                        }
+
+                        ApiStatus.LOADING -> {
+                            pd.show()
+                        }
+                    }
+                }
+            }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getAllMerchantBalanceRes(response: GetMerchantBalanceRes, mainBalance: Double) {
+        if (response.isSuccess == true) {
+            Log.d(TAG, "getAllMerchantBalanceRes: ${response.data[0].debitBalance}")
+            mStash!!.setStringValue(Constants.merchantBalance, response.data[0].debitBalance)
+
+            val totalAmount = mStash!!.getStringValue(Constants.totalTransaction, "")?.toDoubleOrNull() ?: 0.0
+            val merchantBalance = response.data[0].debitBalance?.toDoubleOrNull() ?: 0.0
+
+            Log.d("balanceCheck", "MainBal = $mainBalance, merchantBal = $merchantBalance,totalAmount = $totalAmount, Status = ${totalAmount <= mainBalance && totalAmount <= merchantBalance}")
+
+            if (totalAmount <= mainBalance && totalAmount <= merchantBalance) {
+                 getAllBusAddMoney(mStash.getStringValue(Constants.booking_RefNo, "").toString())
+            } else {
+                pd.dismiss()
+                Toast.makeText(this, "Your merchant balance is low. Please contact the administrator", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            pd.dismiss()
+            Toast.makeText(this, response.returnMessage.toString(), Toast.LENGTH_SHORT).show()
+        }
+    }
 
 
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
@@ -351,6 +837,7 @@ class BusSeating : AppCompatActivity() {
             bin.confirmBookingLayout.busType.text = response.busDetail?.busType.toString()
 
             response.paXDetails.forEach { fareDetails ->
+
                 // Extract and parse individual amounts safely
                 val basicAmount = fareDetails.fare?.basicAmount ?: 0
                 val gst = fareDetails.fare?.gst ?: 0
@@ -378,7 +865,6 @@ class BusSeating : AppCompatActivity() {
                     response.busDetail?.busType.toString(),"₹ $basicAmount", "₹ $gst","₹ $otherAmount","₹ " + bin.confirmBookingLayout.conveniencesFees.text.toString().trim(),"₹ $totalAmount"))
            }
 
-
             var PaxRequeryResponseReq = BusPaxRequeryResponseReq(
                 loginId = mStash!!.getStringValue(Constants.RegistrationId, ""),
                 bookingRefNo = response.bookingRefNo,
@@ -396,12 +882,12 @@ class BusSeating : AppCompatActivity() {
             hitApiforPassDetailsListResponse(PaxRequeryResponseReq)
 
 
-        } else {
-            Toast.makeText(this, response?.responseHeader?.errorInnerException.toString(), Toast.LENGTH_SHORT).show()
         }
+
+        else {
+            Toast.makeText(this, response?.responseHeader?.errorInnerException.toString(), Toast.LENGTH_SHORT).show()
+         }
     }
-
-
 
     fun hitApiforPassDetailsListResponse(PaxRequeryResponseReq: BusPaxRequeryResponseReq){
         Log.d("BusRequeryRequest", Gson().toJson(PaxRequeryResponseReq))
@@ -433,8 +919,6 @@ class BusSeating : AppCompatActivity() {
 
     }
 
-
-
     fun generateQrCode(content: String, size: Int = 512): Bitmap {
         val hints = Hashtable<EncodeHintType, String>().apply {
             put(EncodeHintType.CHARACTER_SET, "UTF-8")
@@ -461,10 +945,7 @@ class BusSeating : AppCompatActivity() {
         return bitmap
     }
 
-
-
-    private fun buildQrDataWithPassengers(pnr: String?, bookingRefNo: String?, fromCity: String?, toCity: String?, travelDate: String?, busType: String?, passengerList: ArrayList<com.bos.payment.appName.data.model.travel.bus.busRequery.PaXDetails>
-    ): String {
+    private fun buildQrDataWithPassengers(pnr: String?, bookingRefNo: String?, fromCity: String?, toCity: String?, travelDate: String?, busType: String?, passengerList: ArrayList<com.bos.payment.appName.data.model.travel.bus.busRequery.PaXDetails>): String {
         val builder = StringBuilder()
 
         builder.appendLine("🚌 Bus Ticket")
@@ -488,8 +969,6 @@ class BusSeating : AppCompatActivity() {
         return builder.toString().trim()
     }
 
-
-
     fun openDialogForGenerateTicket(context: Context,fileName: String,bitmap:Bitmap,data:MutableList<MutableList<String?>>, ticketDetails :MutableList<TicketDetailsForGenerateTicket>){
         if(!ticketDetails.isEmpty()&&ticketDetails.size>0) {
             var ticketDetails = ticketDetails.get(0)
@@ -503,7 +982,6 @@ class BusSeating : AppCompatActivity() {
 
 
     }
-
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -528,8 +1006,6 @@ class BusSeating : AppCompatActivity() {
         }
     }
 
-
-
     private fun validationBoarding() {
         val boardingTextPos = bin.boardingPointSp.selectedItemPosition
         val droppingTextPos = bin.droppingPointSp.selectedItemPosition
@@ -550,7 +1026,6 @@ class BusSeating : AppCompatActivity() {
         }
     }
 
-
     private fun validationSeat() {
         if (selectedSeats.isEmpty()) {
             toast("Choose your seat")
@@ -562,7 +1037,6 @@ class BusSeating : AppCompatActivity() {
             bin.proceedToBookBtn.visibility = View.GONE
         }
     }
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getAllDetailsBusBooking() {
@@ -622,7 +1096,6 @@ class BusSeating : AppCompatActivity() {
         }
     }
 
-
     private fun hitApiForGetTampBookingRequest( request:String){
         val busTempBookingReq = BusTempBookingRequest(
             iPAddress = mStash.getStringValue(Constants.deviceIPAddress, ""),
@@ -678,7 +1151,6 @@ class BusSeating : AppCompatActivity() {
 
     }
 
-
     private fun hitApiForGetTampBookingResponse( response:String, apiResponse:BusTempBookingRes){
         val busTempBookingReq = BusTampBookTicketResponseRequest(
             iPAddress = mStash.getStringValue(Constants.deviceIPAddress, ""),
@@ -726,7 +1198,6 @@ class BusSeating : AppCompatActivity() {
 
     }
 
-
     @SuppressLint("SetTextI18n")
     private fun getAllDetailsBusBookingRes(response: BusTempBookingRes?) {
         if (response?.responseHeader?.errorCode == "0000") {
@@ -770,7 +1241,6 @@ class BusSeating : AppCompatActivity() {
         }
     }
 
-
     private fun getAllBusAddMoney(referenceId: String) {
         val busAddMoneyReq = BusAddMoneyReq(
             clientRefNo = referenceId,
@@ -810,7 +1280,6 @@ class BusSeating : AppCompatActivity() {
 
     }
 
-
     private fun getAllBusAddMoneyRes(response: BusAddMoneyRes?) {
         AppLog.d("BusAddMoneyResponse",Gson().toJson(response))
         if (response?.responseHeader?.errorCode == "0000") {
@@ -820,7 +1289,6 @@ class BusSeating : AppCompatActivity() {
             Toast.makeText(this, response?.responseHeader?.errorInnerException.plus("Amount: ").plus(response!!.amount), Toast.LENGTH_SHORT).show()
         }
     }
-
 
     private fun getAllBusTicketing(referenceId: String) {
         val busTicketingReq = BusTicketingReq(
@@ -841,6 +1309,7 @@ class BusSeating : AppCompatActivity() {
                         it.data?.let { users ->
                             users.body()?.let { response ->
                                 AppLog.d("busTempBookingRes",Gson().toJson(response))
+                                mStash.setStringValue(Constants.ForPayoutBookingRefId, response.bookingRefNo.toString())
                                 getAllBusTicketingRes(response)
                                 getAddBusTicketRequest(mStash.getStringValue(Constants.booking_RefNo, "").toString(),Gson().toJson(busTicketingReq))
                             }
@@ -860,7 +1329,6 @@ class BusSeating : AppCompatActivity() {
         }
 
     }
-
 
     // hit api for add bus ticket request.............................................................................................
     private fun getAddBusTicketRequest(referenceId: String,apirequest:String) {
@@ -899,7 +1367,6 @@ class BusSeating : AppCompatActivity() {
 
     }
 
-
     private fun hitApiForBusTicketResponse(response: BusTicketingRes){
         val busTicketingReq = AddTicketResponseReq(
             requestId =mStash.getStringValue(Constants.requestId, "") ,
@@ -915,7 +1382,8 @@ class BusSeating : AppCompatActivity() {
             transportPNR      = response.transportPNR,
             registrationID = mStash.getStringValue(Constants.MerchantId, ""),
             loginID = mStash.getStringValue(Constants.RegistrationId, ""),
-            apiResponse  =  Gson().toJson(response))
+            apiResponse  =  Gson().toJson(response)
+        )
 
         Log.d("busAddTicketRequest", Gson().toJson(busTicketingReq))
         Log.d("apiResponse", Gson().toJson(response))
@@ -946,25 +1414,29 @@ class BusSeating : AppCompatActivity() {
 
     private fun getTransferAmountToAgentWithCal() {
         try {
+            var transferamt =   mStash!!.getStringValue(Constants.totalTransaction,"")
+            var actualamt =  mStash!!.getStringValue(Constants.actualbusticketamt,"").toString()
+            var bookingRefId =   mStash.getStringValue(Constants.ForPayoutBookingRefId, "")
+
             val transferAmountToAgentsReq = TransferAmountToAgentsReq(
                 transferFrom = mStash!!.getStringValue(Constants.RegistrationId, ""),
                 transferTo = "Admin",
-                transferAmt = "0",
-                remark = "Your bus transaction was successful",
-                transferFromMsg = "",
-                transferToMsg = "",
+                transferAmt = transferamt,
+                remark = "Bus Booking  Api",
+                transferFromMsg = "Your account has been debited by ₹$transferamt for a bus booking Reference Number: ${bookingRefId}.",
+                transferToMsg = "Your account has been credited by ₹$transferamt for a bus booking Reference Number: ${bookingRefId}.",
                 amountType = "Payout",
-                actualTransactionAmount = "0",
+                actualTransactionAmount = actualamt,
                 transIpAddress = mStash!!.getStringValue(Constants.deviceIPAddress, ""),
                 parmUserName = mStash!!.getStringValue(Constants.RegistrationId, "") ,
                 merchantCode = mStash!!.getStringValue(Constants.MerchantId, "") ,
-                servicesChargeAmt ="0.00",
-                servicesChargeGSTAmt = "0.00",
-                servicesChargeWithoutGST = "0.00",
+                servicesChargeAmt =mStash!!.getStringValue(Constants.serviceChargewithgst, ""),
+                servicesChargeGSTAmt = mStash!!.getStringValue(Constants.gst, ""),
+                servicesChargeWithoutGST = mStash!!.getStringValue(Constants.serviceCharge, ""),
                 customerVirtualAddress = "",
                 retailerCommissionAmt = "0.00",
                 retailerId = "",
-                paymentMode = "IMPS",
+                paymentMode = "",
                 depositBankName = "",
                 branchCodeChecqueNo = "",
                 apporvedStatus = "Approved",
@@ -985,6 +1457,14 @@ class BusSeating : AppCompatActivity() {
                                         pd.dismiss()
                                         Log.d("BosPayoutTransaction", response.toString())
 
+                                        val commission = mStash!!.getStringValue(Constants.retailerCommission, "0.00")?.trim()?.toDoubleOrNull() ?: 0.0
+
+                                        Log.d("retailercommissionforpayout", commission.toString())
+
+                                        if (commission > 0.0) {
+                                            Log.d("checkconditionforcommission", "Commissionmethod")
+                                            getTransferAmountToAgentInCommissionCal(response)
+                                        }
                                     }
                                 }
                             }
@@ -1003,18 +1483,12 @@ class BusSeating : AppCompatActivity() {
         } catch (e: NumberFormatException) {
             e.printStackTrace()
             pd.dismiss()
-            Toast.makeText(
-                this,
-                e.message.toString() + " " + e.localizedMessage?.toString(),
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, e.message.toString() + " " + e.localizedMessage?.toString(), Toast.LENGTH_SHORT).show()
         }
     }
 
-
     @SuppressLint("SetTextI18n")
     private fun getAllBusTicketingRes(response: BusTicketingRes) {
-
         hitApiForBusTicketResponse(response)
         if (response.responseHeader?.errorCode == "0000") {
             bin.reviewBookingInclude.finalSeatLayout.visibility = View.GONE
@@ -1032,7 +1506,6 @@ class BusSeating : AppCompatActivity() {
         }
 
     }
-
 
     private fun setDropDown() {
         bin.passengerDetails.passengerDetailsLayout.visibility = View.GONE
@@ -1198,7 +1671,6 @@ class BusSeating : AppCompatActivity() {
 
     }
 
-
     private fun setSpinnerForGender(){
         val arrayGenderSpinner = resources.getStringArray(R.array.gender_array)
         val genderadapters = ArrayAdapter(this@BusSeating, R.layout.spinner_right_aligned, arrayGenderSpinner)
@@ -1258,7 +1730,6 @@ class BusSeating : AppCompatActivity() {
              }*/
     }
 
-
     @SuppressLint("SetTextI18n")
     private fun setupUI() {
         pd = showLoadingDialog(this)
@@ -1291,7 +1762,6 @@ class BusSeating : AppCompatActivity() {
         bin.confirmBookingLayout.recyclerViewPassenger.adapter = userPassengerDetailsAdapter
     }
 
-
     private fun getAllMappingSeat() {
         val request = BusSeatMapReq(
             boardingId = intent.getStringExtra(Constants.boarding_Id),
@@ -1322,7 +1792,6 @@ class BusSeating : AppCompatActivity() {
             }
         }
     }
-
 
     private fun setupSeatGrid(response: BusSeatMapRes) {
         val lowerGrid = bin.seatLayout.lowerBerthGrid
@@ -1376,7 +1845,6 @@ class BusSeating : AppCompatActivity() {
 
         }
     }
-
 
     @SuppressLint("InflateParams", "SetTextI18n")
     private fun createSeatView(seatName: String, context: Context, row: Int, column: Int, length: Int, seat: SeatMap): View {
@@ -1478,12 +1946,12 @@ class BusSeating : AppCompatActivity() {
             val totalAmount = selectedSeats.sumOf { it.fareMaster?.basicAmount ?: 0 }
             bin.finalAmount.text = "₹ $totalAmount"
             bin.reviewBookingInclude.totalprice.text = "₹ $totalAmount"
+            rechargeAmount = totalAmount.toString()
             Log.d("Total Amount", " $totalAmount")
         }
 
         return seatView
     }
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getPassengerDetailsList(): List<PaXDetails> {
@@ -1542,6 +2010,75 @@ class BusSeating : AppCompatActivity() {
         }
         return paxList
     }
+
+    // for payout transaction and commission entry
+
+    private fun getTransferAmountToAgentInCommissionCal(response: TransferAmountToAgentsRes) {
+        var withouttdscommissionamount = mStash!!.getStringValue(Constants.retailerCommissionWithoutTDS, "")
+        var tdsamount = mStash!!.getStringValue(Constants.tds, "")
+        var actualcommission = mStash!!.getStringValue(Constants.retailerCommission, "")
+        var bookingRefId =   mStash.getStringValue(Constants.ForPayoutBookingRefId, "")
+
+        Log.d("tdsamount", tdsamount.toString())
+        Log.d("commissionamount", withouttdscommissionamount.toString())
+        Log.d("actualcommission", actualcommission.toString())
+
+        val transferAmountToAgentsReq = TransferToAgentReq(
+            merchantCode = mStash!!.getStringValue(Constants.MerchantId, ""),
+            transferFrom = "Admin",
+            amountType = "Deposit",
+            transIpAddress = mStash!!.getStringValue(Constants.deviceIPAddress, ""),
+            remark = "Commission Deposit by Bus Api",
+            transferTo = mStash!!.getStringValue(Constants.RegistrationId, ""),
+            transferToMsg = "Your account has been credited by ₹${withouttdscommissionamount} as commission for the Bus booking of Against Reference Number: ${response.data!!.refTransID} for the Booking Reference Number: ${bookingRefId}",
+            gstAmt = 0,
+            parmUserName = mStash!!.getStringValue(Constants.RegistrationId, ""),
+            servicesChargeGSTAmt = 0,
+            servicesChargeWithoutGST = 0,
+            actualTransactionAmount = withouttdscommissionamount?.toDouble() ?: 0.0,
+            actualCommissionAmt = 0,
+            commissionWithoutGST = 0,
+            transferFromMsg = "Your account has been debited  by ₹ ${withouttdscommissionamount} as commission for the Bus booking of Against Reference Number: ${response.data!!.refTransID} for the Booking Reference Number: ${bookingRefId}",
+            netCommissionAmt = 0,
+            tdSAmt = tdsamount?.toDouble() ?: 0.0,
+            servicesChargeAmt = 0,
+            customerVirtualAddress = "",
+            transferAmt = actualcommission?.toDouble() ?: 0.0,
+        )
+
+        Log.d("transferAmountToAgentcommissionreq", Gson().toJson(transferAmountToAgentsReq))
+
+        getAllApiServiceViewModel.transferToAgentReq(transferAmountToAgentsReq)
+            .observe(this) { resource ->
+                resource?.let {
+                    when (it.apiStatus) {
+
+                        ApiStatus.SUCCESS -> {
+                            it.data?.let { users ->
+                                users.body()?.let { commissionresp ->
+                                    if(pd!=null && pd.isShowing){
+                                        pd.dismiss()
+                                    }
+
+                                }
+                            }
+                        }
+
+                        ApiStatus.ERROR -> {
+                            pd.dismiss()
+                            Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
+                        }
+
+                        ApiStatus.LOADING -> {
+                            pd.show()
+                        }
+
+                    }
+                }
+            }
+    }
+
+
 
 
 }

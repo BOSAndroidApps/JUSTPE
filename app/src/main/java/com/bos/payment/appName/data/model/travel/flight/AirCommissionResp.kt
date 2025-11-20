@@ -1,14 +1,14 @@
-package com.bos.payment.appName.data.model.travel.bus.forservicecharge
+package com.bos.payment.appName.data.model.travel.flight
 
 import com.google.gson.annotations.SerializedName
 
-data class BusCommissionResp(
+data class AirCommissionResp(
 
 	@field:SerializedName("returnCode")
-	val returnCode: Any? = null,
+	val returnCode: String? = null,
 
 	@field:SerializedName("data")
-	val data: List<DataItem> = emptyList(),
+	val data: List<FlightDataItem?>? = null,
 
 	@field:SerializedName("returnMessage")
 	val returnMessage: String? = null,
@@ -17,22 +17,19 @@ data class BusCommissionResp(
 	val isSuccess: Boolean? = null
 )
 
-data class DataItem(
+data class FlightDataItem(
 
 	@field:SerializedName("productSource")
 	val productSource: String? = null,
 
-	@field:SerializedName("seatType")
-	val seatType: String? = null,
-
 	@field:SerializedName("retailerType")
 	val retailerType: String? = null,
 
+	@field:SerializedName("airCategory")
+	val airCategory: String? = null,
+
 	@field:SerializedName("servicesValue")
 	val servicesValue: Double? = null,
-
-	@field:SerializedName("busCategory")
-	val busCategory: String? = null,
 
 	@field:SerializedName("servicesType")
 	val servicesType: String? = null,
@@ -47,7 +44,10 @@ data class DataItem(
 	val retailerID: String? = null,
 
 	@field:SerializedName("isActive")
-	val isActive: Boolean? = null,
+	val isActive: String? = null,
+
+	@field:SerializedName("operatorID")
+	val operatorID: String? = null,
 
 	@field:SerializedName("commissionType")
 	val commissionType: String? = null,

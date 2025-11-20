@@ -22,6 +22,8 @@ import com.bos.payment.appName.data.model.travel.bus.history.BusHistoryReq
 import com.bos.payment.appName.data.model.travel.bus.history.BusHistoryRes
 import com.bos.payment.appName.data.model.travel.bus.searchBus.BusSearchReq
 import com.bos.payment.appName.data.model.travel.bus.searchBus.BusSearchRes
+import com.bos.payment.appName.data.model.travel.flight.AirCommissionReq
+import com.bos.payment.appName.data.model.travel.flight.AirCommissionResp
 import com.bos.payment.appName.data.model.travel.flight.AirReprintReq
 import com.bos.payment.appName.data.model.travel.flight.AirTicketCancelReq
 import com.bos.payment.appName.data.model.travel.flight.AirTicketingReq

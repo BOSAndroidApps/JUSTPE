@@ -26,6 +26,7 @@ import com.bos.payment.appName.data.model.travel.bus.city.BusCityListRes
 import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommissionReq
 import com.bos.payment.appName.data.model.travel.bus.history.BusHistoryReq
 import com.bos.payment.appName.data.model.travel.bus.searchBus.BusSearchReq
+import com.bos.payment.appName.data.model.travel.flight.AirCommissionReq
 import com.bos.payment.appName.data.model.travel.flight.AirReprintReq
 import com.bos.payment.appName.data.model.travel.flight.AirTicketCancelReq
 import com.bos.payment.appName.data.model.travel.flight.AirTicketingReq
@@ -751,6 +752,7 @@ class TravelViewModel (private val travelRepository: TravelRepository) : ViewMod
             )
         }
     }
+
 
 
     fun getFlightAddPaymentRequest(req: FlightAddPaymentReq) = liveData(Dispatchers.IO) {
