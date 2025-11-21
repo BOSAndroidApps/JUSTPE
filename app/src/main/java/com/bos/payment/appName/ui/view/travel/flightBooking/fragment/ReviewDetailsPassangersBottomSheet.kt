@@ -26,13 +26,19 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.bos.payment.appName.R
+import com.bos.payment.appName.data.model.recharge.recharge.TransferToAgentReq
+import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsReq
+import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsRes
 import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommissionReq
 import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommissionResp
 import com.bos.payment.appName.data.model.travel.flight.AirCommissionReq
 import com.bos.payment.appName.data.model.travel.flight.AirCommissionResp
 import com.bos.payment.appName.data.model.travel.flight.AirRepriceRequests
 import com.bos.payment.appName.data.model.travel.flight.AirReprintReq
+import com.bos.payment.appName.data.model.travel.flight.AirTicketBookingRequest
+import com.bos.payment.appName.data.model.travel.flight.AirTicketBookingResponseRequest
 import com.bos.payment.appName.data.model.travel.flight.AirTicketingReq
+import com.bos.payment.appName.data.model.travel.flight.AirTicketingResponse
 import com.bos.payment.appName.data.model.travel.flight.BookingFlightDetails
 import com.bos.payment.appName.data.model.travel.flight.BookingSSRDetails
 import com.bos.payment.appName.data.model.travel.flight.FlightAddPaymentReq
@@ -172,6 +178,7 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
         }
         return super.onCreateDialog(savedInstanceState)
     }
+
 
 
     fun hitApiForFlightTempBooking(){
@@ -427,13 +434,14 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
             iPAddress = mStash?.getStringValue(Constants.deviceIPAddress, ""),
             requestId =  mStash?.getStringValue(Constants.requestId, ""),
             imeINumber = "2232323232323",
-            registrationID = mStash?.getStringValue(Constants.MerchantId, "")/*"AOP-554"*/
+            registrationID = mStash?.getStringValue(Constants.MerchantId, "")
         )
 
         Log.d("airticketreq", Gson().toJson(airTicketingreq))
 
-        viewModel.getAirTicketingRequest(airTicketingreq)
-            .observe(viewLifecycleOwner) { resource ->
+        hitApiForUploadAirTicketingRequest(Gson().toJson(airTicketingreq))
+
+        viewModel.getAirTicketingRequest(airTicketingreq).observe(viewLifecycleOwner) { resource ->
                 resource?.let {
                     when (it.apiStatus) {
                         ApiStatus.SUCCESS -> {
@@ -442,6 +450,8 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
 
                                     Log.d("airticketingresponse",response.toString())
 
+                                    hitApiForUploadAirTicketingResponseRequest(response)
+
                                     if(response.responseHeader.statusId.equals("22")){
                                         Toast.makeText(context,response.responseHeader.errorInnerException,Toast.LENGTH_SHORT).show()
                                         pd.dismiss()
@@ -449,6 +459,9 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
                                     }
 
                                     if(response.responseHeader.errorCode.equals("0000")){
+
+                                        getTransferAmountToAgentWithCal()
+
                                         val airTicketReprintreq = AirReprintReq(
                                             BookingRefNo = response.bookingRefNo,
                                             airlinePNR =  response.airlinePNRDetails!![0].airlinePNRs!![0].airlinePNR,
@@ -457,14 +470,16 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
                                             imeNumber = "2232323232323",
                                             registerId = mStash?.getStringValue(Constants.MerchantId, "")/*"AOP-554"*/
                                         )
+
                                        /* Log.d("airTicketReprintreq",Gson().toJson(airTicketReprintreq))*/
+
                                         hitApiForTicketReprint(airTicketReprintreq)
                                     }
+
                                     else{
                                         pd.dismiss()
                                         Toast.makeText(context,response.responseHeader.errorInnerException,Toast.LENGTH_SHORT).show()
                                     }
-
 
                                 }
                             }
@@ -481,6 +496,93 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
                     }
                 }
             }
+
+    }
+
+
+    fun hitApiForUploadAirTicketingRequest(apiresponse:String){
+
+        val req = AirTicketBookingRequest(
+            bookingRefNo = mStash!!.getStringValue(Constants.BookingRefNo,""),
+            ticketingType = "1",
+            loginID = mStash?.getStringValue(Constants.requestId, ""),
+            imeINumber = "2232323232323",
+            createdBy = mStash!!.getStringValue(Constants.RegistrationId, ""),
+            apiResponse = apiresponse,
+            registrationID = mStash?.getStringValue(Constants.MerchantId, ""),
+            requestId = mStash?.getStringValue(Constants.requestId, ""),
+            iPAddress = mStash?.getStringValue(Constants.deviceIPAddress, ""),
+        )
+
+        Log.d("UploadAirTicketReq",Gson().toJson(req))
+
+        getAllApiServiceViewModel.uploadAirBookingTicketRequest(req).observe(this) { resource ->
+            when (resource.apiStatus) {
+                ApiStatus.SUCCESS -> {
+                    val response = resource.data?.body()
+                    pd.dismiss()
+                    Log.d("UploadAirTicketResp",Gson().toJson(response))
+                    if (response != null && response.isSuccess!!) {
+
+                    }
+                    else {
+
+                    }
+                }
+                ApiStatus.ERROR -> pd.dismiss()
+                ApiStatus.LOADING -> pd.dismiss()
+            }
+        }
+
+    }
+
+
+    fun hitApiForUploadAirTicketingResponseRequest(apiresponse:AirTicketingResponse){
+
+        var apiresponsevalue = Gson().toJson(apiresponse)
+
+        val req = AirTicketBookingResponseRequest(
+            bookingRefNo = apiresponse.bookingRefNo,
+            supplierRefno =apiresponse.airlinePNRDetails!![0].airlinePNRs!![0].supplierRefNo ,
+            airlineCode=apiresponse.airlinePNRDetails!![0].airlinePNRs!![0].airlineCode,
+            loginID = mStash?.getStringValue(Constants.requestId, ""),
+            holdValidity = apiresponse.airlinePNRDetails!![0].holdValidity,
+            failureRemark = apiresponse.airlinePNRDetails!![0].failureRemark,
+            airlinePNR = apiresponse.airlinePNRDetails!![0].airlinePNRs!![0].airlinePNR,
+            flightId = apiresponse.airlinePNRDetails!![0].flightId,
+            statusId = apiresponse.responseHeader.statusId,
+            errorCode = apiresponse.responseHeader.errorCode,
+            createdBy = mStash!!.getStringValue(Constants.RegistrationId, ""),
+            crSPNR = apiresponse.airlinePNRDetails!![0].airlinePNRs!![0].crSPNR,
+            apiResponse = apiresponsevalue,
+            errorDesc = apiresponse.responseHeader.errorDesc,
+            registrationID = mStash?.getStringValue(Constants.MerchantId, ""),
+            errorInnerException = apiresponse.responseHeader.errorInnerException,
+            requestId = mStash?.getStringValue(Constants.requestId, ""),
+            iPAddress = mStash?.getStringValue(Constants.deviceIPAddress, ""),
+            recordLocator = apiresponse.airlinePNRDetails!![0].airlinePNRs!![0].recordLocator,
+            crSCode = apiresponse.airlinePNRDetails!![0].airlinePNRs!![0].crSCode,
+        )
+
+        Log.d("UploadAirTicketResponseReq",Gson().toJson(req))
+
+        getAllApiServiceViewModel.uploadAirBookingTicketResponseRequest(req).observe(this) { resource ->
+            when (resource.apiStatus) {
+                ApiStatus.SUCCESS -> {
+                    val response = resource.data?.body()
+                    pd.dismiss()
+                    Log.d("UploadAirTicketResponseResp",Gson().toJson(response))
+                    if (response != null && response.isSuccess!!) {
+
+                    }
+                    else {
+
+                    }
+                }
+                ApiStatus.ERROR -> pd.dismiss()
+                ApiStatus.LOADING -> pd.dismiss()
+            }
+        }
 
     }
 
@@ -556,7 +658,6 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
     }
 
 
-
     fun getpaxDetails(): MutableList<PaXDetailsFlight> {
         val paxDetailsList = mutableListOf<PaXDetailsFlight>()
 
@@ -602,7 +703,6 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
 
         return paxDetailsList
     }
-
 
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -669,6 +769,7 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
 
     }
 
+
     fun hitCommissionAPIRetailer(operatorID: String, retailerId: String, adminCode: String, airCategory: String, rechargeAmount: String) {
 
         val req = AirCommissionReq(
@@ -724,6 +825,7 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
         }
 
     }
+
 
     private fun getAllServiceChargeApiResRetailer(response: AirCommissionResp, rechargeAmount: String) {
         if (response.isSuccess!!) {
@@ -822,6 +924,7 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
         }
 
     }
+
 
     private fun serviceChargeCalculation(serviceCharge: Double, gstRate: Double, rechargeAmount: String, response: AirCommissionResp): Double {
 
@@ -969,10 +1072,147 @@ class ReviewDetailsPassangersBottomSheet:BottomSheetDialogFragment() {
     }
 
 
+    private fun getTransferAmountToAgentWithCal() {
+        try {
+            var transferamt =   mStash!!.getStringValue(Constants.totalTransaction,"")
+            var actualamt =  mStash!!.getStringValue(Constants.actualbusticketamt,"").toString()
+            var bookingRefId =   mStash!!.getStringValue(Constants.ForPayoutBookingRefId, "")
+
+            val transferAmountToAgentsReq = TransferAmountToAgentsReq(
+                transferFrom = mStash!!.getStringValue(Constants.RegistrationId, ""),
+                transferTo = "Admin",
+                transferAmt = transferamt,
+                remark = "Flight Booking  Api",
+                transferFromMsg = "Your account has been debited by ₹$transferamt for a flight booking Reference Number: ${bookingRefId}.",
+                transferToMsg = "Your account has been credited by ₹$transferamt for a flight booking Reference Number: ${bookingRefId}.",
+                amountType = "Payout",
+                actualTransactionAmount = actualamt,
+                transIpAddress = mStash!!.getStringValue(Constants.deviceIPAddress, ""),
+                parmUserName = mStash!!.getStringValue(Constants.RegistrationId, "") ,
+                merchantCode = mStash!!.getStringValue(Constants.MerchantId, "") ,
+                servicesChargeAmt =mStash!!.getStringValue(Constants.serviceChargewithgst, ""),
+                servicesChargeGSTAmt = mStash!!.getStringValue(Constants.gst, ""),
+                servicesChargeWithoutGST = mStash!!.getStringValue(Constants.serviceCharge, ""),
+                customerVirtualAddress = "",
+                retailerCommissionAmt = "0.00",
+                retailerId = "",
+                paymentMode = "",
+                depositBankName = "",
+                branchCodeChecqueNo = "",
+                apporvedStatus = "Approved",
+                registrationId = mStash!!.getStringValue(Constants.RegistrationId, ""),
+                benfiid = "",
+                accountHolder = "",
+                flag = "Y"
+            )
+
+            Log.d("getAllGsonFromAPI", Gson().toJson(transferAmountToAgentsReq))
+            getAllApiServiceViewModel.getTransferAmountToAgents(transferAmountToAgentsReq)
+                .observe(this) { resource ->
+                    resource?.let {
+                        when (it.apiStatus) {
+                            ApiStatus.SUCCESS -> {
+                                it.data?.let { users ->
+                                    users.body()?.let { response ->
+                                        pd.dismiss()
+                                        Log.d("BosPayoutTransaction", response.toString())
+
+                                        val commission = mStash!!.getStringValue(Constants.retailerCommission, "0.00")?.trim()?.toDoubleOrNull() ?: 0.0
+
+                                        Log.d("retailercommissionforpayout", commission.toString())
+
+                                        if (commission > 0.0) {
+                                            Log.d("checkconditionforcommission", "Commissionmethod")
+                                            getTransferAmountToAgentInCommissionCal(response)
+                                        }
+                                    }
+                                }
+                            }
+
+                            ApiStatus.ERROR -> {
+                                pd.dismiss()
+                                Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
+                            }
+
+                            ApiStatus.LOADING -> {
+                                pd.show()
+                            }
+                        }
+                    }
+                }
+        } catch (e: NumberFormatException) {
+            e.printStackTrace()
+            pd.dismiss()
+            Toast.makeText(requireContext(), e.message.toString() + " " + e.localizedMessage?.toString(), Toast.LENGTH_SHORT).show()
+        }
+    }
 
 
+    // for payout transaction and commission entry
+    private fun getTransferAmountToAgentInCommissionCal(response: TransferAmountToAgentsRes) {
+        var withouttdscommissionamount = mStash!!.getStringValue(Constants.retailerCommissionWithoutTDS, "")
+        var tdsamount = mStash!!.getStringValue(Constants.tds, "")
+        var actualcommission = mStash!!.getStringValue(Constants.retailerCommission, "")
+        var bookingRefId =   mStash!!.getStringValue(Constants.ForPayoutBookingRefId, "")
 
+        Log.d("tdsamount", tdsamount.toString())
+        Log.d("commissionamount", withouttdscommissionamount.toString())
+        Log.d("actualcommission", actualcommission.toString())
 
+        val transferAmountToAgentsReq = TransferToAgentReq(
+            merchantCode = mStash!!.getStringValue(Constants.MerchantId, ""),
+            transferFrom = "Admin",
+            amountType = "Deposit",
+            transIpAddress = mStash!!.getStringValue(Constants.deviceIPAddress, ""),
+            remark = "Commission Deposit by Flight Api",
+            transferTo = mStash!!.getStringValue(Constants.RegistrationId, ""),
+            transferToMsg = "Your account has been credited by ₹${withouttdscommissionamount} as commission for the Flight booking of Against Reference Number: ${response.data!!.refTransID} for the Booking Reference Number: ${bookingRefId}",
+            gstAmt = 0,
+            parmUserName = mStash!!.getStringValue(Constants.RegistrationId, ""),
+            servicesChargeGSTAmt = 0,
+            servicesChargeWithoutGST = 0,
+            actualTransactionAmount = withouttdscommissionamount?.toDouble() ?: 0.0,
+            actualCommissionAmt = 0,
+            commissionWithoutGST = 0,
+            transferFromMsg = "Your account has been debited  by ₹ ${withouttdscommissionamount} as commission for the Flight booking of Against Reference Number: ${response.data!!.refTransID} for the Booking Reference Number: ${bookingRefId}",
+            netCommissionAmt = 0,
+            tdSAmt = tdsamount?.toDouble() ?: 0.0,
+            servicesChargeAmt = 0,
+            customerVirtualAddress = "",
+            transferAmt = actualcommission?.toDouble() ?: 0.0,
+        )
+
+        Log.d("transferAmountToAgentcommissionreq", Gson().toJson(transferAmountToAgentsReq))
+
+        getAllApiServiceViewModel.transferToAgentReq(transferAmountToAgentsReq)
+            .observe(this) { resource ->
+                resource?.let {
+                    when (it.apiStatus) {
+
+                        ApiStatus.SUCCESS -> {
+                            it.data?.let { users ->
+                                users.body()?.let { commissionresp ->
+                                    if(pd!=null && pd.isShowing){
+                                        pd.dismiss()
+                                    }
+
+                                }
+                            }
+                        }
+
+                        ApiStatus.ERROR -> {
+                            pd.dismiss()
+                            Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
+                        }
+
+                        ApiStatus.LOADING -> {
+                            pd.show()
+                        }
+
+                    }
+                }
+            }
+    }
 
 
 }

@@ -14,6 +14,7 @@
         app:cardBackgroundColor="@color/grey"
         app:cardCornerRadius="@dimen/dimen_4dp"
         app:cardUseCompatPadding="true"
+        android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -562,6 +563,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/tdsamtlayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -655,6 +657,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/commissionlayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -699,7 +702,6 @@
                         android:textSize="@dimen/dimen_12sp" />
 
                 </LinearLayout>
-
 
 
             </LinearLayout>

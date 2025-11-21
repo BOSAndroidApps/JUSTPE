@@ -54,6 +54,8 @@ import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard.Compan
 import com.bos.payment.appName.ui.view.Dashboard.activity.JustPeDashboard.Companion.vpa
 import com.bos.payment.appName.ui.view.Dashboard.dmt.DMTRechargeSuccessfulPage
 import com.bos.payment.appName.ui.view.Dashboard.rechargeactivity.RechargeSuccessfulPageActivity.Companion.serviceChargeWithGST
+import com.bos.payment.appName.ui.view.Dashboard.tomobile.SendWalletAmountPage.Companion.name
+import com.bos.payment.appName.ui.view.Dashboard.tomobile.SendWalletAmountPage.Companion.userID
 import com.bos.payment.appName.ui.viewmodel.GetAllApiServiceViewModel
 import com.bos.payment.appName.ui.viewmodel.PayoutViewModel
 import com.bos.payment.appName.utils.ApiStatus
@@ -872,7 +874,7 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
                 transferFrom = mStash!!.getStringValue(Constants.RegistrationId, "") ?: "0",
                 transferTo = "Admin",
                 transferAmt = rechargeAmount ?: "0", //dr
-                remark = "Self Payout Deposit" /*binding.remarks.text.toString().trim()*/,
+                remark = "To Self Transfer" /*binding.remarks.text.toString().trim()*/,
                 transferFromMsg = "Your account is debited by ₹${rechargeAmt ?: "0"} from your wallet and credited with ₹${creditAmount ?: "0"} to your bank account due to ToSelf on number ${bankAccountNo ?: ""}.",
                 transferToMsg = "", // for toself commission remarks
                 amountType = "Payout",
@@ -907,6 +909,9 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
                                     users.body()?.let { response ->
                                         Log.d("AdminTransferResp",Gson().toJson(response))
                                         if(response.isSuccess!!){
+                                            if(dialog!=null && dialog.isShowing){
+                                                dialog.dismiss()
+                                            }
                                             sendAllPayoutAmount()
                                         }
                                     }
@@ -958,6 +963,7 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
                                 Log.d("getAllGsonFromAPIResp", Gson().toJson(response))
                                 sendAllPayoutAmountRes(response)
                             }
+
                         }
                     }
                     ApiStatus.ERROR -> {
@@ -974,12 +980,14 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
     }
 
 
+
     private fun sendAllPayoutAmountRes(response: AOPPayOutRes) {
         if (response.statuss == "SUCCESS"){
-            if(dialog!=null && dialog.isShowing){
+            openDialogForPayout(response)
+           /* if(dialog!=null && dialog.isShowing){
                 dialog.dismiss()
             }
-            pd.dismiss()
+            pd.dismiss()*/
             Toast.makeText(this, response.message.toString(), Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, response.message.toString(), Toast.LENGTH_SHORT).show()
@@ -1062,6 +1070,44 @@ class ToSelfMoneyTransferPage : AppCompatActivity() {
         }
 
         dialog.show() // ✅ REQUIRED
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    fun openDialogForPayout(response: AOPPayOutRes)  {
+        dialog = Dialog(this@ToSelfMoneyTransferPage, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.successpopup)
+
+        dialog.window?.apply {
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        }
+
+        dialog.setCanceledOnTouchOutside(false)
+
+        val tvamount = dialog.findViewById<TextView>(R.id.tvAmount)
+        val tvToBeneficiary = dialog.findViewById<TextView>(R.id.tvToBeneficiary)
+        val tvUpiRefNumber = dialog.findViewById<TextView>(R.id.tvUpiRefNumber)
+        val transactionReferenceNo = dialog.findViewById<TextView>(R.id.transactionReferenceNo)
+        val done = dialog.findViewById<Button>(R.id.btnDone)
+        var ToBeCreditedAmt = mStash!!.getStringValue(Constants.toBeCreditedAmt, "")
+
+        tvamount.text = "₹${ToBeCreditedAmt}"
+        tvToBeneficiary.text = response.initiateAuthGenericFundTransferAPIResp!!.resourceData!!.beneficiaryName
+        transactionReferenceNo .text = response.initiateAuthGenericFundTransferAPIResp!!.resourceData!!.transactionID
+        tvUpiRefNumber .text = response.initiateAuthGenericFundTransferAPIResp!!.resourceData!!.transactionReferenceNo
+
+
+        done.setOnClickListener {
+            dialog.dismiss()
+            finish()
+        }
+
+
+        dialog.show()
+
     }
 
 

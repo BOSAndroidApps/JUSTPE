@@ -29,6 +29,8 @@ import com.bos.payment.appName.data.model.transactionreportsmodel.ReportListReq
 import com.bos.payment.appName.data.model.transactionreportsmodel.TransactionReportsReq
 import com.bos.payment.appName.data.model.transferAMountToAgent.TransferAmountToAgentsReq
 import com.bos.payment.appName.data.model.travel.flight.AirCommissionReq
+import com.bos.payment.appName.data.model.travel.flight.AirTicketBookingRequest
+import com.bos.payment.appName.data.model.travel.flight.AirTicketBookingResponseRequest
 import com.bos.payment.appName.data.model.travel.flight.FlightRequeryReq
 import com.bos.payment.appName.data.model.travel.flight.GetAirTicketListReq
 import com.bos.payment.appName.data.model.walletBalance.merchantBal.GetMerchantBalanceReq
@@ -57,6 +59,10 @@ class GetAllAPIServiceRepository(private val apiInterface: ApiInterface) {
     suspend fun getAirTicketListRequest(req: GetAirTicketListReq) = apiInterface.getAirTicketListReq(req)
 
     suspend fun getFlightCommissionReq(req: AirCommissionReq)= apiInterface.getAirCommissionReq(req)
+
+    suspend fun uploadTicketBookingRequest(req: AirTicketBookingRequest)= apiInterface.uploadTicketBookingRequest(req)
+
+    suspend fun uploadTicketBookingResponseRequest(req: AirTicketBookingResponseRequest)= apiInterface.uploadTicketBookingResponse(req)
 
     suspend fun getDashboardBanner(rid: Int,task: String, marchentcode: String, admincode: String, retailercode: String,agentType: String) = apiInterface.getdashboardbanner(rid,task,marchentcode,admincode,retailercode,agentType)
 

@@ -62,7 +62,7 @@
                             android:text="Hello BOS"
                             android:layout_gravity="center"
                             android:textColor="@color/black"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/dimen_16sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -252,6 +252,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     android:layout_below="@+id/bankbottomsheetcall"
                     android:layout_alignStart="@+id/bankbottomsheetcall"
                     android:layout_alignEnd="@+id/bankbottomsheetcall">

@@ -310,9 +310,7 @@ class BusSeating : AppCompatActivity() {
 
         if (seattype.size == 1) {
             // Only Sleeper or only Seater
-            hitCommissionAPIRetailer(seattype[0].second, retailerId!!, adminCode!!, buscategory, rechargeAmount){resp ->
-                Log.d("commissionresp", Gson().toJson(resp))
-            }
+            hitCommissionAPIRetailer(seattype[0].second, retailerId!!, adminCode!!, buscategory, rechargeAmount)
         }
         else {
             // Both Sleeper + Seater
@@ -323,7 +321,7 @@ class BusSeating : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("DefaultLocale", "SetTextI18n", "SuspiciousIndentation")
-    fun hitCommissionAPIRetailer(seatType: String, retailerId: String, adminCode: String, busCategory: String, rechargeAmount: String,callback: (BusCommissionResp) -> Unit) {
+    fun hitCommissionAPIRetailer(seatType: String, retailerId: String, adminCode: String, busCategory: String, rechargeAmount: String) {
 
         val req = BusCommissionReq(
             productSource = "F0133",
@@ -339,13 +337,78 @@ class BusSeating : AppCompatActivity() {
         viewModel.getBusCommissionRequest(req).observe(this) { resource ->
             when (resource.apiStatus) {
                 ApiStatus.SUCCESS -> {
+                    pd.dismiss()
                     val response = resource.data?.body()
                     Log.d("RetailerCommissionResp",Gson().toJson(response))
+                        if (response != null && response.isSuccess!!) {
+
+                            getAllServiceChargeApiResRetailer(response, rechargeAmount)
+                        }
+                        else {
+                            // Save commission types in shared preferences
+                            with(mStash!!) {
+                                setStringValue(Constants.retailer_CommissionType, "")
+                                setStringValue(Constants.serviceType, "")
+                            }
+
+                            mStash!!.setStringValue(Constants.retailerCommissionWithoutTDS, String.format("%.2f", 0.0))
+                            mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", 0.0))
+                            mStash!!.setStringValue(Constants.tds, String.format("%.2f", 0.0))
+
+                            val totalRechargeAmount = (rechargeAmount.toDoubleOrNull() ?: 0.0) + 0.0
+                            mStash!!.setStringValue(Constants.totalTransaction, String.format("%.2f", totalRechargeAmount))
+
+                            serviceChargeWithGST = mStash!!.getStringValue(Constants.serviceChargeWithGST, "")!!
+                            mStash!!.setStringValue(Constants.gst, String.format("%.2f", 0.0))
+                            mStash!!.setStringValue(Constants.serviceCharge, String.format("%.2f", 0.0))
+                            mStash!!.setStringValue(Constants.retailerCommission, String.format("%.2f", 0.0))
+                            mStash!!.setStringValue(Constants.tds, String.format("%.2f", 0.0))
+
+                            var msg = "Warning : Slab structure not found. This transaction will proceed without any commission being credited."
+                            openDialogForPayout(rechargeAmount.toDoubleOrNull() ?: 0.0, 0.0, totalRechargeAmount, 0.0, msg)
+
+                        }
+                }
+                ApiStatus.ERROR -> pd.dismiss()
+                ApiStatus.LOADING -> pd.show()
+            }
+        }
+
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("DefaultLocale", "SetTextI18n", "SuspiciousIndentation")
+    fun hitCommissionAPIRetailerForBothCondition(seatType: String, retailerId: String, adminCode: String, busCategory: String, rechargeAmount: String  , callback: ApiCallback<BusCommissionResp>) {
+
+        val req = BusCommissionReq(
+            productSource = "F0133",
+            seatType = seatType,
+            retailerType = "SPECIFIC",
+            busCategory = busCategory,
+            admincode = adminCode,
+            userType = "B2B",
+            retailerID = retailerId,
+        )
+        Log.d("RetailerCommissionReq",Gson().toJson(req))
+
+        viewModel.getBusCommissionRequest(req).observe(this) { resource ->
+            when (resource.apiStatus) {
+                ApiStatus.SUCCESS -> {
+                    pd.dismiss()
+                    val response = resource.data?.body()
+                    if (response != null && response.isSuccess == true) {
+                        callback.onSuccess(response)   // 🔥 return data
+                    } else {
+                        callback.onError("Slab not found") // 🔥 return error
+                    }
+                   /* val response = resource.data?.body()
+                    Log.d("RetailerCommissionResp",Gson().toJson(response))
                     if (response != null && response.isSuccess!!) {
+
                         getAllServiceChargeApiResRetailer(response, rechargeAmount)
                     }
                     else {
-
                         // Save commission types in shared preferences
                         with(mStash!!) {
                             setStringValue(Constants.retailer_CommissionType, "")
@@ -368,7 +431,7 @@ class BusSeating : AppCompatActivity() {
                         var msg = "Warning : Slab structure not found. This transaction will proceed without any commission being credited."
                         openDialogForPayout(rechargeAmount.toDoubleOrNull() ?: 0.0, 0.0, totalRechargeAmount, 0.0, msg)
 
-                    }
+                    }*/
                 }
                 ApiStatus.ERROR -> pd.dismiss()
                 ApiStatus.LOADING -> pd.show()
@@ -385,6 +448,7 @@ class BusSeating : AppCompatActivity() {
         var commissionResp1: BusCommissionResp? = null
         var commissionResp2: BusCommissionResp? = null
 
+
         fun tryMerge() {
             if (commissionResp1 != null && commissionResp2 != null) {
                 mergeAndCalculateRetailer(commissionResp1!!, commissionResp2!!, rechargeAmount)
@@ -392,19 +456,40 @@ class BusSeating : AppCompatActivity() {
         }
 
 
-        hitCommissionAPIRetailer(seatTypes[0].second, retailerId, adminCode, busCategory, rechargeAmount) { resp ->
-            commissionResp1 = resp
-            Log.d("RetailerBothCommissionResp", Gson().toJson(resp))
-            tryMerge()
-        }
+        hitCommissionAPIRetailerForBothCondition(seatTypes[0].second, retailerId, adminCode, busCategory, rechargeAmount,object : ApiCallback<BusCommissionResp>{
+            override fun onSuccess(response: BusCommissionResp) {
+                commissionResp1 = response
+                Log.d("RetailerBothCommissionResp", Gson().toJson(response))
+                tryMerge()
+            }
 
-        hitCommissionAPIRetailer(seatTypes[1].second, retailerId, adminCode, busCategory, rechargeAmount) { resp ->
-            commissionResp2 = resp
-            Log.d("RetailerBothCommissionResp", Gson().toJson(resp))
-            tryMerge()
-        }
+            override fun onError(message: String) {
+
+            }
+
+        })
+
+
+        hitCommissionAPIRetailerForBothCondition(seatTypes[1].second, retailerId, adminCode, busCategory, rechargeAmount,object :ApiCallback<BusCommissionResp>{
+            override fun onSuccess(response: BusCommissionResp) {
+                commissionResp2 = response
+                Log.d("RetailerBothCommissionResp", Gson().toJson(response))
+                tryMerge()
+            }
+
+            override fun onError(message: String) {
+            }
+
+        })
 
     }
+
+
+    interface ApiCallback<T> {
+        fun onSuccess(response: T)
+        fun onError(message: String)
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("DefaultLocale", "SetTextI18n", "SuspiciousIndentation")
@@ -1486,6 +1571,7 @@ class BusSeating : AppCompatActivity() {
             Toast.makeText(this, e.message.toString() + " " + e.localizedMessage?.toString(), Toast.LENGTH_SHORT).show()
         }
     }
+
 
     @SuppressLint("SetTextI18n")
     private fun getAllBusTicketingRes(response: BusTicketingRes) {

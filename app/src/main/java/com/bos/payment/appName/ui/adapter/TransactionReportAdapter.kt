@@ -67,7 +67,18 @@ class TransactionReportAdapter(var context: Context, var transactionList: List<D
              }
 
              holder.binding.comtransactionno.text = transactionList[position]!!.transactionno
-             holder.binding.tdsamt.text = "₹${String.format("%.2f", transactionList[position]!!.tdsAmt!!.toDouble())}"
+
+             if(transactionList[position]?.tdsAmt.isNullOrBlank()){
+              // for deposit case..............................................
+              holder.binding.tdsamtlayout.visibility=View.GONE
+              holder.binding.commissionlayout.visibility=View.GONE
+             }
+             else{
+                 holder.binding.tdsamtlayout.visibility=View.VISIBLE
+                 holder.binding.commissionlayout.visibility=View.VISIBLE
+                 holder.binding.tdsamt.text = "₹${String.format("%.2f", transactionList[position]?.tdsAmt!!.toDouble())}"
+             }
+
              holder.binding.comupiRefID.text = transactionList[position]!!.upiRefID
              holder.binding.commisservicetype.text = transactionList[position]!!.servicETYPE
              holder.binding.commissiondatetime.text = "${transactionList[position]!!.date} , ${transactionList[position]!!.time}"
@@ -76,6 +87,7 @@ class TransactionReportAdapter(var context: Context, var transactionList: List<D
              holder.binding.commissionremarkflag.text = transactionList[position]!!.flagRemarks
 
          }
+
          else{
              holder.binding.withoutCommissionRequestcard.visibility=View.VISIBLE
              holder.binding.CommissionRequestcard.visibility=View.GONE
@@ -103,7 +115,13 @@ class TransactionReportAdapter(var context: Context, var transactionList: List<D
              holder.binding.servicetype.text = transactionList[position]!!.servicETYPE
              holder.binding.datetime.text = "${transactionList[position]!!.date} , ${transactionList[position]!!.time}"
 
-             holder.binding.servicecharge.text= "₹ ${String.format("%.2f", transactionList[position]!!.serviceChGst!!.toDouble())}"
+             if(transactionList[position]!!.serviceChGst!!.isNotEmpty() && !transactionList[position]!!.serviceChGst.equals("0.00")){
+                 holder.binding.servicechargelayout.visibility=View.VISIBLE
+                 holder.binding.servicecharge.text= "₹ ${String.format("%.2f", transactionList[position]!!.serviceChGst!!.toDouble())}"
+             }
+             else{
+                 holder.binding.servicechargelayout.visibility=View.GONE
+             }
 
              if (transactionList[position]!!.cr!!.isNotEmpty()) {
                  holder.binding.debitorcredit.text = "Credited Amt"
@@ -145,8 +163,8 @@ class TransactionReportAdapter(var context: Context, var transactionList: List<D
                  }
 
              }
-         }
 
+         }
 
     }
 

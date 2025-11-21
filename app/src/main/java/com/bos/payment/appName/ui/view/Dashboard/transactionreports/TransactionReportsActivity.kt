@@ -53,6 +53,8 @@ class TransactionReportsActivity : AppCompatActivity() {
     var displayReportList : MutableList<String?> = arrayListOf()
     var rechargeModeList : MutableList<String?> = arrayListOf()
     var payoutModeList : MutableList<String?> = arrayListOf()
+    var depositModeList : MutableList<String?> = arrayListOf()
+    var transferModeList : MutableList<String?> = arrayListOf()
     var dmtModeList : MutableList<String?> = arrayListOf()
     var displaytxtReportList : MutableList<String?> = arrayListOf()
     private val myCalender = Calendar.getInstance()
@@ -212,6 +214,14 @@ class TransactionReportsActivity : AppCompatActivity() {
                     setDataForModeBasedOnSelectedReport(payoutModeList)
                 }
 
+                if(selectedItem.contains("deposit",ignoreCase = true)){
+                    setDataForModeBasedOnSelectedReport(depositModeList)
+                }
+
+                if(selectedItem.trim().contains("transfer report",ignoreCase = true)){
+                    setDataForModeBasedOnSelectedReport(transferModeList)
+                }
+
                 if(selectedItem.isNotEmpty() && binding.reportmode.selectedItem.toString().trim().isNotEmpty()&& ToDate.isNotEmpty() && FromDate.isNotEmpty()){
                     hitApiForGettingTransactionReports()
                 }
@@ -279,6 +289,8 @@ class TransactionReportsActivity : AppCompatActivity() {
         rechargeModeList.clear()
         payoutModeList.clear()
         dmtModeList.clear()
+        depositModeList.clear()
+        transferModeList.clear()
 
         dmtModeList.add("")
 
@@ -290,6 +302,19 @@ class TransactionReportsActivity : AppCompatActivity() {
         payoutModeList.add("Pending")
         payoutModeList.add("Rejected")
         payoutModeList.add("Commission History")
+
+
+
+        depositModeList.add("All")
+        depositModeList.add("Make Payment Deposit")
+        depositModeList.add("Wallet Transfer")
+        depositModeList.add("Refunds Deposit")
+        depositModeList.add("To Mobile Deposit")
+
+
+        transferModeList.add("To Mobile Transfer")
+        transferModeList.add("To Self Transfer")
+
 
 
     }

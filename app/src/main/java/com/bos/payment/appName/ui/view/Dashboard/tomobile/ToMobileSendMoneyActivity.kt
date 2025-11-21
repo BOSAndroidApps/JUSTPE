@@ -77,7 +77,8 @@ class ToMobileSendMoneyActivity : AppCompatActivity() {
         val result = if (searchText.isEmpty()) RetailerContactList else RetailerContactList!!.filter {
             it!!.agentType!!.lowercase().contains(searchText) ||
                     it.mobileNo!!.lowercase().contains(searchText) ||
-                    it.name!!.lowercase().contains(searchText)
+                    it.name!!.lowercase().contains(searchText)||
+                    it.userID!!.lowercase().contains(searchText)
         }
         contactListAdapter.updateList(result)
     }
@@ -87,6 +88,7 @@ class ToMobileSendMoneyActivity : AppCompatActivity() {
     fun hitApiForGettingRetailersList(){
 
         var adminCode = mStash!!.getStringValue(Constants.AdminCode, "")
+        var retailerloginId = mStash!!.getStringValue(Constants.RegistrationId, "")
 
         val getRetailerContactList = RetailerContactListRequestModel(
             adminCode = adminCode
@@ -103,10 +105,18 @@ class ToMobileSendMoneyActivity : AppCompatActivity() {
                             users.body()?.let { response ->
                                 Log.d("retailerContactListResp", Gson().toJson(response))
                                 if(response.isSuccess!!){
-                                    RetailerContactList= response.data
+                                    var  AllRetailerContactList= response.data
+
+                                     RetailerContactList =  AllRetailerContactList?.filter { item ->
+                                         !(item?.userID?.contains(retailerloginId!!, ignoreCase = true) == true ||
+                                                 item?.userID?.contains(adminCode!!, ignoreCase = true) == true)
+                                     } ?: emptyList()
+
+                                    Log.d("filterdata", Gson().toJson(response))
                                     contactListAdapter = ContactListAdapter(this@ToMobileSendMoneyActivity,RetailerContactList)
                                     binding.contactList.adapter = contactListAdapter
                                     contactListAdapter.notifyDataSetChanged()
+
                                 }
                             }
                         }

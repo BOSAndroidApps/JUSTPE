@@ -19,13 +19,14 @@ data class AirTicketingResponse (@SerializedName("booking_RefNo")
 data class AirlinePNRDetailsItem(@SerializedName("status_Id")
                                  val statusId: String = "",
                                  @SerializedName("hold_Validity")
-                                 val holdValidity: Any? = null,
+                                 val holdValidity: String? = null,
                                  @SerializedName("failure_Remark")
-                                 val failureRemark: Any? = null,
+                                 val failureRemark: String? = null,
                                  @SerializedName("airlinePNRs")
                                  val airlinePNRs: List<AirlinePNRsItem>?,
                                  @SerializedName("flight_Id")
-                                 val flightId: String = "")
+                                 val flightId: String = ""
+)
 
 
 data class AirlinePNRsItem(@SerializedName("supplier_RefNo")
@@ -33,13 +34,13 @@ data class AirlinePNRsItem(@SerializedName("supplier_RefNo")
                            @SerializedName("airline_Code")
                            val airlineCode: String = "",
                            @SerializedName("crS_PNR")
-                           val crSPNR: Any? = null,
+                           val crSPNR: String? = null,
                            @SerializedName("airline_PNR")
                            val airlinePNR: String = "",
                            @SerializedName("record_Locator")
                            val recordLocator: String = "",
                            @SerializedName("crS_Code")
-                           val crSCode: Any? = null)
+                           val crSCode: String? = null)
 
 
 

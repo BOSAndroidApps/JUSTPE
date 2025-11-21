@@ -261,7 +261,6 @@ class JustPeDashboard : AppCompatActivity() {
         pd = PD(this)
 
         viewModel = ViewModelProvider(this, MoneyTransferViewModelFactory(MoneyTransferRepository(RetrofitClient.apiAllInterface)))[MoneyTransferViewModel::class.java]
-
         getAllApiServiceViewModel = ViewModelProvider(this, GetAllApiServiceViewModelFactory(GetAllAPIServiceRepository(RetrofitClient.apiAllInterface)))[GetAllApiServiceViewModel::class.java]
 
         binding.nav.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -270,6 +269,8 @@ class JustPeDashboard : AppCompatActivity() {
 
         fingerPrint = mStash!!.getBoolanValue(Constants.fingerPrintAction.toString(), false)
         binding.nav.switchButton.isChecked = fingerPrint
+
+        binding.nav.customerName.text =  "Hello ${mStash!!.getStringValue(Constants.retailerName, "")}"
 
     }
 
@@ -340,9 +341,11 @@ class JustPeDashboard : AppCompatActivity() {
         if(mStash!!.getStringValue(Constants.ISQRCodeGenerated,"No").equals("No",ignoreCase = true)){
             binding.nav.qrcodetxt.text= "Generate QR Code"
             binding.nav.lockiconlayout.visibility= View.VISIBLE
+            binding.nav.sharelayout.visibility=View.GONE
         }
         else{
             binding.nav.lockiconlayout.visibility= View.GONE
+            binding.nav.sharelayout.visibility=View.VISIBLE
             binding.nav.qrcodetxt.text= "View Bank Details"
             binding.nav.vpaid.text=vpa
             var accountnumber =  maskWithEllipsis(mStash!!.getStringValue(Constants.SettlementAccountNumber,""))
@@ -633,7 +636,6 @@ class JustPeDashboard : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
         startAutoSlide()
         getWalletBalance()
         hitApiForServicesRequest()

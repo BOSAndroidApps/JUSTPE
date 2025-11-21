@@ -165,6 +165,9 @@ import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommiss
 import com.bos.payment.appName.data.model.travel.bus.forservicecharge.BusCommissionResp
 import com.bos.payment.appName.data.model.travel.flight.AirCommissionReq
 import com.bos.payment.appName.data.model.travel.flight.AirCommissionResp
+import com.bos.payment.appName.data.model.travel.flight.AirTicketBookingRequest
+import com.bos.payment.appName.data.model.travel.flight.AirTicketBookingResponse
+import com.bos.payment.appName.data.model.travel.flight.AirTicketBookingResponseRequest
 import com.bos.payment.appName.data.model.travel.flight.AirportListReq
 import com.bos.payment.appName.data.model.travel.flight.AirportListResp
 import com.bos.payment.appName.data.model.travel.flight.FlightRequeryReq
@@ -524,6 +527,14 @@ interface ApiInterface {
     suspend fun getAirCommissionReq(@Body req: AirCommissionReq): Response<AirCommissionResp>? // Annu
 
 
+    @POST("api/Air/api/TicketRequest")
+    suspend fun uploadTicketBookingRequest(@Body req: AirTicketBookingRequest): Response<AirTicketBookingResponse>? // Annu
+
+
+    @POST("api/Air/api/TicketResponse")
+    suspend fun uploadTicketBookingResponse(@Body req: AirTicketBookingResponseRequest): Response<AirTicketBookingResponse>? // Annu
+
+
     // new api for recharge............................................................................
 
 
@@ -560,7 +571,7 @@ interface ApiInterface {
 
 
     // when having commission use this api
-    @POST("/api/BosTransfer/TransfertoAgent")
+    @POST("api/BosTransfer/TransfertoAgent")
     suspend fun getTransferAmountToAgentsForCommission(@Body req: TransferToAgentReq): Response<UploadRechargeMobileRespResp>?
 
 

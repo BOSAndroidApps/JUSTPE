@@ -329,6 +329,7 @@ class LoginActivity : AppCompatActivity() {
                 mStash!!.setBooleanValue(Constants.Status, res.isSuccess!!)
                 mStash!!.setStringValue(Constants.Password, binding.loginLayout.tvPassword.text.toString().trim())
                 mStash!!.setStringValue(Constants.MerchantId, res.data[0].merchantCode.toString())
+                mStash!!.setStringValue(Constants.retailerName, res.data[0].fullName.toString())
                 toast("Login Successful")
                 Log.d("getAllMerchantList", res.data[0].merchantCode.toString())
                 Log.d("loginId",res.data[0].userID.toString().uppercase())
